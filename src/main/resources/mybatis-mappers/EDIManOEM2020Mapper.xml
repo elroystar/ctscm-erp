@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDIManOEM2020Mapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDIManOEM2020">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="did" jdbcType="INTEGER" property="did" />
+    <result column="serial_no" jdbcType="VARCHAR" property="serialNo" />
+    <result column="tracking" jdbcType="VARCHAR" property="tracking" />
+    <result column="carton_no" jdbcType="VARCHAR" property="cartonNo" />
+    <result column="carton_count" jdbcType="VARCHAR" property="cartonCount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, did, serial_no, tracking, carton_no, carton_count
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_man_OEM_2020
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_man_OEM_2020
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EDIManOEM2020">
+    insert into edi_man_OEM_2020 (id, did, serial_no, 
+      tracking, carton_no, carton_count
+      )
+    values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{serialNo,jdbcType=VARCHAR}, 
+      #{tracking,jdbcType=VARCHAR}, #{cartonNo,jdbcType=VARCHAR}, #{cartonCount,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EDIManOEM2020">
+    insert into edi_man_OEM_2020
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="did != null">
+        did,
+      </if>
+      <if test="serialNo != null">
+        serial_no,
+      </if>
+      <if test="tracking != null">
+        tracking,
+      </if>
+      <if test="cartonNo != null">
+        carton_no,
+      </if>
+      <if test="cartonCount != null">
+        carton_count,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="did != null">
+        #{did,jdbcType=INTEGER},
+      </if>
+      <if test="serialNo != null">
+        #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tracking != null">
+        #{tracking,jdbcType=VARCHAR},
+      </if>
+      <if test="cartonNo != null">
+        #{cartonNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cartonCount != null">
+        #{cartonCount,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDIManOEM2020">
+    update edi_man_OEM_2020
+    <set>
+      <if test="did != null">
+        did = #{did,jdbcType=INTEGER},
+      </if>
+      <if test="serialNo != null">
+        serial_no = #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tracking != null">
+        tracking = #{tracking,jdbcType=VARCHAR},
+      </if>
+      <if test="cartonNo != null">
+        carton_no = #{cartonNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cartonCount != null">
+        carton_count = #{cartonCount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EDIManOEM2020">
+    update edi_man_OEM_2020
+    set did = #{did,jdbcType=INTEGER},
+      serial_no = #{serialNo,jdbcType=VARCHAR},
+      tracking = #{tracking,jdbcType=VARCHAR},
+      carton_no = #{cartonNo,jdbcType=VARCHAR},
+      carton_count = #{cartonCount,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

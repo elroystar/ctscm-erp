@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDIDetailICT2020Mapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDIDetailICT2020">
+    <id column="linid" jdbcType="INTEGER" property="linid" />
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="linno" jdbcType="VARCHAR" property="linno" />
+    <result column="shipperqty" jdbcType="VARCHAR" property="shipperqty" />
+    <result column="partno" jdbcType="VARCHAR" property="partno" />
+    <result column="gross_weight" jdbcType="VARCHAR" property="grossWeight" />
+    <result column="d_weight_unit1" jdbcType="VARCHAR" property="dWeightUnit1" />
+    <result column="net_weight" jdbcType="VARCHAR" property="netWeight" />
+    <result column="d_weight_unit2" jdbcType="VARCHAR" property="dWeightUnit2" />
+    <result column="package_type" jdbcType="VARCHAR" property="packageType" />
+    <result column="carton_count" jdbcType="VARCHAR" property="cartonCount" />
+    <result column="descriptopn" jdbcType="VARCHAR" property="descriptopn" />
+    <result column="d_consumption" jdbcType="VARCHAR" property="dConsumption" />
+    <result column="d_consumption_amount" jdbcType="VARCHAR" property="dConsumptionAmount" />
+    <result column="cod" jdbcType="VARCHAR" property="cod" />
+    <result column="accounts_no" jdbcType="VARCHAR" property="accountsNo" />
+    <result column="po" jdbcType="VARCHAR" property="po" />
+    <result column="cbm" jdbcType="VARCHAR" property="cbm" />
+    <result column="customer_po" jdbcType="VARCHAR" property="customerPo" />
+    <result column="rma" jdbcType="VARCHAR" property="rma" />
+    <result column="tracbm" jdbcType="VARCHAR" property="tracbm" />
+    <result column="exportprice" jdbcType="VARCHAR" property="exportprice" />
+    <result column="delivery_time" jdbcType="VARCHAR" property="deliveryTime" />
+    <result column="so" jdbcType="VARCHAR" property="so" />
+    <result column="loading_no" jdbcType="VARCHAR" property="loadingNo" />
+    <result column="dn" jdbcType="VARCHAR" property="dn" />
+    <result column="consumerid" jdbcType="VARCHAR" property="consumerid" />
+    <result column="d_volume" jdbcType="VARCHAR" property="dVolume" />
+    <result column="d_volume_unit" jdbcType="VARCHAR" property="dVolumeUnit" />
+    <result column="st_name" jdbcType="VARCHAR" property="stName" />
+    <result column="st_phone" jdbcType="VARCHAR" property="stPhone" />
+    <result column="st_region" jdbcType="VARCHAR" property="stRegion" />
+    <result column="st_addr2" jdbcType="VARCHAR" property="stAddr2" />
+    <result column="st_state" jdbcType="VARCHAR" property="stState" />
+    <result column="st_city" jdbcType="VARCHAR" property="stCity" />
+    <result column="st_pastal" jdbcType="VARCHAR" property="stPastal" />
+    <result column="st_country" jdbcType="VARCHAR" property="stCountry" />
+    <result column="st_direct" jdbcType="VARCHAR" property="stDirect" />
+    <result column="contract_name" jdbcType="VARCHAR" property="contractName" />
+    <result column="contract_tel" jdbcType="VARCHAR" property="contractTel" />
+    <result column="contract_fax" jdbcType="VARCHAR" property="contractFax" />
+    <result column="contract_state" jdbcType="VARCHAR" property="contractState" />
+    <result column="country_des" jdbcType="VARCHAR" property="countryDes" />
+    <result column="hazardous_certification_no" jdbcType="VARCHAR" property="hazardousCertificationNo" />
+    <result column="deliveryqty" jdbcType="VARCHAR" property="deliveryqty" />
+    <result column="deliveryunit" jdbcType="VARCHAR" property="deliveryunit" />
+    <result column="exponent" jdbcType="VARCHAR" property="exponent" />
+    <result column="multiplier" jdbcType="VARCHAR" property="multiplier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    linid, id, linno, shipperqty, partno, gross_weight, d_weight_unit1, net_weight, d_weight_unit2, 
+    package_type, carton_count, descriptopn, d_consumption, d_consumption_amount, cod, 
+    accounts_no, po, cbm, customer_po, rma, tracbm, exportprice, delivery_time, so, loading_no, 
+    dn, consumerid, d_volume, d_volume_unit, st_name, st_phone, st_region, st_addr2, 
+    st_state, st_city, st_pastal, st_country, st_direct, contract_name, contract_tel, 
+    contract_fax, contract_state, country_des, hazardous_certification_no, deliveryqty, 
+    deliveryunit, exponent, multiplier
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_detail_ICT_2020
+    where linid = #{linid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_detail_ICT_2020
+    where linid = #{linid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EDIDetailICT2020">
+    insert into edi_detail_ICT_2020 (linid, id, linno, 
+      shipperqty, partno, gross_weight, 
+      d_weight_unit1, net_weight, d_weight_unit2, 
+      package_type, carton_count, descriptopn, 
+      d_consumption, d_consumption_amount, cod, 
+      accounts_no, po, cbm, 
+      customer_po, rma, tracbm, 
+      exportprice, delivery_time, so, 
+      loading_no, dn, consumerid, 
+      d_volume, d_volume_unit, st_name, 
+      st_phone, st_region, st_addr2, 
+      st_state, st_city, st_pastal, 
+      st_country, st_direct, contract_name, 
+      contract_tel, contract_fax, contract_state, 
+      country_des, hazardous_certification_no, deliveryqty, 
+      deliveryunit, exponent, multiplier
+      )
+    values (#{linid,jdbcType=INTEGER}, #{id,jdbcType=INTEGER}, #{linno,jdbcType=VARCHAR}, 
+      #{shipperqty,jdbcType=VARCHAR}, #{partno,jdbcType=VARCHAR}, #{grossWeight,jdbcType=VARCHAR}, 
+      #{dWeightUnit1,jdbcType=VARCHAR}, #{netWeight,jdbcType=VARCHAR}, #{dWeightUnit2,jdbcType=VARCHAR}, 
+      #{packageType,jdbcType=VARCHAR}, #{cartonCount,jdbcType=VARCHAR}, #{descriptopn,jdbcType=VARCHAR}, 
+      #{dConsumption,jdbcType=VARCHAR}, #{dConsumptionAmount,jdbcType=VARCHAR}, #{cod,jdbcType=VARCHAR}, 
+      #{accountsNo,jdbcType=VARCHAR}, #{po,jdbcType=VARCHAR}, #{cbm,jdbcType=VARCHAR}, 
+      #{customerPo,jdbcType=VARCHAR}, #{rma,jdbcType=VARCHAR}, #{tracbm,jdbcType=VARCHAR}, 
+      #{exportprice,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=VARCHAR}, #{so,jdbcType=VARCHAR}, 
+      #{loadingNo,jdbcType=VARCHAR}, #{dn,jdbcType=VARCHAR}, #{consumerid,jdbcType=VARCHAR}, 
+      #{dVolume,jdbcType=VARCHAR}, #{dVolumeUnit,jdbcType=VARCHAR}, #{stName,jdbcType=VARCHAR}, 
+      #{stPhone,jdbcType=VARCHAR}, #{stRegion,jdbcType=VARCHAR}, #{stAddr2,jdbcType=VARCHAR}, 
+      #{stState,jdbcType=VARCHAR}, #{stCity,jdbcType=VARCHAR}, #{stPastal,jdbcType=VARCHAR}, 
+      #{stCountry,jdbcType=VARCHAR}, #{stDirect,jdbcType=VARCHAR}, #{contractName,jdbcType=VARCHAR}, 
+      #{contractTel,jdbcType=VARCHAR}, #{contractFax,jdbcType=VARCHAR}, #{contractState,jdbcType=VARCHAR}, 
+      #{countryDes,jdbcType=VARCHAR}, #{hazardousCertificationNo,jdbcType=VARCHAR}, #{deliveryqty,jdbcType=VARCHAR}, 
+      #{deliveryunit,jdbcType=VARCHAR}, #{exponent,jdbcType=VARCHAR}, #{multiplier,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EDIDetailICT2020">
+    insert into edi_detail_ICT_2020
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="linid != null">
+        linid,
+      </if>
+      <if test="id != null">
+        id,
+      </if>
+      <if test="linno != null">
+        linno,
+      </if>
+      <if test="shipperqty != null">
+        shipperqty,
+      </if>
+      <if test="partno != null">
+        partno,
+      </if>
+      <if test="grossWeight != null">
+        gross_weight,
+      </if>
+      <if test="dWeightUnit1 != null">
+        d_weight_unit1,
+      </if>
+      <if test="netWeight != null">
+        net_weight,
+      </if>
+      <if test="dWeightUnit2 != null">
+        d_weight_unit2,
+      </if>
+      <if test="packageType != null">
+        package_type,
+      </if>
+      <if test="cartonCount != null">
+        carton_count,
+      </if>
+      <if test="descriptopn != null">
+        descriptopn,
+      </if>
+      <if test="dConsumption != null">
+        d_consumption,
+      </if>
+      <if test="dConsumptionAmount != null">
+        d_consumption_amount,
+      </if>
+      <if test="cod != null">
+        cod,
+      </if>
+      <if test="accountsNo != null">
+        accounts_no,
+      </if>
+      <if test="po != null">
+        po,
+      </if>
+      <if test="cbm != null">
+        cbm,
+      </if>
+      <if test="customerPo != null">
+        customer_po,
+      </if>
+      <if test="rma != null">
+        rma,
+      </if>
+      <if test="tracbm != null">
+        tracbm,
+      </if>
+      <if test="exportprice != null">
+        exportprice,
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time,
+      </if>
+      <if test="so != null">
+        so,
+      </if>
+      <if test="loadingNo != null">
+        loading_no,
+      </if>
+      <if test="dn != null">
+        dn,
+      </if>
+      <if test="consumerid != null">
+        consumerid,
+      </if>
+      <if test="dVolume != null">
+        d_volume,
+      </if>
+      <if test="dVolumeUnit != null">
+        d_volume_unit,
+      </if>
+      <if test="stName != null">
+        st_name,
+      </if>
+      <if test="stPhone != null">
+        st_phone,
+      </if>
+      <if test="stRegion != null">
+        st_region,
+      </if>
+      <if test="stAddr2 != null">
+        st_addr2,
+      </if>
+      <if test="stState != null">
+        st_state,
+      </if>
+      <if test="stCity != null">
+        st_city,
+      </if>
+      <if test="stPastal != null">
+        st_pastal,
+      </if>
+      <if test="stCountry != null">
+        st_country,
+      </if>
+      <if test="stDirect != null">
+        st_direct,
+      </if>
+      <if test="contractName != null">
+        contract_name,
+      </if>
+      <if test="contractTel != null">
+        contract_tel,
+      </if>
+      <if test="contractFax != null">
+        contract_fax,
+      </if>
+      <if test="contractState != null">
+        contract_state,
+      </if>
+      <if test="countryDes != null">
+        country_des,
+      </if>
+      <if test="hazardousCertificationNo != null">
+        hazardous_certification_no,
+      </if>
+      <if test="deliveryqty != null">
+        deliveryqty,
+      </if>
+      <if test="deliveryunit != null">
+        deliveryunit,
+      </if>
+      <if test="exponent != null">
+        exponent,
+      </if>
+      <if test="multiplier != null">
+        multiplier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="linid != null">
+        #{linid,jdbcType=INTEGER},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="linno != null">
+        #{linno,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperqty != null">
+        #{shipperqty,jdbcType=VARCHAR},
+      </if>
+      <if test="partno != null">
+        #{partno,jdbcType=VARCHAR},
+      </if>
+      <if test="grossWeight != null">
+        #{grossWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="dWeightUnit1 != null">
+        #{dWeightUnit1,jdbcType=VARCHAR},
+      </if>
+      <if test="netWeight != null">
+        #{netWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="dWeightUnit2 != null">
+        #{dWeightUnit2,jdbcType=VARCHAR},
+      </if>
+      <if test="packageType != null">
+        #{packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="cartonCount != null">
+        #{cartonCount,jdbcType=VARCHAR},
+      </if>
+      <if test="descriptopn != null">
+        #{descriptopn,jdbcType=VARCHAR},
+      </if>
+      <if test="dConsumption != null">
+        #{dConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="dConsumptionAmount != null">
+        #{dConsumptionAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="cod != null">
+        #{cod,jdbcType=VARCHAR},
+      </if>
+      <if test="accountsNo != null">
+        #{accountsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="po != null">
+        #{po,jdbcType=VARCHAR},
+      </if>
+      <if test="cbm != null">
+        #{cbm,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPo != null">
+        #{customerPo,jdbcType=VARCHAR},
+      </if>
+      <if test="rma != null">
+        #{rma,jdbcType=VARCHAR},
+      </if>
+      <if test="tracbm != null">
+        #{tracbm,jdbcType=VARCHAR},
+      </if>
+      <if test="exportprice != null">
+        #{exportprice,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null">
+        #{deliveryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="so != null">
+        #{so,jdbcType=VARCHAR},
+      </if>
+      <if test="loadingNo != null">
+        #{loadingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dn != null">
+        #{dn,jdbcType=VARCHAR},
+      </if>
+      <if test="consumerid != null">
+        #{consumerid,jdbcType=VARCHAR},
+      </if>
+      <if test="dVolume != null">
+        #{dVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="dVolumeUnit != null">
+        #{dVolumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="stName != null">
+        #{stName,jdbcType=VARCHAR},
+      </if>
+      <if test="stPhone != null">
+        #{stPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="stRegion != null">
+        #{stRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="stAddr2 != null">
+        #{stAddr2,jdbcType=VARCHAR},
+      </if>
+      <if test="stState != null">
+        #{stState,jdbcType=VARCHAR},
+      </if>
+      <if test="stCity != null">
+        #{stCity,jdbcType=VARCHAR},
+      </if>
+      <if test="stPastal != null">
+        #{stPastal,jdbcType=VARCHAR},
+      </if>
+      <if test="stCountry != null">
+        #{stCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="stDirect != null">
+        #{stDirect,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null">
+        #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractTel != null">
+        #{contractTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contractFax != null">
+        #{contractFax,jdbcType=VARCHAR},
+      </if>
+      <if test="contractState != null">
+        #{contractState,jdbcType=VARCHAR},
+      </if>
+      <if test="countryDes != null">
+        #{countryDes,jdbcType=VARCHAR},
+      </if>
+      <if test="hazardousCertificationNo != null">
+        #{hazardousCertificationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryqty != null">
+        #{deliveryqty,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryunit != null">
+        #{deliveryunit,jdbcType=VARCHAR},
+      </if>
+      <if test="exponent != null">
+        #{exponent,jdbcType=VARCHAR},
+      </if>
+      <if test="multiplier != null">
+        #{multiplier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDIDetailICT2020">
+    update edi_detail_ICT_2020
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="linno != null">
+        linno = #{linno,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperqty != null">
+        shipperqty = #{shipperqty,jdbcType=VARCHAR},
+      </if>
+      <if test="partno != null">
+        partno = #{partno,jdbcType=VARCHAR},
+      </if>
+      <if test="grossWeight != null">
+        gross_weight = #{grossWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="dWeightUnit1 != null">
+        d_weight_unit1 = #{dWeightUnit1,jdbcType=VARCHAR},
+      </if>
+      <if test="netWeight != null">
+        net_weight = #{netWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="dWeightUnit2 != null">
+        d_weight_unit2 = #{dWeightUnit2,jdbcType=VARCHAR},
+      </if>
+      <if test="packageType != null">
+        package_type = #{packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="cartonCount != null">
+        carton_count = #{cartonCount,jdbcType=VARCHAR},
+      </if>
+      <if test="descriptopn != null">
+        descriptopn = #{descriptopn,jdbcType=VARCHAR},
+      </if>
+      <if test="dConsumption != null">
+        d_consumption = #{dConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="dConsumptionAmount != null">
+        d_consumption_amount = #{dConsumptionAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="cod != null">
+        cod = #{cod,jdbcType=VARCHAR},
+      </if>
+      <if test="accountsNo != null">
+        accounts_no = #{accountsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="po != null">
+        po = #{po,jdbcType=VARCHAR},
+      </if>
+      <if test="cbm != null">
+        cbm = #{cbm,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPo != null">
+        customer_po = #{customerPo,jdbcType=VARCHAR},
+      </if>
+      <if test="rma != null">
+        rma = #{rma,jdbcType=VARCHAR},
+      </if>
+      <if test="tracbm != null">
+        tracbm = #{tracbm,jdbcType=VARCHAR},
+      </if>
+      <if test="exportprice != null">
+        exportprice = #{exportprice,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="so != null">
+        so = #{so,jdbcType=VARCHAR},
+      </if>
+      <if test="loadingNo != null">
+        loading_no = #{loadingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dn != null">
+        dn = #{dn,jdbcType=VARCHAR},
+      </if>
+      <if test="consumerid != null">
+        consumerid = #{consumerid,jdbcType=VARCHAR},
+      </if>
+      <if test="dVolume != null">
+        d_volume = #{dVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="dVolumeUnit != null">
+        d_volume_unit = #{dVolumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="stName != null">
+        st_name = #{stName,jdbcType=VARCHAR},
+      </if>
+      <if test="stPhone != null">
+        st_phone = #{stPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="stRegion != null">
+        st_region = #{stRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="stAddr2 != null">
+        st_addr2 = #{stAddr2,jdbcType=VARCHAR},
+      </if>
+      <if test="stState != null">
+        st_state = #{stState,jdbcType=VARCHAR},
+      </if>
+      <if test="stCity != null">
+        st_city = #{stCity,jdbcType=VARCHAR},
+      </if>
+      <if test="stPastal != null">
+        st_pastal = #{stPastal,jdbcType=VARCHAR},
+      </if>
+      <if test="stCountry != null">
+        st_country = #{stCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="stDirect != null">
+        st_direct = #{stDirect,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null">
+        contract_name = #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractTel != null">
+        contract_tel = #{contractTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contractFax != null">
+        contract_fax = #{contractFax,jdbcType=VARCHAR},
+      </if>
+      <if test="contractState != null">
+        contract_state = #{contractState,jdbcType=VARCHAR},
+      </if>
+      <if test="countryDes != null">
+        country_des = #{countryDes,jdbcType=VARCHAR},
+      </if>
+      <if test="hazardousCertificationNo != null">
+        hazardous_certification_no = #{hazardousCertificationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryqty != null">
+        deliveryqty = #{deliveryqty,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryunit != null">
+        deliveryunit = #{deliveryunit,jdbcType=VARCHAR},
+      </if>
+      <if test="exponent != null">
+        exponent = #{exponent,jdbcType=VARCHAR},
+      </if>
+      <if test="multiplier != null">
+        multiplier = #{multiplier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where linid = #{linid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EDIDetailICT2020">
+    update edi_detail_ICT_2020
+    set id = #{id,jdbcType=INTEGER},
+      linno = #{linno,jdbcType=VARCHAR},
+      shipperqty = #{shipperqty,jdbcType=VARCHAR},
+      partno = #{partno,jdbcType=VARCHAR},
+      gross_weight = #{grossWeight,jdbcType=VARCHAR},
+      d_weight_unit1 = #{dWeightUnit1,jdbcType=VARCHAR},
+      net_weight = #{netWeight,jdbcType=VARCHAR},
+      d_weight_unit2 = #{dWeightUnit2,jdbcType=VARCHAR},
+      package_type = #{packageType,jdbcType=VARCHAR},
+      carton_count = #{cartonCount,jdbcType=VARCHAR},
+      descriptopn = #{descriptopn,jdbcType=VARCHAR},
+      d_consumption = #{dConsumption,jdbcType=VARCHAR},
+      d_consumption_amount = #{dConsumptionAmount,jdbcType=VARCHAR},
+      cod = #{cod,jdbcType=VARCHAR},
+      accounts_no = #{accountsNo,jdbcType=VARCHAR},
+      po = #{po,jdbcType=VARCHAR},
+      cbm = #{cbm,jdbcType=VARCHAR},
+      customer_po = #{customerPo,jdbcType=VARCHAR},
+      rma = #{rma,jdbcType=VARCHAR},
+      tracbm = #{tracbm,jdbcType=VARCHAR},
+      exportprice = #{exportprice,jdbcType=VARCHAR},
+      delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      so = #{so,jdbcType=VARCHAR},
+      loading_no = #{loadingNo,jdbcType=VARCHAR},
+      dn = #{dn,jdbcType=VARCHAR},
+      consumerid = #{consumerid,jdbcType=VARCHAR},
+      d_volume = #{dVolume,jdbcType=VARCHAR},
+      d_volume_unit = #{dVolumeUnit,jdbcType=VARCHAR},
+      st_name = #{stName,jdbcType=VARCHAR},
+      st_phone = #{stPhone,jdbcType=VARCHAR},
+      st_region = #{stRegion,jdbcType=VARCHAR},
+      st_addr2 = #{stAddr2,jdbcType=VARCHAR},
+      st_state = #{stState,jdbcType=VARCHAR},
+      st_city = #{stCity,jdbcType=VARCHAR},
+      st_pastal = #{stPastal,jdbcType=VARCHAR},
+      st_country = #{stCountry,jdbcType=VARCHAR},
+      st_direct = #{stDirect,jdbcType=VARCHAR},
+      contract_name = #{contractName,jdbcType=VARCHAR},
+      contract_tel = #{contractTel,jdbcType=VARCHAR},
+      contract_fax = #{contractFax,jdbcType=VARCHAR},
+      contract_state = #{contractState,jdbcType=VARCHAR},
+      country_des = #{countryDes,jdbcType=VARCHAR},
+      hazardous_certification_no = #{hazardousCertificationNo,jdbcType=VARCHAR},
+      deliveryqty = #{deliveryqty,jdbcType=VARCHAR},
+      deliveryunit = #{deliveryunit,jdbcType=VARCHAR},
+      exponent = #{exponent,jdbcType=VARCHAR},
+      multiplier = #{multiplier,jdbcType=VARCHAR}
+    where linid = #{linid,jdbcType=INTEGER}
+  </update>
+</mapper>

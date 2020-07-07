@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDIManICT2020Mapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDIManICT2020">
+    <id column="manid" jdbcType="INTEGER" property="manid" />
+    <result column="lid" jdbcType="INTEGER" property="lid" />
+    <result column="serial_no" jdbcType="VARCHAR" property="serialNo" />
+    <result column="tracking" jdbcType="VARCHAR" property="tracking" />
+    <result column="carton_no" jdbcType="VARCHAR" property="cartonNo" />
+    <result column="scccarton_count" jdbcType="VARCHAR" property="scccartonCount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    manid, lid, serial_no, tracking, carton_no, scccarton_count
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_man_ICT_2020
+    where manid = #{manid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_man_ICT_2020
+    where manid = #{manid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EDIManICT2020">
+    insert into edi_man_ICT_2020 (manid, lid, serial_no, 
+      tracking, carton_no, scccarton_count
+      )
+    values (#{manid,jdbcType=INTEGER}, #{lid,jdbcType=INTEGER}, #{serialNo,jdbcType=VARCHAR}, 
+      #{tracking,jdbcType=VARCHAR}, #{cartonNo,jdbcType=VARCHAR}, #{scccartonCount,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EDIManICT2020">
+    insert into edi_man_ICT_2020
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="manid != null">
+        manid,
+      </if>
+      <if test="lid != null">
+        lid,
+      </if>
+      <if test="serialNo != null">
+        serial_no,
+      </if>
+      <if test="tracking != null">
+        tracking,
+      </if>
+      <if test="cartonNo != null">
+        carton_no,
+      </if>
+      <if test="scccartonCount != null">
+        scccarton_count,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="manid != null">
+        #{manid,jdbcType=INTEGER},
+      </if>
+      <if test="lid != null">
+        #{lid,jdbcType=INTEGER},
+      </if>
+      <if test="serialNo != null">
+        #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tracking != null">
+        #{tracking,jdbcType=VARCHAR},
+      </if>
+      <if test="cartonNo != null">
+        #{cartonNo,jdbcType=VARCHAR},
+      </if>
+      <if test="scccartonCount != null">
+        #{scccartonCount,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDIManICT2020">
+    update edi_man_ICT_2020
+    <set>
+      <if test="lid != null">
+        lid = #{lid,jdbcType=INTEGER},
+      </if>
+      <if test="serialNo != null">
+        serial_no = #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tracking != null">
+        tracking = #{tracking,jdbcType=VARCHAR},
+      </if>
+      <if test="cartonNo != null">
+        carton_no = #{cartonNo,jdbcType=VARCHAR},
+      </if>
+      <if test="scccartonCount != null">
+        scccarton_count = #{scccartonCount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where manid = #{manid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EDIManICT2020">
+    update edi_man_ICT_2020
+    set lid = #{lid,jdbcType=INTEGER},
+      serial_no = #{serialNo,jdbcType=VARCHAR},
+      tracking = #{tracking,jdbcType=VARCHAR},
+      carton_no = #{cartonNo,jdbcType=VARCHAR},
+      scccarton_count = #{scccartonCount,jdbcType=VARCHAR}
+    where manid = #{manid,jdbcType=INTEGER}
+  </update>
+</mapper>

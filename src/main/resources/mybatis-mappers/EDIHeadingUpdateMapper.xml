@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDIHeadingUpdateMapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDIHeadingUpdate">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="hid" jdbcType="INTEGER" property="hid" />
+    <result column="shipper" jdbcType="VARCHAR" property="shipper" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CTNs" jdbcType="VARCHAR" property="ctns" />
+    <result column="QTY" jdbcType="VARCHAR" property="qty" />
+    <result column="factory_weight" jdbcType="VARCHAR" property="factoryWeight" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, hid, shipper, create_time, CTNs, QTY, factory_weight
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_heading_update
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByHid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from edi_heading_update
+    where hid = #{hid,jdbcType=INTEGER}
+    and shipper = #{shipper,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_heading_update
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EDIHeadingUpdate">
+    insert into edi_heading_update (id, hid, shipper, 
+      create_time, CTNs, QTY, 
+      factory_weight)
+    values (#{id,jdbcType=INTEGER}, #{hid,jdbcType=INTEGER}, #{shipper,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{ctns,jdbcType=VARCHAR}, #{qty,jdbcType=VARCHAR}, 
+      #{factoryWeight,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EDIHeadingUpdate">
+    insert into edi_heading_update
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="hid != null">
+        hid,
+      </if>
+      <if test="shipper != null">
+        shipper,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="ctns != null">
+        CTNs,
+      </if>
+      <if test="qty != null">
+        QTY,
+      </if>
+      <if test="factoryWeight != null">
+        factory_weight,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="hid != null">
+        #{hid,jdbcType=INTEGER},
+      </if>
+      <if test="shipper != null">
+        #{shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctns != null">
+        #{ctns,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null">
+        #{qty,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryWeight != null">
+        #{factoryWeight,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDIHeadingUpdate">
+    update edi_heading_update
+    <set>
+      <if test="hid != null">
+        hid = #{hid,jdbcType=INTEGER},
+      </if>
+      <if test="shipper != null">
+        shipper = #{shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctns != null">
+        CTNs = #{ctns,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null">
+        QTY = #{qty,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryWeight != null">
+        factory_weight = #{factoryWeight,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EDIHeadingUpdate">
+    update edi_heading_update
+    set hid = #{hid,jdbcType=INTEGER},
+      shipper = #{shipper,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      CTNs = #{ctns,jdbcType=VARCHAR},
+      QTY = #{qty,jdbcType=VARCHAR},
+      factory_weight = #{factoryWeight,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
