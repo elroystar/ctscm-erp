@@ -77,6 +77,16 @@
 <script type="text/javascript" src="../../js/my/permission.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
 <script type="text/javascript">
+    layui.use(['layer', 'laydate'], function () {
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#beginTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+    });
 
     var example;
 
