@@ -1,7 +1,12 @@
 package com.boot.security.server.dao;
 
+import com.boot.security.server.dto.ShipperDetailDTO;
 import com.boot.security.server.model.EDIManOEM2020;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface EDIManOEM2020Mapper {
@@ -16,4 +21,11 @@ public interface EDIManOEM2020Mapper {
     int updateByPrimaryKeySelective(EDIManOEM2020 record);
 
     int updateByPrimaryKey(EDIManOEM2020 record);
+
+    int count(@Param("params") Map<String, Object> params, @Param("isCountry") Integer isCountry);
+
+    List<ShipperDetailDTO> list(@Param("params") Map<String, Object> params,
+                                @Param("isCountry") Integer isCountry,
+                                @Param("offset") Integer offset,
+                                @Param("limit") Integer limit);
 }

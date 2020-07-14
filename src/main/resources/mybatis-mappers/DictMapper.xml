@@ -5,6 +5,7 @@
 
 	<sql id="where">
 		<where>
+			id > 10
 			<if test="params.id != null and params.id != ''">
 				and id = #{params.id}
 			</if>
@@ -31,6 +32,11 @@
 		<include refid="where" />
 		${params.orderBy}
 		limit #{offset}, #{limit}
+	</select>
+
+	<select id="getAllDict" resultType="Dict">
+		select * from t_dict t
+		<include refid="where" />
 	</select>
 
 	<update id="update">

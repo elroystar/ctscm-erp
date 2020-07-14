@@ -34,3 +34,18 @@ function getDict(type) {
 
 	return JSON.parse(sessionStorage[type]);
 }
+
+function getAllDict() {
+	v = {};
+	$.ajax({
+		type : 'get',
+		url : '/dicts/getAllDict',
+		async : false,
+		success : function(data) {
+			$.each(data, function(i, d) {
+				v[d.type] = d.type;
+			});
+		}
+	});
+	return JSON.parse(JSON.stringify(v));
+}

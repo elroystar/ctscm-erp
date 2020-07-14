@@ -1,12 +1,10 @@
 package com.boot.security.server.controller;
 
 import com.boot.security.server.annotation.LogAnnotation;
-import com.boot.security.server.dao.EDIDetailOEM2020Mapper;
-import com.boot.security.server.dao.EDIHeadingOEM2020Mapper;
-import com.boot.security.server.dao.EDIHeadingUpdateMapper;
-import com.boot.security.server.dao.NoticeDao;
+import com.boot.security.server.dao.*;
 import com.boot.security.server.dto.NoticeReadVO;
 import com.boot.security.server.dto.NoticeVO;
+import com.boot.security.server.dto.ShipperDetailDTO;
 import com.boot.security.server.model.EDIHeadingOEM2020;
 import com.boot.security.server.model.EDIHeadingUpdate;
 import com.boot.security.server.model.Notice;
@@ -19,12 +17,15 @@ import com.boot.security.server.page.table.PageTableResponse;
 import com.boot.security.server.utils.UserUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "日志")
 @RestController
@@ -42,6 +43,9 @@ public class ShipperController {
 
     @Autowired
     private EDIHeadingUpdateMapper ediHeadingUpdateMapper;
+
+    @Autowired
+    private EDIManOEM2020Mapper ediManOEM2020Mapper;
 
     @LogAnnotation
     @PostMapping
@@ -148,6 +152,53 @@ public class ShipperController {
                     }
                 }
                 return headingOEM2020List;
+            }
+        }).handle(request);
+    }
+
+    @GetMapping("getShipperHHCDetail")
+    @ApiOperation(value = "HHC shipper detail列表")
+    public PageTableResponse getShipperHHCDetail(PageTableRequest request) {
+        return new PageTableHandler(new CountHandler() {
+
+            @Override
+            public int count(PageTableRequest request) {
+                Integer isCountry = null;
+                Map<String, Object> params = request.getParams();
+                String region = (String) params.get("region");
+                if (StringUtils.isNotBlank(region)) {
+                    Object country = params.get("country");
+                    if (country instanceof String) {
+                        if (StringUtils.isNotBlank((String) country)) {
+                            isCountry = 1;
+                        }
+                    }
+                    if (country instanceof ArrayList) {
+                        isCountry = 0;
+                    }
+                }
+                return ediManOEM2020Mapper.count(params, isCountry);
+            }
+        }, new ListHandler() {
+
+            @Override
+            public List<ShipperDetailDTO> list(PageTableRequest request) {
+                Integer isCountry = null;
+                Map<String, Object> params = request.getParams();
+                String region = (String) params.get("region");
+                if (StringUtils.isNotBlank(region)) {
+                    Object country = params.get("country");
+                    if (country instanceof String) {
+                        if (StringUtils.isNotBlank((String) country)) {
+                            isCountry = 1;
+                        }
+                    }
+                    if (country instanceof ArrayList) {
+                        isCountry = 0;
+                    }
+                }
+                List<ShipperDetailDTO> shipperDetailDTOS = ediManOEM2020Mapper.list(params, isCountry, request.getOffset(), request.getLimit());
+                return shipperDetailDTOS;
             }
         }).handle(request);
     }

@@ -16,13 +16,18 @@
                         <td>
                             <form class="form-inline" onsubmit="return false">
                                 <div class="form-group">
-									Country：
-                                    <input id="country" type="text" class="form-control" placeholder="country">
-									Region：
-                                    <input id="region" type="text" class="form-control" placeholder="region">
+                                    Region：
+                                    <select class="form-control input-sm" id="region">
+
+                                    </select>
+                                    Country：
+                                    <select class="form-control input-sm" id="country">
+
+                                    </select>
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
+                                    <button class="btn btn-primary" onclick="location.href='HHCList.html'">返回</button>
                                 </div>
                             </form>
                         </td>
@@ -51,14 +56,6 @@
             </div>
         </div>
     </div>
-
-    <div class="form-actions">
-        <div class="row" align="center">
-            <div class="col-md-12">
-                <button class="btn btn-primary" onclick="location.href='HHCList.html'">返回</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
@@ -68,9 +65,12 @@
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="../../js/my/permission.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
 <script type="text/javascript">
 
     var example;
+    init();
+    showRegionSelect("region", "region", true);
 
     function init() {
         example =
@@ -83,10 +83,10 @@
                     "url": "/js/plugin/datatables/Chinese.lang"
                 },
                 "ajax": {
-                    "url": "/shipper/listShipperHHC",
+                    "url": "/shipper/getShipperHHCDetail",
                     "type": "get",
                     "data": function (d) {
-                    	d.hid = getUrlParam("id");
+                        d.hid = getUrlParam("id");
                         d.shipper = "HHC";
                         d.country = $('#country').val();
                         d.region = $('#region').val();
@@ -115,24 +115,69 @@
                 "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
                 "columns": [
                     {"data": "id", "defaultContent": ""},
-                    {"data": "actualDate", "defaultContent": ""},
-                    {"data": "shipper", "defaultContent": ""},
-                    {"data": "original", "defaultContent": ""},
-                    {"data": "ctns", "defaultContent": ""},
+                    {"data": "tracking", "defaultContent": ""},
+                    {"data": "country", "defaultContent": ""},
+                    {"data": "region", "defaultContent": ""},
+                    {"data": "trackingNO", "defaultContent": ""},
                 ]
             });
+    }
+
+    function showRegionSelect(id, type, all) {
+        var data = getAllDict();
+        var select = $("#" + id);
+        select.empty();
+
+        if (all != undefined && all) {
+            select.append("<option value=''>全部</option>");
+        }
+
+        $.each(data, function (k, v) {
+            select.append("<option value ='" + k + "'>" + v + "</option>");
+        });
+
+        return data;
+    }
+
+    function showCountrySelect(id, type, all) {
+        var data = getDict(type);
+        var select = $("#" + id);
+        select.empty();
+
+        if (all != undefined && all) {
+            select.append("<option value=''>全部</option>");
+        }
+
+        $.each(data, function (k, v) {
+            select.append("<option value ='" + k + "'>" + v + "</option>");
+        });
+
+        return data;
     }
 
     $("#searchBt").click(function () {
         example.ajax.reload();
     });
 
+    $("#region").change(function () {
+        var opt = $("#region").val();
+        showCountrySelect("country", opt, true);
+    });
+
+    var pro = window.location.protocol;
+    var host = window.location.host;
+    var domain = pro + "//" + host;
+
     var layedit, index;
     layui.use('layedit', function () {
         layedit = layui.layedit;
-        index = layedit.build('demo', {
-            tool: ['strong']
+        layedit.set({
+            uploadImage: {
+                url: '/files/layui?domain=' + domain + "&token=" + localStorage.getItem("token"),
+                type: 'post'
+            }
         });
+        index = layedit.build('demo');
     });
 
 </script>

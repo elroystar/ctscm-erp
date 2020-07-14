@@ -9,14 +9,62 @@
     <result column="carton_no" jdbcType="VARCHAR" property="cartonNo" />
     <result column="carton_count" jdbcType="VARCHAR" property="cartonCount" />
   </resultMap>
+  <resultMap id="ShipperDetailMap" type="com.boot.security.server.dto.ShipperDetailDTO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tracking" jdbcType="VARCHAR" property="tracking" />
+    <result column="st_country" jdbcType="INTEGER" property="country" />
+    <result column="type" jdbcType="INTEGER" property="region" />
+  </resultMap>
   <sql id="Base_Column_List">
     id, did, serial_no, tracking, carton_no, carton_count
   </sql>
+  <sql id="where">
+    <where>
+      <if test="params.hid != null and params.hid != ''">
+        and h.id = #{params.hid,jdbcType=INTEGER}
+      </if>
+      <if test="params.shipper != null and params.shipper != ''">
+        and h.shipper = #{params.shipper,jdbcType=VARCHAR}
+      </if>
+      <if test="isCountry != null and isCountry == 1">
+        and d.st_country = #{params.country,jdbcType=VARCHAR}
+      </if>
+      <if test="isCountry != null and isCountry == 0">
+        and d.st_country in
+        <foreach item="item" index="params.country" collection="list" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from edi_man_OEM_2020
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="count" resultType="int">
+    SELECT
+      count(1)
+    FROM
+      edi_man_OEM_2020 m
+    LEFT JOIN edi_detail_OEM_2020 d ON m.did = d.id
+    LEFT JOIN edi_heading_OEM_2020 h ON d.hid = h.id
+    <include refid="where" />
+  </select>
+  <select id="list" resultMap="ShipperDetailMap">
+    SELECT
+      m.id,
+      m.tracking,
+      d.st_country,
+      t.type
+    FROM
+      edi_man_OEM_2020 m
+    LEFT JOIN edi_detail_OEM_2020 d ON m.did = d.id
+    LEFT JOIN edi_heading_OEM_2020 h ON d.hid = h.id
+    LEFT JOIN t_dict t ON t.val = d.st_country
+    <include refid="where" />
+    limit #{offset}, #{limit}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from edi_man_OEM_2020
