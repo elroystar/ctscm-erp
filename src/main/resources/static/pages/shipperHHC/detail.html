@@ -27,6 +27,9 @@
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
+                                    <button id="exportExcel" class="layui-btn layui-btn-sm"><i
+                                            class="layui-icon">&#xe601;</i>导出
+                                    </button>
                                     <button class="btn btn-primary" onclick="location.href='HHCList.html'">返回</button>
                                 </div>
                             </form>
@@ -47,6 +50,7 @@
                         <th>PO/DN</th>
                         <th>Country</th>
                         <th>Region</th>
+                        <th>DN</th>
                         <th>Tracking No</th>
                     </tr>
                     </thead>
@@ -70,8 +74,7 @@
 
     var example;
     init();
-    showRegionSelect("region", "region", true);
-
+    showDictNameSelect("region", "region", true);
     function init() {
         example =
             $('#dt-table').DataTable({
@@ -118,50 +121,33 @@
                     {"data": "tracking", "defaultContent": ""},
                     {"data": "country", "defaultContent": ""},
                     {"data": "region", "defaultContent": ""},
-                    {"data": "trackingNO", "defaultContent": ""},
+                    {"data": "tracking", "defaultContent": ""},
+                    {"data": "trackingNo", "defaultContent": ""},
                 ]
             });
-    }
-
-    function showRegionSelect(id, type, all) {
-        var data = getAllDict();
-        var select = $("#" + id);
-        select.empty();
-
-        if (all != undefined && all) {
-            select.append("<option value=''>全部</option>");
-        }
-
-        $.each(data, function (k, v) {
-            select.append("<option value ='" + k + "'>" + v + "</option>");
-        });
-
-        return data;
-    }
-
-    function showCountrySelect(id, type, all) {
-        var data = getDict(type);
-        var select = $("#" + id);
-        select.empty();
-
-        if (all != undefined && all) {
-            select.append("<option value=''>全部</option>");
-        }
-
-        $.each(data, function (k, v) {
-            select.append("<option value ='" + k + "'>" + v + "</option>");
-        });
-
-        return data;
     }
 
     $("#searchBt").click(function () {
         example.ajax.reload();
     });
 
+    $("#exportExcel").click(function () {
+        var hid = getUrlParam("id");
+        var shipper = "HHC";
+        var country = $('#country').val();
+        var region = $('#region').val();
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['600px', '600px'],
+            shadeClose: true,
+            content: ['exportExcelHHC.html?hid=' + hid + '&shipper=' + shipper + '&country=' + country + '&region=' + region]
+        });
+    });
+
     $("#region").change(function () {
         var opt = $("#region").val();
-        showCountrySelect("country", opt, true);
+        showDictSelect("country", opt, true);
     });
 
     var pro = window.location.protocol;

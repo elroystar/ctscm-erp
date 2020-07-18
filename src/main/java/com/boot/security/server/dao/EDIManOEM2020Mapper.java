@@ -28,4 +28,6 @@ public interface EDIManOEM2020Mapper {
                                 @Param("isCountry") Integer isCountry,
                                 @Param("offset") Integer offset,
                                 @Param("limit") Integer limit);
+
+    List<ShipperDetailDTO> listAll(@Param("params") Map<String, Object> params, @Param("isCountry") Integer isCountry);
 }

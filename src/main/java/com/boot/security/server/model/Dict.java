@@ -2,33 +2,42 @@ package com.boot.security.server.model;
 
 public class Dict extends BaseEntity<Long> {
 
-	private static final long serialVersionUID = -2431140186410912787L;
-	private String type;
-	private String k;
-	private String val;
+    private static final long serialVersionUID = -2431140186410912787L;
+    private String name;
+    private String type;
+    private String k;
+    private String val;
 
-	public String getType() {
-		return type;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getK() {
-		return k;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setK(String k) {
-		this.k = k;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public String getVal() {
-		return val;
-	}
+    public String getK() {
+        return k;
+    }
 
-	public void setVal(String val) {
-		this.val = val;
-	}
+    public void setK(String k) {
+        this.k = k;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    public void setVal(String val) {
+        this.val = val;
+    }
 
 }

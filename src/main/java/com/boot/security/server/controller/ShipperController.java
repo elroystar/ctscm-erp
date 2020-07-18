@@ -1,27 +1,29 @@
 package com.boot.security.server.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.boot.security.server.annotation.LogAnnotation;
-import com.boot.security.server.dao.*;
-import com.boot.security.server.dto.NoticeReadVO;
-import com.boot.security.server.dto.NoticeVO;
+import com.boot.security.server.dao.EDIDetailOEM2020Mapper;
+import com.boot.security.server.dao.EDIHeadingOEM2020Mapper;
+import com.boot.security.server.dao.EDIHeadingUpdateMapper;
+import com.boot.security.server.dao.EDIManOEM2020Mapper;
+import com.boot.security.server.dto.EDIExportExcelDTO;
 import com.boot.security.server.dto.ShipperDetailDTO;
 import com.boot.security.server.model.EDIHeadingOEM2020;
 import com.boot.security.server.model.EDIHeadingUpdate;
-import com.boot.security.server.model.Notice;
-import com.boot.security.server.model.SysUser;
 import com.boot.security.server.page.table.PageTableHandler;
 import com.boot.security.server.page.table.PageTableHandler.CountHandler;
 import com.boot.security.server.page.table.PageTableHandler.ListHandler;
 import com.boot.security.server.page.table.PageTableRequest;
 import com.boot.security.server.page.table.PageTableResponse;
-import com.boot.security.server.utils.UserUtil;
+import com.boot.security.server.utils.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +33,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/shipper")
 public class ShipperController {
-
-    @Autowired
-    private NoticeDao noticeDao;
 
     @Autowired
     private EDIHeadingOEM2020Mapper ediHeadingOEM2020Mapper;
@@ -47,51 +46,11 @@ public class ShipperController {
     @Autowired
     private EDIManOEM2020Mapper ediManOEM2020Mapper;
 
-    @LogAnnotation
-    @PostMapping
-    @ApiOperation(value = "保存公告")
-    @PreAuthorize("hasAuthority('notice:add')")
-    public Notice saveNotice(@RequestBody Notice notice) {
-        noticeDao.save(notice);
-
-        return notice;
-    }
-
     @GetMapping("/HHC/{id}")
     @ApiOperation(value = "根据id HHC shipper")
     public EDIHeadingOEM2020 getShipperHHC(@PathVariable Long id) {
-        EDIHeadingOEM2020 headingOEM2020 = ediHeadingOEM2020Mapper.selectByPrimaryKey(Long.bitCount(id));
-        if ("".equals(headingOEM2020.getCtns()) || null == headingOEM2020.getCtns()) {
-            String CTNs = ediDetailOEM2020Mapper.selectCTNsByHeadingId(headingOEM2020.getId());
-            headingOEM2020.setCtns(CTNs);
-        }
-        if ("".equals(headingOEM2020.getQty()) || null == headingOEM2020.getQty()) {
-            String QTY = ediDetailOEM2020Mapper.selectQTYByHeadingId(headingOEM2020.getId());
-            headingOEM2020.setQty(QTY);
-        }
-        if ("".equals(headingOEM2020.getFactoryWeight()) || null == headingOEM2020.getFactoryWeight()) {
-            String factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
-            headingOEM2020.setFactoryWeight(factoryWeight);
-        }
+        EDIHeadingOEM2020 headingOEM2020 = getEdiHeadingOEM2020(Long.bitCount(id));
         return headingOEM2020;
-    }
-
-    @GetMapping(params = "id")
-    public NoticeVO readNotice(Long id) {
-        NoticeVO vo = new NoticeVO();
-
-        Notice notice = noticeDao.getById(id);
-        if (notice == null || notice.getStatus() == Notice.Status.DRAFT) {
-            return vo;
-        }
-        vo.setNotice(notice);
-
-        noticeDao.saveReadRecord(notice.getId(), UserUtil.getLoginUser().getId());
-
-        List<SysUser> users = noticeDao.listReadUsers(id);
-        vo.setUsers(users);
-
-        return vo;
     }
 
     @LogAnnotation
@@ -119,6 +78,68 @@ public class ShipperController {
             ediHeadingUpdateMapper.updateByPrimaryKey(update);
         }
         return headingOEM2020;
+    }
+
+    @LogAnnotation
+    @PostMapping("exportExcelHHC")
+    @ApiOperation(value = "导出HHC数据")
+    public void exportExcelHHC(EDIExportExcelDTO exportExcelDTO, HttpServletResponse response) {
+        Integer isCountry = null;
+        String region = exportExcelDTO.getRegion();
+        if (StringUtils.isNotBlank(region)) {
+            Object country = exportExcelDTO.getCountry();
+            if (country instanceof String) {
+                if (StringUtils.isNotBlank((String) country)) {
+                    isCountry = 1;
+                }
+            }
+            if (country instanceof ArrayList) {
+                isCountry = 0;
+            }
+        }
+        Map<String, Object> params = (Map<String, Object>) JSONObject.parse(JSON.toJSONString(exportExcelDTO));
+        EDIHeadingOEM2020 headingOEM2020 = getEdiHeadingOEM2020(exportExcelDTO.getHid());
+        List<ShipperDetailDTO> shipperDetailDTOS = ediManOEM2020Mapper.listAll(params, isCountry);
+        List<Object[]> data = new ArrayList<>();
+        switch (headingOEM2020.getShipmentway()) {
+            case "DIRECT":
+                for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
+                    detailDTO.setTrackingNo(detailDTO.getDn());
+                    setExportData(exportExcelDTO, detailDTO, headingOEM2020);
+                    data.add(detailDTO.toString().split(","));
+                }
+                break;
+            case "STO":
+                for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
+                    detailDTO.setTrackingNo(detailDTO.getDn());
+                    setExportData(exportExcelDTO, detailDTO, headingOEM2020);
+                    data.add(detailDTO.toString().split(","));
+                }
+                break;
+            case "HUB":
+                for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
+                    detailDTO.setTrackingNo(detailDTO.getHawb());
+                    setExportData(exportExcelDTO, detailDTO, headingOEM2020);
+                    data.add(detailDTO.toString().split(","));
+                }
+                break;
+        }
+        String headerStr = "id,country,PO/DN,region,trackingNo,状态,原因,日期,时间,地区,城市,国别,ctns,qty,factoryWeight";
+        String[] headers = headerStr.split(",");
+        ExcelUtil.excelExport2("detail", headers, data, response);
+    }
+
+    private void setExportData(EDIExportExcelDTO exportExcelDTO, ShipperDetailDTO detailDTO, EDIHeadingOEM2020 headingOEM2020) {
+        detailDTO.setState(exportExcelDTO.getState());
+        detailDTO.setReason(exportExcelDTO.getReason());
+        detailDTO.setDate(exportExcelDTO.getDate());
+        detailDTO.setTime(exportExcelDTO.getTime());
+        detailDTO.setZone(exportExcelDTO.getZone());
+        detailDTO.setCity(exportExcelDTO.getCity());
+        detailDTO.setGuobie(exportExcelDTO.getGuobie());
+        detailDTO.setCtns(headingOEM2020.getCtns());
+        detailDTO.setQty(headingOEM2020.getQty());
+        detailDTO.setFactoryWeight(headingOEM2020.getFactoryWeight());
     }
 
     @GetMapping("listShipperHHC")
@@ -197,44 +218,45 @@ public class ShipperController {
                         isCountry = 0;
                     }
                 }
+                EDIHeadingOEM2020 headingOEM2020 = ediHeadingOEM2020Mapper.selectByPrimaryKey(Integer.parseInt((String) params.get("hid")));
                 List<ShipperDetailDTO> shipperDetailDTOS = ediManOEM2020Mapper.list(params, isCountry, request.getOffset(), request.getLimit());
+                switch (headingOEM2020.getShipmentway()) {
+                    case "DIRECT":
+                        for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
+                            detailDTO.setTrackingNo(detailDTO.getDn());
+                        }
+                        break;
+                    case "STO":
+                        for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
+                            detailDTO.setTrackingNo(detailDTO.getDn());
+                        }
+                        break;
+                    case "HUB":
+                        for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
+                            detailDTO.setTrackingNo(detailDTO.getHawb());
+                        }
+                        break;
+                }
                 return shipperDetailDTOS;
             }
         }).handle(request);
     }
 
-    @LogAnnotation
-    @DeleteMapping("/{id}")
-    @ApiOperation(value = "删除公告")
-    @PreAuthorize("hasAuthority('notice:del')")
-    public void delete(@PathVariable Long id) {
-        noticeDao.delete(id);
+    private EDIHeadingOEM2020 getEdiHeadingOEM2020(int hid) {
+        EDIHeadingOEM2020 headingOEM2020 = ediHeadingOEM2020Mapper.selectByPrimaryKey(hid);
+        if ("".equals(headingOEM2020.getCtns()) || null == headingOEM2020.getCtns()) {
+            String CTNs = ediDetailOEM2020Mapper.selectCTNsByHeadingId(headingOEM2020.getId());
+            headingOEM2020.setCtns(CTNs);
+        }
+        if ("".equals(headingOEM2020.getQty()) || null == headingOEM2020.getQty()) {
+            String QTY = ediDetailOEM2020Mapper.selectQTYByHeadingId(headingOEM2020.getId());
+            headingOEM2020.setQty(QTY);
+        }
+        if ("".equals(headingOEM2020.getFactoryWeight()) || null == headingOEM2020.getFactoryWeight()) {
+            String factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
+            headingOEM2020.setFactoryWeight(factoryWeight);
+        }
+        return headingOEM2020;
     }
 
-    @ApiOperation(value = "未读公告数")
-    @GetMapping("/count-unread")
-    public Integer countUnread() {
-        SysUser user = UserUtil.getLoginUser();
-        return noticeDao.countUnread(user.getId());
-    }
-
-    @GetMapping("/published")
-    @ApiOperation(value = "公告列表")
-    public PageTableResponse listNoticeReadVO(PageTableRequest request) {
-        request.getParams().put("userId", UserUtil.getLoginUser().getId());
-
-        return new PageTableHandler(new CountHandler() {
-
-            @Override
-            public int count(PageTableRequest request) {
-                return noticeDao.countNotice(request.getParams());
-            }
-        }, new ListHandler() {
-
-            @Override
-            public List<NoticeReadVO> list(PageTableRequest request) {
-                return noticeDao.listNotice(request.getParams(), request.getOffset(), request.getLimit());
-            }
-        }).handle(request);
-    }
 }

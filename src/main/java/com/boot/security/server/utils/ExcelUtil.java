@@ -116,6 +116,51 @@ public class ExcelUtil {
 	}
 
 	/**
+	 * 导出excel
+	 *
+	 * @param fileName
+	 * @param headers
+	 * @param datas
+	 * @param response
+	 */
+	public static void excelExport2(String fileName, String[] headers, List<Object[]> datas,
+								   HttpServletResponse response) {
+		Workbook workbook = getWorkbook(headers, datas);
+		if (workbook != null) {
+			ByteArrayOutputStream byteArrayOutputStream = null;
+			try {
+				byteArrayOutputStream = new ByteArrayOutputStream();
+				workbook.write(byteArrayOutputStream);
+
+				String suffix = ".xls";
+				response.setContentType("application/vnd.ms-excel;charset=utf-8");
+				response.setHeader("Content-Disposition",
+						"attachment;filename=" + new String((fileName + suffix).getBytes(), "UTF-8"));
+
+				OutputStream outputStream = response.getOutputStream();
+				outputStream.write(byteArrayOutputStream.toByteArray());
+				outputStream.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (byteArrayOutputStream != null) {
+						byteArrayOutputStream.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				try {
+					workbook.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
 	 * 
 	 * @param headers
 	 *            列头

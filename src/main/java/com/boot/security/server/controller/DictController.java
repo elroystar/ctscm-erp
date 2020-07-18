@@ -87,4 +87,9 @@ public class DictController {
     public List<Dict> listByType(String type) {
         return dictDao.listByType(type);
     }
+
+    @GetMapping("/listByName")
+    public List<Dict> listByName(String name) {
+        return dictDao.listByName(name);
+    }
 }

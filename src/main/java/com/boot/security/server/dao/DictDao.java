@@ -18,7 +18,7 @@ public interface DictDao {
     int update(Dict dict);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into t_dict(type, k, val, createTime, updateTime) values(#{type}, #{k}, #{val}, now(), now())")
+    @Insert("insert into t_dict(name, type, k, val, createTime, updateTime) values(#{name}, #{type}, #{k}, #{val}, now(), now())")
     int save(Dict dict);
 
     int count(@Param("params") Map<String, Object> params);
@@ -36,4 +36,7 @@ public interface DictDao {
 
     @Select("select t.val from t_dict t where t.type = #{type}")
     List<String> listValueByType(String region);
+
+    @Select("select * from t_dict t where t.name = #{name}")
+    List<Dict> listByName(String name);
 }
