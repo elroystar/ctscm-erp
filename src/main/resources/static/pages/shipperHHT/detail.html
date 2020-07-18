@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
     <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
@@ -17,13 +16,21 @@
                         <td>
                             <form class="form-inline" onsubmit="return false">
                                 <div class="form-group">
-                                    hawb：
-                                    <input id="hawb" type="text" class="form-control" placeholder="hawb">
-                                    awb：
-                                    <input id="awb" type="text" class="form-control" placeholder="awb">
+                                    Region：
+                                    <select class="form-control input-sm" id="region">
+
+                                    </select>
+                                    Country：
+                                    <select class="form-control input-sm" id="country">
+
+                                    </select>
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
+                                    <button id="exportExcel" class="layui-btn layui-btn-sm"><i
+                                            class="layui-icon">&#xe601;</i>导出
+                                    </button>
+                                    <button class="btn btn-primary" onclick="location.href='HHTList.html'">返回</button>
                                 </div>
                             </form>
                         </td>
@@ -40,17 +47,11 @@
                     </tr>
                     <tr>
                         <th>id</th>
-                        <th>Date</th>
-                        <th>Shipper</th>
-                        <th>Original</th>
-                        <th>HAWB</th>
-                        <th>AWB</th>
-                        <th>Ship Type</th>
-                        <th>PLTs</th>
-                        <th>CTNs</th>
-                        <th>QTY</th>
-                        <th>Factory Weight</th>
-                        <th>操作</th>
+                        <th>PO/DN</th>
+                        <th>Country</th>
+                        <th>Region</th>
+                        <th>DN</th>
+                        <th>Tracking No</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -60,8 +61,6 @@
         </div>
     </div>
 </div>
-</body>
-</html>
 
 <script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="../../js/jq.js"></script>
@@ -70,20 +69,12 @@
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="../../js/my/permission.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
 <script type="text/javascript">
-    layui.use(['layer', 'laydate'], function () {
-        var layer = layui.layer;
-        var laydate = layui.laydate;
-        laydate.render({
-            elem: '#beginTime'
-        });
-        laydate.render({
-            elem: '#endTime'
-        });
-    });
 
     var example;
-
+    init();
+    showDictNameSelect("region", "region", true);
     function init() {
         example =
             $('#dt-table').DataTable({
@@ -95,12 +86,13 @@
                     "url": "/js/plugin/datatables/Chinese.lang"
                 },
                 "ajax": {
-                    "url": "/shipper/listShipperHHC",
+                    "url": "/shipper/getShipperHHCDetail",
                     "type": "get",
                     "data": function (d) {
-                        d.shipper = "HHC";
-                        d.hawb = $('#hawb').val();
-                        d.awb = $('#awb').val();
+                        d.hid = getUrlParam("id");
+                        d.shipper = "HHT";
+                        d.country = $('#country').val();
+                        d.region = $('#region').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;
@@ -126,45 +118,54 @@
                 "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
                 "columns": [
                     {"data": "id", "defaultContent": ""},
-                    {"data": "actualDate", "defaultContent": ""},
-                    {"data": "shipper", "defaultContent": ""},
-                    {"data": "original", "defaultContent": ""},
-                    {"data": "hawb", "defaultContent": ""},
-                    {"data": "awb", "defaultContent": ""},
-                    {"data": "shipmentway", "defaultContent": ""},
-                    {"data": "totalPallet", "defaultContent": ""},
-                    {"data": "ctns", "defaultContent": ""},
-                    {"data": "qty", "defaultContent": ""},
-                    {"data": "factoryWeight", "defaultContent": ""},
-                    {
-                        "data": "",
-                        "defaultContent": "",
-                        "orderable": false,
-                        "render": function (data, type, row) {
-                            var id = row['id'];
-                            var hrefInfo = "detail.html?id=" + id;
-                            var edit = "<button class='layui-btn layui-btn-xs' title='修改' onclick='updateShipperHHC(\"" + id + "\")'><i class='layui-icon'>&#xe642;</i></button>";
-                            var info = "<button class='layui-btn layui-btn-xs' title='详情' onclick='window.location=\"" + hrefInfo + "\"'><i class='layui-icon'>&#xe65f;</i></button>";
-                            return edit + info;
-                        }
-                    },
+                    {"data": "tracking", "defaultContent": ""},
+                    {"data": "country", "defaultContent": ""},
+                    {"data": "region", "defaultContent": ""},
+                    {"data": "tracking", "defaultContent": ""},
+                    {"data": "trackingNo", "defaultContent": ""},
                 ]
             });
-    }
-
-    function updateShipperHHC(id) {
-        layer.open({
-            type: 2,
-            title: false,
-            area: ['800px', '400px'],
-            shadeClose: true,
-            content: ['updateShipperHHC.html?id=' + id]
-        });
     }
 
     $("#searchBt").click(function () {
         example.ajax.reload();
     });
 
-    init();
+    $("#exportExcel").click(function () {
+        var hid = getUrlParam("id");
+        var shipper = "HHT";
+        var country = $('#country').val();
+        var region = $('#region').val();
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['600px', '600px'],
+            shadeClose: true,
+            content: ['exportExcelHHT.html?hid=' + hid + '&shipper=' + shipper + '&country=' + country + '&region=' + region]
+        });
+    });
+
+    $("#region").change(function () {
+        var opt = $("#region").val();
+        showDictSelect("country", opt, true);
+    });
+
+    var pro = window.location.protocol;
+    var host = window.location.host;
+    var domain = pro + "//" + host;
+
+    var layedit, index;
+    layui.use('layedit', function () {
+        layedit = layui.layedit;
+        layedit.set({
+            uploadImage: {
+                url: '/files/layui?domain=' + domain + "&token=" + localStorage.getItem("token"),
+                type: 'post'
+            }
+        });
+        index = layedit.build('demo');
+    });
+
 </script>
+</body>
+</html>

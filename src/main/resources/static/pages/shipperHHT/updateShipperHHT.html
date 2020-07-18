@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <form class="form-horizontal" onsubmit="return false" id="form">
+        <br/>
+        <input type="hidden" id="id" name="id">
+        <div class="form-group">
+            <label class="col-md-2 control-label">PLTs</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="PLTs" type="text" name="plts" id="plts">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">CTNs</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="CTNs" type="text" name="ctns" id="ctns">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">QTY</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="QTY" type="text" name="qty" id="qty">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Factory Weight</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="Factory Weight" type="text" name="factoryWeight"
+                       id="factoryWeight">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="row" align="center">
+                <div class="col-md-12">
+                    <button class="btn btn-primary" type="submit" onclick="update(this)">
+                        <i class="fa fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript">
+    initData();
+
+    function initData() {
+        var id = getUrlParam("id");
+        debugger;
+        if (id != "") {
+            $.ajax({
+                type: 'get',
+                url: '/shipper/HHC/' + id,
+                async: false,
+                success: function (data) {
+                    $("#id").val(data.id);
+                    $("#plts").val(data.totalPallet);
+                    $("#ctns").val(data.ctns);
+                    $("#qty").val(data.qty);
+                    $("#factoryWeight").val(data.factoryWeight);
+
+                }
+            });
+
+        }
+    }
+
+    var pro = window.location.protocol;
+    var host = window.location.host;
+    var domain = pro + "//" + host;
+
+    var layedit, index;
+    layui.use('layedit', function () {
+        layedit = layui.layedit;
+        layedit.set({
+            uploadImage: {
+                url: '/files/layui?domain=' + domain + "&token=" + localStorage.getItem("token"),
+                type: 'post'
+            }
+        });
+        index = layedit.build('demo');
+    });
+
+
+    function update(obj) {
+        var plts = $("#plts").val();
+        var ctns = $("#ctns").val();
+        var qty = $("#qty").val();
+        var factoryWeight = $("#factoryWeight").val();
+        $(obj).attr("disabled", true);
+
+        var formdata = $("#form").serializeObject();
+        formdata.id = $("#id").val();
+        formdata.shipper = "HHT";
+        formdata.totalPallet = plts;
+        formdata.ctns = ctns;
+        formdata.qty = qty;
+        formdata.factoryWeight = factoryWeight;
+
+        $.ajax({
+            type: 'put',
+            url: '/shipper/updateShipperHHC',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(formdata),
+            success: function (data) {
+                window.parent.location.reload(); //刷新父页面
+                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                parent.layer.close(index);  // 关闭layer
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

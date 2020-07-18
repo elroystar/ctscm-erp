@@ -25,5 +25,5 @@ public interface EDIDetailOEM2020Mapper {
 
     String selectQTYByHeadingId(@Param("hid") Integer hid);
 
-    String selectFactoryWeightByHeadingId(@Param("hid") Integer hid);
+    Double selectFactoryWeightByHeadingId(@Param("hid") Integer hid);
 }

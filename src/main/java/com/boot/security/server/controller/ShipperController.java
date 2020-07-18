@@ -48,8 +48,8 @@ public class ShipperController {
 
     @GetMapping("/HHC/{id}")
     @ApiOperation(value = "根据id HHC shipper")
-    public EDIHeadingOEM2020 getShipperHHC(@PathVariable Long id) {
-        EDIHeadingOEM2020 headingOEM2020 = getEdiHeadingOEM2020(Long.bitCount(id));
+    public EDIHeadingOEM2020 getShipperHHC(@PathVariable Integer id) {
+        EDIHeadingOEM2020 headingOEM2020 = getEdiHeadingOEM2020(id);
         return headingOEM2020;
     }
 
@@ -167,8 +167,8 @@ public class ShipperController {
                             headingOEM2020.setQty(QTY);
                         }
                         if ("".equals(headingOEM2020.getFactoryWeight()) || null == headingOEM2020.getFactoryWeight()) {
-                            String factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
-                            headingOEM2020.setFactoryWeight(factoryWeight);
+                            Double factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
+                            headingOEM2020.setFactoryWeight(String.format("%.2f", factoryWeight));
                         }
                     }
                 }
@@ -253,8 +253,8 @@ public class ShipperController {
             headingOEM2020.setQty(QTY);
         }
         if ("".equals(headingOEM2020.getFactoryWeight()) || null == headingOEM2020.getFactoryWeight()) {
-            String factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
-            headingOEM2020.setFactoryWeight(factoryWeight);
+            Double factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
+            headingOEM2020.setFactoryWeight(String.format("%.2f", factoryWeight));
         }
         return headingOEM2020;
     }

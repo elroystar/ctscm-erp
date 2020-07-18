@@ -98,7 +98,7 @@
                     "url": "/shipper/listShipperHHC",
                     "type": "get",
                     "data": function (d) {
-                        d.shipper = "HHC";
+                        d.shipper = "HHT";
                         d.hawb = $('#hawb').val();
                         d.awb = $('#awb').val();
                     },
@@ -143,7 +143,7 @@
                         "render": function (data, type, row) {
                             var id = row['id'];
                             var hrefInfo = "detail.html?id=" + id;
-                            var edit = "<button class='layui-btn layui-btn-xs' title='修改' onclick='updateShipperHHC(\"" + id + "\")'><i class='layui-icon'>&#xe642;</i></button>";
+                            var edit = "<button class='layui-btn layui-btn-xs' title='修改' onclick='updateShipperHHT(\"" + id + "\")'><i class='layui-icon'>&#xe642;</i></button>";
                             var info = "<button class='layui-btn layui-btn-xs' title='详情' onclick='window.location=\"" + hrefInfo + "\"'><i class='layui-icon'>&#xe65f;</i></button>";
                             return edit + info;
                         }
@@ -152,13 +152,13 @@
             });
     }
 
-    function updateShipperHHC(id) {
+    function updateShipperHHT(id) {
         layer.open({
             type: 2,
             title: false,
             area: ['800px', '400px'],
             shadeClose: true,
-            content: ['updateShipperHHC.html?id=' + id]
+            content: ['updateShipperHHT.html?id=' + id]
         });
     }
 
