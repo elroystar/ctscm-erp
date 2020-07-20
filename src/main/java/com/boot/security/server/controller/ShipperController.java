@@ -218,22 +218,31 @@ public class ShipperController {
                         isCountry = 0;
                     }
                 }
-                EDIHeadingOEM2020 headingOEM2020 = ediHeadingOEM2020Mapper.selectByPrimaryKey(Integer.parseInt((String) params.get("hid")));
+                EDIHeadingOEM2020 headingOEM2020 = getEdiHeadingOEM2020(Integer.parseInt((String) params.get("hid")));
                 List<ShipperDetailDTO> shipperDetailDTOS = ediManOEM2020Mapper.list(params, isCountry, request.getOffset(), request.getLimit());
                 switch (headingOEM2020.getShipmentway()) {
                     case "DIRECT":
                         for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
                             detailDTO.setTrackingNo(detailDTO.getDn());
+                            detailDTO.setCtns(headingOEM2020.getCtns());
+                            detailDTO.setQty(headingOEM2020.getQty());
+                            detailDTO.setFactoryWeight(headingOEM2020.getFactoryWeight());
                         }
                         break;
                     case "STO":
                         for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
                             detailDTO.setTrackingNo(detailDTO.getDn());
+                            detailDTO.setCtns(headingOEM2020.getCtns());
+                            detailDTO.setQty(headingOEM2020.getQty());
+                            detailDTO.setFactoryWeight(headingOEM2020.getFactoryWeight());
                         }
                         break;
                     case "HUB":
                         for (ShipperDetailDTO detailDTO : shipperDetailDTOS) {
                             detailDTO.setTrackingNo(detailDTO.getHawb());
+                            detailDTO.setCtns(headingOEM2020.getCtns());
+                            detailDTO.setQty(headingOEM2020.getQty());
+                            detailDTO.setFactoryWeight(headingOEM2020.getFactoryWeight());
                         }
                         break;
                 }
