@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDITruckNoICTMapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDITruckNoICT">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mid" jdbcType="INTEGER" property="mid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="truck_no" jdbcType="VARCHAR" property="truckNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, mid, create_time, truck_no
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_truck_no_ICT
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_truck_no_ICT
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EDITruckNoICT">
+    insert into edi_truck_no_ICT (id, mid, create_time, 
+      truck_no)
+    values (#{id,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{truckNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EDITruckNoICT">
+    insert into edi_truck_no_ICT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="truckNo != null">
+        truck_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mid != null">
+        #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="truckNo != null">
+        #{truckNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDITruckNoICT">
+    update edi_truck_no_ICT
+    <set>
+      <if test="mid != null">
+        mid = #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="truckNo != null">
+        truck_no = #{truckNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EDITruckNoICT">
+    update edi_truck_no_ICT
+    set mid = #{mid,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      truck_no = #{truckNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

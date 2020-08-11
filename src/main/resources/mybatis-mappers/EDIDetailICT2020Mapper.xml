@@ -66,6 +66,15 @@
     from edi_detail_ICT_2020
     where linid = #{linid,jdbcType=INTEGER}
   </select>
+  <select id="selectCTNsByHeadingId" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT SUM(carton_count) FROM edi_detail_ICT_2020 WHERE id = #{hid,jdbcType=INTEGER};
+  </select>
+  <select id="selectQTYByHeadingId" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT SUM(shipperqty) FROM edi_detail_ICT_2020 WHERE id = #{hid,jdbcType=INTEGER};
+  </select>
+  <select id="selectFactoryWeightByHeadingId" parameterType="java.lang.Integer" resultType="java.lang.Double">
+    SELECT SUM(gross_weight) FROM edi_detail_ICT_2020 WHERE id = #{hid,jdbcType=INTEGER};
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from edi_detail_ICT_2020
     where linid = #{linid,jdbcType=INTEGER}

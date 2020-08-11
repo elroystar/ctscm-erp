@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <form class="form-horizontal" id="form" method="post" action="/shipper/exportExcelHHC" onsubmit="return false"
+          enctype="multipart/form-data">
+        <br/>
+        <input id="token" name="token" hidden="true">
+        <input id="hid" name="hid" hidden="true">
+        <input id="shipper" name="shipper" hidden="true">
+        <input id="country" name="country" hidden="true">
+        <input id="region" name="region" hidden="true">
+        <fieldset>
+            <input type="hidden" id="id" name="id">
+            <div class="form-group">
+                <label class="col-md-2 control-label">状态</label>
+                <div class="col-md-10">
+                    <select class="form-control input-sm" id="state"
+                            name="state" data-bv-notempty='true' data-bv-notempty-message='状态 不能为空'>
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">原因</label>
+                <div class="col-md-10">
+                    <select class="form-control input-sm" id="reason"
+                            name="reason" data-bv-notempty='true' data-bv-notempty-message='原因 不能为空'>
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">日期</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="date" type="text" name="date"
+                           id="date" data-bv-notempty='true' data-bv-notempty-message='日期 不能为空'>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">时间</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="time" type="text" name="time"
+                           id="time" data-bv-notempty='true' data-bv-notempty-message='时间 不能为空'>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">时区</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="zone" type="text" name="zone" value="08"
+                           id="zone" data-bv-notempty='true' data-bv-notempty-message='时区 不能为空'>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">城市</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="city" type="text" name="city"
+                           id="city" data-bv-notempty='true' data-bv-notempty-message='城市 不能为空'>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">国别</label>
+                <div class="col-md-10">
+                    <input class="form-control" placeholder="country" type="text" name="guobie"
+                           id="guobie" data-bv-notempty='true' data-bv-notempty-message='国别 不能为空'>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <div class="row" align="center">
+                    <div class="col-md-12">
+                        <button class='btn btn-primary' type="submit" onclick="exportExcel(this)">
+                            <i class='layui-icon'>&#xe601;</i>导出
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+    <div class="widget-body no-padding">
+        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+            <thead>
+            <tr>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <th>Reason</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Time Code</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Country</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript">
+    var example;
+
+    initData();
+
+    function initData() {
+        example =
+            $('#dt-table').DataTable({
+                "searching": false,
+                "processing": false,
+                "serverSide": true,
+                "ordering": false,
+                "language": {
+                    "url": "/js/plugin/datatables/Chinese.lang"
+                },
+                "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
+                "columns": [
+                    {"data": "actualDate", "defaultContent": ""},
+                    {"data": "shipper", "defaultContent": ""},
+                    {"data": "original", "defaultContent": ""},
+                    {"data": "hawb", "defaultContent": ""},
+                    {"data": "awb", "defaultContent": ""},
+                    {"data": "shipmentway", "defaultContent": ""},
+                    {"data": "country", "defaultContent": ""},
+                    {"data": "region", "defaultContent": ""},
+                    {"data": "tracking", "defaultContent": ""},
+                    {"data": "dn", "defaultContent": ""},
+                    {"data": "trackingNo", "defaultContent": ""},
+                    {"data": "totalPallet", "defaultContent": ""},
+                    {"data": "ctns", "defaultContent": ""},
+                    {"data": "qty", "defaultContent": ""},
+                    {"data": "factoryWeight", "defaultContent": ""},
+                    {"data": "truckNo", "defaultContent": ""},
+                    {
+                        "data": "",
+                        "defaultContent": "",
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            var hid = row['hid'];
+                            var edit = "<button class='layui-btn layui-btn-xs' title='修改' onclick='updateShipperICT(\"" + hid + "\")'><i class='layui-icon'>&#xe642;</i></button>";
+                            return edit;
+                        }
+                    },
+                ]
+            });
+        showDictSelectByName("state", "exportState", true);
+        showDictSelectByName("reason", "exportReason", true);
+        $("#date").val(getCurrentDate("date"));
+        $("#time").val(getCurrentDate("time"));
+    }
+
+    function getCurrentDate(format) {
+        var now = new Date();
+        var year = now.getFullYear(); //得到年份
+        var month = now.getMonth();//得到月份
+        var date = now.getDate();//得到日期
+        var hour = now.getHours();//得到小时
+        var minu = now.getMinutes();//得到分钟
+        month = month + 1;
+        if (month < 10) month = "0" + month;
+        if (date < 10) date = "0" + date;
+        if (hour < 10) hour = "0" + hour;
+        if (minu < 10) minu = "0" + minu;
+        var time = "";
+        //精确到天
+        if (format == 'date') {
+            time = year + '' + month + '' + date;
+        }
+        //精确到分
+        else if (format == 'time') {
+            time = hour + '' + minu;
+        }
+        return time;
+    }
+
+    var pro = window.location.protocol;
+    var host = window.location.host;
+    var domain = pro + "//" + host;
+
+    var layedit, index;
+    layui.use('layedit', function () {
+        layedit = layui.layedit;
+        layedit.set({
+            uploadImage: {
+                url: '/files/layui?domain=' + domain + "&token=" + localStorage.getItem("token"),
+                type: 'post'
+            }
+        });
+        index = layedit.build('demo');
+    });
+
+
+    function exportExcel(obj) {
+        $('#form').bootstrapValidator();
+        var bootstrapValidator = $("#form").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if (!bootstrapValidator.isValid()) {
+            return;
+        }
+        $("#token").val(localStorage.getItem("token"));
+        $("#hid").val(getUrlParam("hid"));
+        $("#shipper").val(getUrlParam("shipper"));
+        $("#country").val(getUrlParam("country"));
+        $("#region").val(getUrlParam("region"));
+        $("#form").attr("onsubmit", "return true");
+        $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
+        $("#form").attr("onsubmit", "return false");
+    }
+
+</script>
+</body>
+</html>

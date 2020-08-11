@@ -31,6 +31,9 @@
     <result column="spec_note" jdbcType="VARCHAR" property="specNote" />
     <result column="vat" jdbcType="VARCHAR" property="vat" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="CTNs" jdbcType="VARCHAR" property="ctns" />
+    <result column="QTY" jdbcType="VARCHAR" property="qty" />
+    <result column="factory_weight" jdbcType="VARCHAR" property="factoryWeight" />
   </resultMap>
   <sql id="Base_Column_List">
     ID, transationid, document_date, hawb, shipmentway, shipper, shipping_point, pur, 
@@ -39,10 +42,10 @@
     volume_unit, total_pallet, pallet_unit, spec_note, vat, status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from edi_heading_ICT_2020
-    where ID = #{id,jdbcType=INTEGER}
+    select h.total_pallet, u.CTNs, u.QTY, u.factory_weight
+    from edi_heading_ICT_2020 h
+    left join edi_heading_update_ICT u on h.id = u.hid
+    where h.ID = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from edi_heading_ICT_2020

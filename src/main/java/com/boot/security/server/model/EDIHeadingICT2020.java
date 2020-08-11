@@ -59,6 +59,12 @@ public class EDIHeadingICT2020 {
 
     private Integer status;
 
+    private String ctns;
+
+    private String qty;
+
+    private String factoryWeight;
+
     public Integer getId() {
         return id;
     }
@@ -289,5 +295,29 @@ public class EDIHeadingICT2020 {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCtns() {
+        return ctns;
+    }
+
+    public void setCtns(String ctns) {
+        this.ctns = ctns;
+    }
+
+    public String getQty() {
+        return qty;
+    }
+
+    public void setQty(String qty) {
+        this.qty = qty;
+    }
+
+    public String getFactoryWeight() {
+        return factoryWeight;
+    }
+
+    public void setFactoryWeight(String factoryWeight) {
+        this.factoryWeight = factoryWeight;
     }
 }
