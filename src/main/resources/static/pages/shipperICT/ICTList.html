@@ -198,7 +198,6 @@
     }
 
     function showLoadLayer() {
-        // return layer.msg('努力中...', {icon: 16, shade: [0.5, '#f5f5f5'], scrollbar: false, offset: '0px', time: 100000});
         return layer.load(1, {
             shade: [0.1, '#fff'] //0.1透明度的白色背景
         });
@@ -206,6 +205,23 @@
 
     function closeLoadLayer(index) {
         layer.close(index);
+    }
+
+    function checkSelectCondition() {
+        var actualDate = $('#date').val();
+        var hawb = $('#hawb').val();
+        var awb = $('#awb').val();
+        var shipmentway = $('#shipType').val();
+        var truckNo = $('#truckNo').val();
+        if (actualDate.trim().length == 0
+            && hawb.trim().length == 0
+            && awb.trim().length == 0
+            && shipmentway.trim().length == 0
+            && truckNo.trim().length == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     $("#searchBt").click(function () {
@@ -230,27 +246,32 @@
         var awb = $('#awb').val();
         var shipmentway = $('#shipType').val();
         var truckNo = $('#truckNo').val();
-        if (actualDate.trim() == 0
-            && hawb.trim() == 0
-            && awb.trim() == 0
-            && shipmentway.trim() == 0
-            && truckNo.trim() == 0) {
+        var array = example.rows({selected: true}).data().toArray();
+        var arrayMid = "";
+        if (checkSelectCondition() && array.length == 0) {
             layer.open({
                 title: '提示',
-                content: '请至少输入查询一个条件'
+                content: '请至少输入查询一个条件或者选择要导出的数据'
             });
         } else {
+            if (array.length > 0) {
+                arrayMid = array[0].id;
+                for (var i = 1; i < array.length; i++) {
+                    arrayMid = arrayMid + "," + array[i].id
+                }
+            }
             layer.open({
                 type: 2,
                 title: "导出数据",
-                area: ['600px', '600px'],
+                area: ['1000px', '600px'],
                 shadeClose: true,
                 content: ['exportExcelICT.html' +
                 '?actualDate=' + actualDate + '' +
                 '&hawb=' + hawb + '' +
                 '&awb=' + awb + '' +
                 '&shipmentway=' + shipmentway + '' +
-                '&truckNo=' + truckNo]
+                '&truckNo=' + truckNo + '' +
+                '&arrayMid=' + arrayMid]
             });
         }
     });

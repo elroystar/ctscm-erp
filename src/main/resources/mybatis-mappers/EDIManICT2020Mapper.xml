@@ -101,6 +101,68 @@
         order by h.actual_date desc
         limit #{offset}, #{limit}
     </select>
+    <select id="listAll" resultMap="ediManResultMap">
+        SELECT
+        m.manid,
+        h.ID AS 'hid',
+        h.actual_date,
+        h.shipper,
+        h.original,
+        h.hawb,
+        h.awb,
+        h.shipmentway,
+        d.st_country,
+        t.type,
+        m.tracking,
+        d.dn,
+        d.partno,
+        h.total_pallet,
+        u.CTNs,
+        u.QTY,
+        u.factory_weight,
+        n.truck_no
+        FROM
+        edi_man_ICT_2020 m
+        LEFT JOIN edi_detail_ICT_2020 d ON m.lid = d.linid
+        LEFT JOIN edi_heading_ICT_2020 h ON d.id = h.id
+        LEFT JOIN edi_heading_update_ICT u ON h.id = u.hid
+        LEFT JOIN edi_truck_no_ICT n ON m.manid = n.mid
+        LEFT JOIN t_dict t ON t.val = d.st_country
+        <include refid="where"/>
+        order by h.actual_date desc
+    </select>
+    <select id="findByIdArray" parameterType="java.lang.Integer" resultMap="ediManResultMap">
+        SELECT
+        m.manid,
+        h.ID AS 'hid',
+        h.actual_date,
+        h.shipper,
+        h.original,
+        h.hawb,
+        h.awb,
+        h.shipmentway,
+        d.st_country,
+        t.type,
+        m.tracking,
+        d.dn,
+        d.partno,
+        h.total_pallet,
+        u.CTNs,
+        u.QTY,
+        u.factory_weight,
+        n.truck_no
+        FROM
+        edi_man_ICT_2020 m
+        LEFT JOIN edi_detail_ICT_2020 d ON m.lid = d.linid
+        LEFT JOIN edi_heading_ICT_2020 h ON d.id = h.id
+        LEFT JOIN edi_heading_update_ICT u ON h.id = u.hid
+        LEFT JOIN edi_truck_no_ICT n ON m.manid = n.mid
+        LEFT JOIN t_dict t ON t.val = d.st_country
+        where m.manid in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from edi_man_ICT_2020
     where manid = #{manid,jdbcType=INTEGER}

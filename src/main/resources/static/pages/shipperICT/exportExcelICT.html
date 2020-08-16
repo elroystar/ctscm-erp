@@ -3,92 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/select.dataTables.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
 </head>
 <body>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <form class="form-horizontal" id="form" method="post" action="/shipper/exportExcelHHC" onsubmit="return false"
-          enctype="multipart/form-data">
-        <br/>
-        <input id="token" name="token" hidden="true">
-        <input id="hid" name="hid" hidden="true">
-        <input id="shipper" name="shipper" hidden="true">
-        <input id="country" name="country" hidden="true">
-        <input id="region" name="region" hidden="true">
-        <fieldset>
-            <input type="hidden" id="id" name="id">
-            <div class="form-group">
-                <label class="col-md-2 control-label">状态</label>
-                <div class="col-md-10">
-                    <select class="form-control input-sm" id="state"
-                            name="state" data-bv-notempty='true' data-bv-notempty-message='状态 不能为空'>
-
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-md-2 control-label">原因</label>
-                <div class="col-md-10">
-                    <select class="form-control input-sm" id="reason"
-                            name="reason" data-bv-notempty='true' data-bv-notempty-message='原因 不能为空'>
-
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-md-2 control-label">日期</label>
-                <div class="col-md-10">
-                    <input class="form-control" placeholder="date" type="text" name="date"
-                           id="date" data-bv-notempty='true' data-bv-notempty-message='日期 不能为空'>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-md-2 control-label">时间</label>
-                <div class="col-md-10">
-                    <input class="form-control" placeholder="time" type="text" name="time"
-                           id="time" data-bv-notempty='true' data-bv-notempty-message='时间 不能为空'>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-md-2 control-label">时区</label>
-                <div class="col-md-10">
-                    <input class="form-control" placeholder="zone" type="text" name="zone" value="08"
-                           id="zone" data-bv-notempty='true' data-bv-notempty-message='时区 不能为空'>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-md-2 control-label">城市</label>
-                <div class="col-md-10">
-                    <input class="form-control" placeholder="city" type="text" name="city"
-                           id="city" data-bv-notempty='true' data-bv-notempty-message='城市 不能为空'>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-md-2 control-label">国别</label>
-                <div class="col-md-10">
-                    <input class="form-control" placeholder="country" type="text" name="guobie"
-                           id="guobie" data-bv-notempty='true' data-bv-notempty-message='国别 不能为空'>
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <div class="row" align="center">
-                    <div class="col-md-12">
-                        <button class='btn btn-primary' type="submit" onclick="exportExcel(this)">
-                            <i class='layui-icon'>&#xe601;</i>导出
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </fieldset>
-    </form>
+    <br/>
     <div class="widget-body no-padding">
         <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
             <thead>
@@ -106,66 +27,239 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <th style="width: 100px">
+                    <select class="form-control input-sm" name="excelStatus">
+
+                    </select>
+                </th>
+                <th style="width: 100px">
+                    <select class="form-control input-sm" name="excelReason">
+
+                    </select>
+                </th>
+                <th>
+                    <input class="form-control" placeholder="date" type="text" name="excelDate">
+                </th>
+                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
+                <th>
+                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="city" type="text" name="excelCity"
+                           style="text-transform:uppercase">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="State" type="text" name="excelState"
+                           style="text-transform:uppercase"></th>
+                <th>
+                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                           style="text-transform:uppercase">
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <select class="form-control input-sm" name="excelStatus">
+
+                    </select>
+                </th>
+                <th>
+                    <select class="form-control input-sm" name="excelReason">
+
+                    </select>
+                </th>
+                <th>
+                    <input class="form-control" placeholder="date" type="text" name="excelDate">
+                </th>
+                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
+                <th>
+                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="city" type="text" name="excelCity"
+                           style="text-transform:uppercase">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="State" type="text" name="excelState"
+                           style="text-transform:uppercase"></th>
+                <th>
+                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                           style="text-transform:uppercase">
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <select class="form-control input-sm" name="excelStatus">
+
+                    </select>
+                </th>
+                <th>
+                    <select class="form-control input-sm" name="excelReason">
+
+                    </select>
+                </th>
+                <th>
+                    <input class="form-control" placeholder="date" type="text" name="excelDate">
+                </th>
+                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
+                <th>
+                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="city" type="text" name="excelCity"
+                           style="text-transform:uppercase">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="State" type="text" name="excelState"
+                           style="text-transform:uppercase"></th>
+                <th>
+                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                           style="text-transform:uppercase">
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <select class="form-control input-sm" name="excelStatus">
+
+                    </select>
+                </th>
+                <th>
+                    <select class="form-control input-sm" name="excelReason">
+
+                    </select>
+                </th>
+                <th>
+                    <input class="form-control" placeholder="date" type="text" name="excelDate">
+                </th>
+                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
+                <th>
+                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="city" type="text" name="excelCity"
+                           style="text-transform:uppercase">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="State" type="text" name="excelState"
+                           style="text-transform:uppercase"></th>
+                <th>
+                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                           style="text-transform:uppercase">
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <select class="form-control input-sm" name="excelStatus">
+
+                    </select>
+                </th>
+                <th>
+                    <select class="form-control input-sm" name="excelReason">
+
+                    </select>
+                </th>
+                <th>
+                    <input class="form-control" placeholder="date" type="text" name="excelDate">
+                </th>
+                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
+                <th>
+                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="city" type="text" name="excelCity"
+                           style="text-transform:uppercase">
+                </th>
+                <th>
+                    <input class="form-control" placeholder="State" type="text" name="excelState"
+                           style="text-transform:uppercase"></th>
+                <th>
+                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                           style="text-transform:uppercase">
+                </th>
+            </tr>
             </tbody>
         </table>
     </div>
+    <form class="form-horizontal" id="form" method="post" action="/shipper/exportExcelICT" onsubmit="return false"
+          enctype="multipart/form-data">
+        <input id="token" name="token" hidden="true">
+        <input id="actualDate" name="actualDate" hidden="true">
+        <input id="hawb" name="hawb" hidden="true">
+        <input id="awb" name="awb" hidden="true">
+        <input id="shipmentway" name="shipmentway" hidden="true">
+        <input id="truckNo" name="truckNo" hidden="true">
+        <input id="arrayId" name="arrayId" hidden="true">
+        <input id="exportStatus" name="exportStatus" hidden="true">
+        <input id="exportDate" name="exportDate" hidden="true">
+        <input id="exportReason" name="exportReason" hidden="true">
+        <input id="exportTime" name="exportTime" hidden="true">
+        <input id="exportZone" name="exportZone" hidden="true">
+        <input id="exportCity" name="exportCity" hidden="true">
+        <input id="exportState" name="exportState" hidden="true">
+        <input id="exportCountry" name="exportCountry" hidden="true">
+        <div class="form-actions">
+            <div class="row" align="center">
+                <div class="col-md-12">
+                    <button class='btn btn-primary' type="submit" onclick="exportExcel(this)">
+                        <i class='layui-icon'>&#xe601;</i>导出
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 <script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="../../js/jq.js"></script>
 <script type="text/javascript" src="../../layui/layui.js"></script>
-<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
 <script type="text/javascript" src="../../js/common.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.select.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">
     var example;
 
     initData();
 
+    function initUrlData() {
+        var actualDate = getUrlParam("actualDate");
+        var hawb = getUrlParam("hawb");
+        var awb = getUrlParam("awb");
+        var shipmentway = getUrlParam("shipmentway");
+        var truckNo = getUrlParam("truckNo");
+        var arrayMid = getUrlParam("arrayMid");
+        $("#actualDate").val(actualDate);
+        $("#hawb").val(hawb);
+        $("#awb").val(awb);
+        $("#shipmentway").val(shipmentway);
+        $("#truckNo").val(truckNo);
+        $("#arrayId").val(arrayMid);
+    }
+
     function initData() {
-        example =
-            $('#dt-table').DataTable({
-                "searching": false,
-                "processing": false,
-                "serverSide": true,
-                "ordering": false,
-                "language": {
-                    "url": "/js/plugin/datatables/Chinese.lang"
-                },
-                "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
-                "columns": [
-                    {"data": "actualDate", "defaultContent": ""},
-                    {"data": "shipper", "defaultContent": ""},
-                    {"data": "original", "defaultContent": ""},
-                    {"data": "hawb", "defaultContent": ""},
-                    {"data": "awb", "defaultContent": ""},
-                    {"data": "shipmentway", "defaultContent": ""},
-                    {"data": "country", "defaultContent": ""},
-                    {"data": "region", "defaultContent": ""},
-                    {"data": "tracking", "defaultContent": ""},
-                    {"data": "dn", "defaultContent": ""},
-                    {"data": "trackingNo", "defaultContent": ""},
-                    {"data": "totalPallet", "defaultContent": ""},
-                    {"data": "ctns", "defaultContent": ""},
-                    {"data": "qty", "defaultContent": ""},
-                    {"data": "factoryWeight", "defaultContent": ""},
-                    {"data": "truckNo", "defaultContent": ""},
-                    {
-                        "data": "",
-                        "defaultContent": "",
-                        "orderable": false,
-                        "render": function (data, type, row) {
-                            var hid = row['hid'];
-                            var edit = "<button class='layui-btn layui-btn-xs' title='修改' onclick='updateShipperICT(\"" + hid + "\")'><i class='layui-icon'>&#xe642;</i></button>";
-                            return edit;
-                        }
-                    },
-                ]
-            });
-        showDictSelectByName("state", "exportState", true);
-        showDictSelectByName("reason", "exportReason", true);
-        $("#date").val(getCurrentDate("date"));
-        $("#time").val(getCurrentDate("time"));
+        initUrlData();
+
+        showDictSelectByName("excelStatus", "exportState", true);
+        showDictSelectByName("excelReason", "exportReason", true);
+        $('[name="excelDate"]').val(getCurrentDate("date"));
+        $('[name="excelTime"]').val(getCurrentDate("time"));
+    }
+
+    function showDictSelectByName(id, name, all) {
+        var data = getDictByName(name);
+        var select = $('[name=' + id + ']');
+        select.empty();
+
+        if (all != undefined && all) {
+            select.append("<option value=''>全部</option>");
+        }
+
+        $.each(data, function (k, v) {
+            select.append("<option value ='" + k + "'>" + v + "</option>");
+        });
+
+        return data;
     }
 
     function getCurrentDate(format) {
@@ -210,19 +304,56 @@
 
 
     function exportExcel(obj) {
-        $('#form').bootstrapValidator();
-        var bootstrapValidator = $("#form").data('bootstrapValidator');
-        bootstrapValidator.validate();
-        if (!bootstrapValidator.isValid()) {
-            return;
-        }
+        var excelStatusArr = new Array(5);
+        $("[name='excelStatus']").each(function (j, item) {
+            excelStatusArr[j] = item.value
+        });
+        $("#exportStatus").val(excelStatusArr.join(","));
+
+        var excelDateArr = new Array(5);
+        $("[name='excelDate']").each(function (j, item) {
+            excelDateArr[j] = item.value
+        });
+        $("#exportDate").val(excelDateArr.join(","));
+
+        var excelReasonArr = new Array(5);
+        $("[name='excelReason']").each(function (j, item) {
+            excelReasonArr[j] = item.value
+        });
+        $("#exportReason").val(excelReasonArr.join(","));
+
+        var excelTimeArr = new Array(5);
+        $("[name='excelTime']").each(function (j, item) {
+            excelTimeArr[j] = item.value
+        });
+        $("#exportTime").val(excelTimeArr.join(","));
+
+        var excelZoneArr = new Array(5);
+        $("[name='excelZone']").each(function (j, item) {
+            excelZoneArr[j] = item.value
+        });
+        $("#exportZone").val(excelZoneArr.join(","));
+
+        var excelCityArr = new Array(5);
+        $("[name='excelCity']").each(function (j, item) {
+            excelCityArr[j] = item.value
+        });
+        $("#exportCity").val(excelCityArr.join(","));
+
+        var excelStateArr = new Array(5);
+        $("[name='excelState']").each(function (j, item) {
+            excelStateArr[j] = item.value
+        });
+        $("#exportState").val(excelStateArr.join(","));
+
+        var excelCountryArr = new Array(5);
+        $("[name='excelCountry']").each(function (j, item) {
+            excelCountryArr[j] = item.value
+        });
+        $("#exportCountry").val(excelCountryArr.join(","));
         $("#token").val(localStorage.getItem("token"));
-        $("#hid").val(getUrlParam("hid"));
-        $("#shipper").val(getUrlParam("shipper"));
-        $("#country").val(getUrlParam("country"));
-        $("#region").val(getUrlParam("region"));
         $("#form").attr("onsubmit", "return true");
-        $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
+        $("#form").submit();//解决bootstrapValidator 表单无法提交的问题
         $("#form").attr("onsubmit", "return false");
     }
 
