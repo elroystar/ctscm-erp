@@ -138,7 +138,18 @@ public class ShipperICTController {
         for (EDIManICT2020DTO dto : ediManICT2020DTOList) {
             for (int i = 0; i < 5; i++) {
                 String dataStr = ",{0},,{1},,CTSC,N Chargeable Weight,K Kilograms,{2},{3},{4},{5},{6},{7},{8},{9},{10}";
-                String format = MessageFormat.format(dataStr, dto.getRegion(), dto.getDn(), exportStatus[i], exportReason[i], exportDate[i], exportTime[i], exportZone[i], exportCity[i].toUpperCase(), exportState[i].toUpperCase(), exportCountry[i].toUpperCase(), dto.getTrackingNo());
+                String format = MessageFormat.format(dataStr,
+                        dto.getRegion(),
+                        dto.getDn(),
+                        exportStatus[i],
+                        exportReason[i],
+                        exportDate[i],
+                        exportTime[i],
+                        exportZone[i],
+                        exportCity[i].toUpperCase(),
+                        exportState[i].toUpperCase(),
+                        exportCountry[i].toUpperCase(),
+                        StringUtils.isNotBlank(dto.getTrackingNo()) ? dto.getTrackingNo() : "");
                 data.add(format.split(","));
             }
         }

@@ -10,176 +10,208 @@
 <body>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <br/>
-    <div class="widget-body no-padding">
-        <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
-            <thead>
-            <tr>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <th>Reason</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Time Code</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Country</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th style="width: 100px">
-                    <select class="form-control input-sm" name="excelStatus">
+    <form id="validateForm">
+        <div class="widget-body no-padding">
+            <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                <thead>
+                <tr>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <th>Reason</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Time Code</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelStatus"
+                                data-bv-notempty='true' data-bv-notempty-message='状态 不能为空'>
 
-                    </select>
-                </th>
-                <th style="width: 100px">
-                    <select class="form-control input-sm" name="excelReason">
+                        </select>
+                    </th>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelReason"
+                                data-bv-notempty='true' data-bv-notempty-message='原因 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <input class="form-control" placeholder="date" type="text" name="excelDate">
-                </th>
-                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
-                <th>
-                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="city" type="text" name="excelCity"
-                           style="text-transform:uppercase">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="State" type="text" name="excelState"
-                           style="text-transform:uppercase"></th>
-                <th>
-                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
-                           style="text-transform:uppercase">
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    <select class="form-control input-sm" name="excelStatus">
+                        </select>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="date" type="text" name="excelDate"
+                               data-bv-notempty='true' data-bv-notempty-message='日期 不能为空'>
+                    </th>
+                    <th><input class="form-control" placeholder="time" type="text" name="excelTime"
+                               data-bv-notempty='true' data-bv-notempty-message='时间 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08"
+                               data-bv-notempty='true' data-bv-notempty-message='时区 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="city" type="text" name="excelCity"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='城市 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="State" type="text" name="excelState"
+                               style="text-transform:uppercase" data-bv-notempty='true'
+                               data-bv-notempty-message='State 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='国别 不能为空'>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelStatus"
+                                data-bv-notempty='true' data-bv-notempty-message='状态 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <select class="form-control input-sm" name="excelReason">
+                        </select>
+                    </th>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelReason"
+                                data-bv-notempty='true' data-bv-notempty-message='原因 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <input class="form-control" placeholder="date" type="text" name="excelDate">
-                </th>
-                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
-                <th>
-                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="city" type="text" name="excelCity"
-                           style="text-transform:uppercase">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="State" type="text" name="excelState"
-                           style="text-transform:uppercase"></th>
-                <th>
-                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
-                           style="text-transform:uppercase">
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    <select class="form-control input-sm" name="excelStatus">
+                        </select>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="date" type="text" name="excelDate"
+                               data-bv-notempty='true' data-bv-notempty-message='日期 不能为空'>
+                    </th>
+                    <th><input class="form-control" placeholder="time" type="text" name="excelTime"
+                               data-bv-notempty='true' data-bv-notempty-message='时间 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08"
+                               data-bv-notempty='true' data-bv-notempty-message='时区 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="city" type="text" name="excelCity"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='城市 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="State" type="text" name="excelState"
+                               style="text-transform:uppercase" data-bv-notempty='true'
+                               data-bv-notempty-message='State 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='国别 不能为空'>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelStatus"
+                                data-bv-notempty='true' data-bv-notempty-message='状态 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <select class="form-control input-sm" name="excelReason">
+                        </select>
+                    </th>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelReason"
+                                data-bv-notempty='true' data-bv-notempty-message='原因 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <input class="form-control" placeholder="date" type="text" name="excelDate">
-                </th>
-                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
-                <th>
-                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="city" type="text" name="excelCity"
-                           style="text-transform:uppercase">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="State" type="text" name="excelState"
-                           style="text-transform:uppercase"></th>
-                <th>
-                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
-                           style="text-transform:uppercase">
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    <select class="form-control input-sm" name="excelStatus">
+                        </select>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="date" type="text" name="excelDate"
+                               data-bv-notempty='true' data-bv-notempty-message='日期 不能为空'>
+                    </th>
+                    <th><input class="form-control" placeholder="time" type="text" name="excelTime"
+                               data-bv-notempty='true' data-bv-notempty-message='时间 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08"
+                               data-bv-notempty='true' data-bv-notempty-message='时区 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="city" type="text" name="excelCity"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='城市 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="State" type="text" name="excelState"
+                               style="text-transform:uppercase" data-bv-notempty='true'
+                               data-bv-notempty-message='State 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='国别 不能为空'>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelStatus"
+                                data-bv-notempty='true' data-bv-notempty-message='状态 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <select class="form-control input-sm" name="excelReason">
+                        </select>
+                    </th>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelReason"
+                                data-bv-notempty='true' data-bv-notempty-message='原因 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <input class="form-control" placeholder="date" type="text" name="excelDate">
-                </th>
-                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
-                <th>
-                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="city" type="text" name="excelCity"
-                           style="text-transform:uppercase">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="State" type="text" name="excelState"
-                           style="text-transform:uppercase"></th>
-                <th>
-                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
-                           style="text-transform:uppercase">
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    <select class="form-control input-sm" name="excelStatus">
+                        </select>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="date" type="text" name="excelDate"
+                               data-bv-notempty='true' data-bv-notempty-message='日期 不能为空'>
+                    </th>
+                    <th><input class="form-control" placeholder="time" type="text" name="excelTime"
+                               data-bv-notempty='true' data-bv-notempty-message='时间 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08"
+                               data-bv-notempty='true' data-bv-notempty-message='时区 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="city" type="text" name="excelCity"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='城市 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="State" type="text" name="excelState"
+                               style="text-transform:uppercase" data-bv-notempty='true'
+                               data-bv-notempty-message='State 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='国别 不能为空'>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelStatus"
+                                data-bv-notempty='true' data-bv-notempty-message='状态 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <select class="form-control input-sm" name="excelReason">
+                        </select>
+                    </th>
+                    <th style="width: 100px">
+                        <select class="form-control input-sm" name="excelReason"
+                                data-bv-notempty='true' data-bv-notempty-message='原因 不能为空'>
 
-                    </select>
-                </th>
-                <th>
-                    <input class="form-control" placeholder="date" type="text" name="excelDate">
-                </th>
-                <th><input class="form-control" placeholder="time" type="text" name="excelTime"></th>
-                <th>
-                    <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="city" type="text" name="excelCity"
-                           style="text-transform:uppercase">
-                </th>
-                <th>
-                    <input class="form-control" placeholder="State" type="text" name="excelState"
-                           style="text-transform:uppercase"></th>
-                <th>
-                    <input class="form-control" placeholder="country" type="text" name="excelCountry"
-                           style="text-transform:uppercase">
-                </th>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                        </select>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="date" type="text" name="excelDate"
+                               data-bv-notempty='true' data-bv-notempty-message='日期 不能为空'>
+                    </th>
+                    <th><input class="form-control" placeholder="time" type="text" name="excelTime"
+                               data-bv-notempty='true' data-bv-notempty-message='时间 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="zone" type="text" name="excelZone" value="08"
+                               data-bv-notempty='true' data-bv-notempty-message='时区 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="city" type="text" name="excelCity"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='城市 不能为空'>
+                    </th>
+                    <th>
+                        <input class="form-control" placeholder="State" type="text" name="excelState"
+                               style="text-transform:uppercase" data-bv-notempty='true'
+                               data-bv-notempty-message='State 不能为空'></th>
+                    <th>
+                        <input class="form-control" placeholder="country" type="text" name="excelCountry"
+                               style="text-transform:uppercase" data-bv-notempty='true' data-bv-notempty-message='国别 不能为空'>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
     <form class="form-horizontal" id="form" method="post" action="/shipper/exportExcelICT" onsubmit="return false"
           enctype="multipart/form-data">
         <input id="token" name="token" hidden="true">
@@ -217,6 +249,7 @@
 <script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.select.min.js"></script>
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
 <script type="text/javascript">
     var example;
 
@@ -304,6 +337,12 @@
 
 
     function exportExcel(obj) {
+        $('#validateForm').bootstrapValidator();
+        var bootstrapValidator = $("#validateForm").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if (!bootstrapValidator.isValid()) {
+            return;
+        }
         var excelStatusArr = new Array(5);
         $("[name='excelStatus']").each(function (j, item) {
             excelStatusArr[j] = item.value
@@ -353,7 +392,7 @@
         $("#exportCountry").val(excelCountryArr.join(","));
         $("#token").val(localStorage.getItem("token"));
         $("#form").attr("onsubmit", "return true");
-        $("#form").submit();//解决bootstrapValidator 表单无法提交的问题
+        $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
         $("#form").attr("onsubmit", "return false");
     }
 
