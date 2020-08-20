@@ -92,11 +92,12 @@
 <script type="text/javascript" src="../../js/my/permission.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
 <script type="text/javascript">
+    var layer;
     layui.use(['layer', 'laydate'], function () {
-        var layer = layui.layer;
-        // layer.config({//加载扩展模块
-        //     extend: 'extend/layer.ext.js'
-        // });
+        layer = layui.layer;
+        layer.config({//加载扩展模块
+            extend: 'extend/layer.ext.js'
+        });
     });
 
     var example;
