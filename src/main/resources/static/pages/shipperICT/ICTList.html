@@ -92,8 +92,13 @@
 <script type="text/javascript" src="../../js/my/permission.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
 <script type="text/javascript">
-    layui.use(['layer'], function () {
-        var layer = layui.layer;
+    $(document).ready(function () {
+
+        layui.use(['layer'], function () {
+            var layer = layui.layer;
+        });
+
+        init();
     });
 
     var example;
@@ -271,8 +276,5 @@
                 '&arrayMid=' + arrayMid]
             });
         }
-    });
-    $(document).ready(function () {
-        init();
     });
 </script>
