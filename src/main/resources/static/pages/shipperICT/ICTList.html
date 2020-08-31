@@ -92,13 +92,8 @@
 <script type="text/javascript" src="../../js/my/permission.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-
-        layui.use(['layer'], function () {
-            var layer = layui.layer;
-        });
-
-        init();
+    layui.use(['layer'], function () {
+        var layer = layui.layer;
     });
 
     var example;
@@ -200,7 +195,7 @@
     }
 
     function showLoadLayer() {
-        layer.load(1, {
+        return layer.load(1, {
             shade: [0.1, '#fff'] //0.1透明度的白色背景
         });
     }
@@ -277,4 +272,8 @@
             });
         }
     });
+    setTimeout(function () {
+        // 这里就是处理的事件
+        init();
+    }, 1000);
 </script>
