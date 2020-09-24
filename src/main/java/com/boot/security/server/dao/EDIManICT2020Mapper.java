@@ -22,7 +22,7 @@ public interface EDIManICT2020Mapper {
 
     int updateByPrimaryKey(EDIManICT2020 record);
 
-    int count(@Param("params") Map<String, Object> params);
+    List<Integer> count(@Param("params") Map<String, Object> params);
 
     List<EDIManICT2020DTO> list(@Param("params") Map<String, Object> params,
                                 @Param("offset") Integer offset,

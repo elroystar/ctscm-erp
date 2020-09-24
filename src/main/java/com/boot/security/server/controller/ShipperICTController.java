@@ -47,7 +47,8 @@ public class ShipperICTController {
 
             @Override
             public int count(PageTableRequest request) {
-                return ediManICT2020Mapper.count(request.getParams());
+                List<Integer> count = ediManICT2020Mapper.count(request.getParams());
+                return count.size();
             }
         }, new PageTableHandler.ListHandler() {
 

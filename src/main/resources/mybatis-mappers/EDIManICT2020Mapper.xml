@@ -57,7 +57,7 @@
         from edi_man_ICT_2020
         where manid = #{manid,jdbcType=INTEGER}
     </select>
-    <select id="count" resultType="int">
+    <select id="count" resultType="java.lang.Integer">
         select
         count(1)
         FROM
