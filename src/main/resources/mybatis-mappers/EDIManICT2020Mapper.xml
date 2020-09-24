@@ -68,6 +68,8 @@
         LEFT JOIN edi_truck_no_ICT n ON m.manid = n.mid
         LEFT JOIN t_dict t ON t.val = d.st_country
         <include refid="where"/>
+        GROUP BY
+        m.tracking
         order by h.actual_date desc
     </select>
     <select id="list" resultMap="ediManResultMap">
@@ -98,6 +100,8 @@
         LEFT JOIN edi_truck_no_ICT n ON m.manid = n.mid
         LEFT JOIN t_dict t ON t.val = d.st_country
         <include refid="where"/>
+        GROUP BY
+        m.tracking
         order by h.actual_date desc
         limit #{offset}, #{limit}
     </select>
@@ -129,6 +133,8 @@
         LEFT JOIN edi_truck_no_ICT n ON m.manid = n.mid
         LEFT JOIN t_dict t ON t.val = d.st_country
         <include refid="where"/>
+        GROUP BY
+        m.tracking
         order by h.actual_date desc
     </select>
     <select id="findByIdArray" parameterType="java.lang.Integer" resultMap="ediManResultMap">
@@ -162,6 +168,8 @@
         <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
             #{item}
         </foreach>
+        GROUP BY
+        m.tracking
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from edi_man_ICT_2020
