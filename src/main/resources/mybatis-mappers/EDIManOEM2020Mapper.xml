@@ -42,16 +42,16 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from edi_man_OEM_2020
+    from edi_man_207
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="count" resultType="int">
     SELECT
       count(1)
     FROM
-      edi_man_OEM_2020 m
-    LEFT JOIN edi_detail_OEM_2020 d ON m.did = d.id
-    LEFT JOIN edi_heading_OEM_2020 h ON d.hid = h.id
+      edi_man_207 m
+    LEFT JOIN edi_detail_207 d ON m.did = d.id
+    LEFT JOIN edi_heading_207 h ON d.hid = h.id
     <include refid="where" />
   </select>
   <select id="list" resultMap="ShipperDetailMap">
@@ -63,9 +63,9 @@
       h.hawb,
       d.dn
     FROM
-      edi_man_OEM_2020 m
-    LEFT JOIN edi_detail_OEM_2020 d ON m.did = d.id
-    LEFT JOIN edi_heading_OEM_2020 h ON d.hid = h.id
+      edi_man_207 m
+    LEFT JOIN edi_detail_207 d ON m.did = d.id
+    LEFT JOIN edi_heading_207 h ON d.hid = h.id
     LEFT JOIN t_dict t ON t.val = d.st_country
     <include refid="where" />
     limit #{offset}, #{limit}
@@ -79,18 +79,18 @@
     h.hawb,
     d.dn
     FROM
-    edi_man_OEM_2020 m
-    LEFT JOIN edi_detail_OEM_2020 d ON m.did = d.id
-    LEFT JOIN edi_heading_OEM_2020 h ON d.hid = h.id
+    edi_man_207 m
+    LEFT JOIN edi_detail_207 d ON m.did = d.id
+    LEFT JOIN edi_heading_207 h ON d.hid = h.id
     LEFT JOIN t_dict t ON t.val = d.st_country
     <include refid="where" />
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from edi_man_OEM_2020
+    delete from edi_man_207
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.boot.security.server.model.EDIManOEM2020">
-    insert into edi_man_OEM_2020 (id, did, serial_no, 
+    insert into edi_man_207 (id, did, serial_no,
       tracking, carton_no, carton_count
       )
     values (#{id,jdbcType=INTEGER}, #{did,jdbcType=INTEGER}, #{serialNo,jdbcType=VARCHAR}, 
@@ -98,7 +98,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.boot.security.server.model.EDIManOEM2020">
-    insert into edi_man_OEM_2020
+    insert into edi_man_207
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -141,7 +141,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDIManOEM2020">
-    update edi_man_OEM_2020
+    update edi_man_207
     <set>
       <if test="did != null">
         did = #{did,jdbcType=INTEGER},
@@ -162,7 +162,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EDIManOEM2020">
-    update edi_man_OEM_2020
+    update edi_man_207
     set did = #{did,jdbcType=INTEGER},
       serial_no = #{serialNo,jdbcType=VARCHAR},
       tracking = #{tracking,jdbcType=VARCHAR},

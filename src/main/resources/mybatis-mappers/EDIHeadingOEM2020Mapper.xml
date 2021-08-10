@@ -55,27 +55,27 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     h.id, h.hawb, h.awb, h.actual_date, h.shipper, h.original, h.shipmentway, h.total_pallet, u.CTNs, u.QTY, u.factory_weight
-    from edi_heading_OEM_2020 h
+    from edi_heading_207 h
     left join edi_heading_update u on h.id = u.hid
     where h.id = #{id,jdbcType=INTEGER}
   </select>
   <select id="count" resultType="int">
-    select count(1) from edi_heading_OEM_2020 h <include refid="where" />
+    select count(1) from edi_heading_207 h <include refid="where" />
   </select>
   <select id="list" resultMap="BaseResultMap">
     select
     h.id, h.hawb, h.awb, h.actual_date, h.shipper, h.original, h.shipmentway, h.total_pallet, u.CTNs, u.QTY, u.factory_weight
-    from edi_heading_OEM_2020 h
+    from edi_heading_207 h
     left join edi_heading_update u on h.id = u.hid
     <include refid="where" />
     limit #{offset}, #{limit}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from edi_heading_OEM_2020
+    delete from edi_heading_207
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.boot.security.server.model.EDIHeadingOEM2020">
-    insert into edi_heading_OEM_2020 (id, transationid, document_date, 
+    insert into edi_heading_207 (id, transationid, document_date,
       hawb, shipmentway, shipper, 
       shipping_point, pur, consumption, 
       awb, original, customer, 
@@ -97,7 +97,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.boot.security.server.model.EDIHeadingOEM2020">
-    insert into edi_heading_OEM_2020
+    insert into edi_heading_207
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -266,7 +266,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDIHeadingOEM2020">
-    update edi_heading_OEM_2020
+    update edi_heading_207
     <set>
       <if test="transationid != null">
         transationid = #{transationid,jdbcType=VARCHAR},
@@ -350,7 +350,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EDIHeadingOEM2020">
-    update edi_heading_OEM_2020
+    update edi_heading_207
     set transationid = #{transationid,jdbcType=VARCHAR},
       document_date = #{documentDate,jdbcType=VARCHAR},
       hawb = #{hawb,jdbcType=VARCHAR},

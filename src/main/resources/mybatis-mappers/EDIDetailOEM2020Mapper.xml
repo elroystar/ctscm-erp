@@ -60,24 +60,24 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from edi_detail_OEM_2020
+    from edi_detail_207
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectCTNsByHeadingId" parameterType="java.lang.Integer" resultType="java.lang.String">
-    SELECT SUM(carton_count) FROM edi_detail_OEM_2020 WHERE hid = #{hid,jdbcType=INTEGER};
+    SELECT SUM(carton_count) FROM edi_detail_207 WHERE hid = #{hid,jdbcType=INTEGER};
   </select>
   <select id="selectQTYByHeadingId" parameterType="java.lang.Integer" resultType="java.lang.String">
-    SELECT SUM(shipperqty) FROM edi_detail_OEM_2020 WHERE hid = #{hid,jdbcType=INTEGER};
+    SELECT SUM(shipperqty) FROM edi_detail_207 WHERE hid = #{hid,jdbcType=INTEGER};
   </select>
   <select id="selectFactoryWeightByHeadingId" parameterType="java.lang.Integer" resultType="java.lang.Double">
-    SELECT SUM(gross_weight) FROM edi_detail_OEM_2020 WHERE hid = #{hid,jdbcType=INTEGER};
+    SELECT SUM(gross_weight) FROM edi_detail_207 WHERE hid = #{hid,jdbcType=INTEGER};
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from edi_detail_OEM_2020
+    delete from edi_detail_207
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.boot.security.server.model.EDIDetailOEM2020WithBLOBs">
-    insert into edi_detail_OEM_2020 (id, hid, linno, 
+    insert into edi_detail_207 (id, hid, linno,
       shipperqty, partno, gross_weight, 
       d_weight_unit1, net_weight, d_weight_unit2, 
       package_type, carton_count, descriptopn, 
@@ -107,7 +107,7 @@
       #{stCompany,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.boot.security.server.model.EDIDetailOEM2020WithBLOBs">
-    insert into edi_detail_OEM_2020
+    insert into edi_detail_207
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -354,7 +354,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDIDetailOEM2020WithBLOBs">
-    update edi_detail_OEM_2020
+    update edi_detail_207
     <set>
       <if test="hid != null">
         hid = #{hid,jdbcType=INTEGER},
@@ -477,7 +477,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.boot.security.server.model.EDIDetailOEM2020WithBLOBs">
-    update edi_detail_OEM_2020
+    update edi_detail_207
     set hid = #{hid,jdbcType=INTEGER},
       linno = #{linno,jdbcType=VARCHAR},
       shipperqty = #{shipperqty,jdbcType=VARCHAR},
@@ -520,7 +520,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EDIDetailOEM2020">
-    update edi_detail_OEM_2020
+    update edi_detail_207
     set hid = #{hid,jdbcType=INTEGER},
       linno = #{linno,jdbcType=VARCHAR},
       shipperqty = #{shipperqty,jdbcType=VARCHAR},
