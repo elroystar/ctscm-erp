@@ -15,7 +15,7 @@ public interface EDIHeadingOEM2020Mapper {
 
     int insertSelective(EDIHeadingOEM2020 record);
 
-    EDIHeadingOEM2020 selectByPrimaryKey(Integer id);
+    List<EDIHeadingOEM2020> selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(EDIHeadingOEM2020 record);
 

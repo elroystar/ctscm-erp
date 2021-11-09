@@ -80,7 +80,7 @@ public class ShipperController {
         return headingOEM2020;
     }
 
-    @LogAnnotation
+    //    @LogAnnotation
     @PostMapping("exportExcelHHC")
     @ApiOperation(value = "导出HHC数据")
     public void exportExcelHHC(EDIExportExcelDTO exportExcelDTO, HttpServletResponse response) {
@@ -252,7 +252,8 @@ public class ShipperController {
     }
 
     private EDIHeadingOEM2020 getEdiHeadingOEM2020(int hid) {
-        EDIHeadingOEM2020 headingOEM2020 = ediHeadingOEM2020Mapper.selectByPrimaryKey(hid);
+        List<EDIHeadingOEM2020> ediHeadingOEM2020s = ediHeadingOEM2020Mapper.selectByPrimaryKey(hid);
+        EDIHeadingOEM2020 headingOEM2020 = ediHeadingOEM2020s.get(0);
         if ("".equals(headingOEM2020.getCtns()) || null == headingOEM2020.getCtns()) {
             String CTNs = ediDetailOEM2020Mapper.selectCTNsByHeadingId(headingOEM2020.getId());
             headingOEM2020.setCtns(CTNs);
