@@ -25,9 +25,9 @@
       <if test="params.hid != null and params.hid != ''">
         and h.id = #{params.hid,jdbcType=INTEGER}
       </if>
-      <if test="params.shipper != null and params.shipper != ''">
-        and h.shipper = #{params.shipper,jdbcType=VARCHAR}
-      </if>
+<!--      <if test="params.shipper != null and params.shipper != ''">-->
+<!--        and h.shipper = #{params.shipper,jdbcType=VARCHAR}-->
+<!--      </if>-->
       <if test="isCountry != null and isCountry == 1">
         and d.st_country = #{params.country,jdbcType=VARCHAR}
       </if>
