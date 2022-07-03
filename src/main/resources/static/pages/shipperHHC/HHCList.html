@@ -39,18 +39,34 @@
                     <tr>
                     </tr>
                     <tr>
-                        <th>id</th>
-                        <th>Date</th>
-                        <th>Shipper</th>
-                        <th>Original</th>
-                        <th>HAWB</th>
-                        <th>AWB</th>
-                        <th>Ship Type</th>
-                        <th>PLTs</th>
-                        <th>CTNs</th>
-                        <th>QTY</th>
-                        <th>Factory Weight</th>
-                        <th>操作</th>
+                        <th>Ship Date</th>
+                        <th>Actual Date</th>
+                        <th>Sender</th>
+                        <th>Tracking Number</th>
+                        <th>PO/DN</th>
+                        <th>Shipment Number</th>
+                        <th>Waybill</th>
+                        <th>Ship Way</th>
+                        <th>FWD</th>
+                        <th>FWD Code</th>
+                        <th>OEM</th>
+                        <th>Gateway</th>
+                        <th>CTNS</th>
+                        <th>Units</th>
+                        <th>GW</th>
+                        <th>Ship Mode</th>
+                        <th>POE</th>
+                        <th>POE Country</th>
+                        <th>Region</th>
+                        <th>Truck Plant Number</th>
+                        <th>CT Tracking</th>
+                        <th>GPS Device</th>
+                        <th>GPS Updating</th>
+                        <th>City</th>
+                        <th>Province</th>
+                        <th>Position</th>
+                        <th>Longitude</th>
+                        <th>Latitude</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -98,9 +114,9 @@
                     "url": "/shipper/listShipperHHC",
                     "type": "get",
                     "data": function (d) {
-                        // d.shipper = "HHC";
-                        d.hawb = $('#hawb').val();
-                        d.awb = $('#awb').val();
+                        d.shipper = "edi945";
+                        // d.hawb = $('#hawb').val();
+                        // d.awb = $('#awb').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;
@@ -125,29 +141,34 @@
                 },
                 "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
                 "columns": [
-                    {"data": "id", "defaultContent": ""},
+                    {"data": "shipDate", "defaultContent": ""},
                     {"data": "actualDate", "defaultContent": ""},
-                    {"data": "shipper", "defaultContent": ""},
-                    {"data": "original", "defaultContent": ""},
-                    {"data": "hawb", "defaultContent": ""},
-                    {"data": "awb", "defaultContent": ""},
-                    {"data": "shipmentway", "defaultContent": ""},
-                    {"data": "totalPallet", "defaultContent": ""},
+                    {"data": "sender", "defaultContent": ""},
+                    {"data": "trackingNumber", "defaultContent": ""},
+                    {"data": "dn", "defaultContent": ""},
+                    {"data": "shipmentNumber", "defaultContent": ""},
+                    {"data": "waybill", "defaultContent": ""},
+                    {"data": "shipway", "defaultContent": ""},
+                    {"data": "fwd", "defaultContent": ""},
+                    {"data": "fwdCode", "defaultContent": ""},
+                    {"data": "oem", "defaultContent": ""},
+                    {"data": "gateway", "defaultContent": ""},
                     {"data": "ctns", "defaultContent": ""},
-                    {"data": "qty", "defaultContent": ""},
-                    {"data": "factoryWeight", "defaultContent": ""},
-                    {
-                        "data": "",
-                        "defaultContent": "",
-                        "orderable": false,
-                        "render": function (data, type, row) {
-                            var id = row['id'];
-                            var hrefInfo = "detail.html?id=" + id;
-                            var edit = "<button class='layui-btn layui-btn-xs' title='修改' onclick='updateShipperHHC(\"" + id + "\")'><i class='layui-icon'>&#xe642;</i></button>";
-                            var info = "<button class='layui-btn layui-btn-xs' title='详情' onclick='window.location=\"" + hrefInfo + "\"'><i class='layui-icon'>&#xe65f;</i></button>";
-                            return edit + info;
-                        }
-                    },
+                    {"data": "units", "defaultContent": ""},
+                    {"data": "gw", "defaultContent": ""},
+                    {"data": "ship_mode", "defaultContent": ""},
+                    {"data": "poe", "defaultContent": ""},
+                    {"data": "poeCountry", "defaultContent": ""},
+                    {"data": "region", "defaultContent": ""},
+                    {"data": "truckPlantNumber", "defaultContent": ""},
+                    {"data": "ctTracking", "defaultContent": ""},
+                    {"data": "gpsDevice", "defaultContent": ""},
+                    {"data": "gpsUpdating", "defaultContent": ""},
+                    {"data": "city", "defaultContent": ""},
+                    {"data": "province", "defaultContent": ""},
+                    {"data": "position", "defaultContent": ""},
+                    {"data": "longitude", "defaultContent": ""},
+                    {"data": "latitude", "defaultContent": ""},
                 ]
             });
     }

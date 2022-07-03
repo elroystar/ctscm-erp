@@ -145,36 +145,67 @@ public class ShipperController {
     @GetMapping("listShipperHHC")
     @ApiOperation(value = "HHC shipper管理列表")
     public PageTableResponse listShipperHHC(PageTableRequest request) {
-        return new PageTableHandler(new CountHandler() {
-
-            @Override
-            public int count(PageTableRequest request) {
-                return ediHeadingOEM2020Mapper.count(request.getParams());
-            }
-        }, new ListHandler() {
-
-            @Override
-            public List<EDIHeadingOEM2020> list(PageTableRequest request) {
-                List<EDIHeadingOEM2020> headingOEM2020List = ediHeadingOEM2020Mapper.list(request.getParams(), request.getOffset(), request.getLimit());
-                if (!headingOEM2020List.isEmpty()) {
-                    for (EDIHeadingOEM2020 headingOEM2020 : headingOEM2020List) {
-                        if ("".equals(headingOEM2020.getCtns()) || null == headingOEM2020.getCtns()) {
-                            String CTNs = ediDetailOEM2020Mapper.selectCTNsByHeadingId(headingOEM2020.getId());
-                            headingOEM2020.setCtns(CTNs);
-                        }
-                        if ("".equals(headingOEM2020.getQty()) || null == headingOEM2020.getQty()) {
-                            String QTY = ediDetailOEM2020Mapper.selectQTYByHeadingId(headingOEM2020.getId());
-                            headingOEM2020.setQty(QTY);
-                        }
-                        if ("".equals(headingOEM2020.getFactoryWeight()) || null == headingOEM2020.getFactoryWeight()) {
-                            Double factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
-                            headingOEM2020.setFactoryWeight(String.format("%.2f", factoryWeight));
+        Map<String, Object> params = request.getParams();
+        String shipper = (String) params.get("shipper");
+        if ("edi945".equals(shipper)) {
+            return new PageTableHandler(new CountHandler() {
+                @Override
+                public int count(PageTableRequest request) {
+                    return ediHeadingOEM2020Mapper.count(request.getParams());
+                }
+            }, new ListHandler() {
+                @Override
+                public List<EDIHeadingOEM2020> list(PageTableRequest request) {
+                    List<EDIHeadingOEM2020> headingOEM2020List = ediHeadingOEM2020Mapper.list(request.getParams(), request.getOffset(), request.getLimit());
+                    if (!headingOEM2020List.isEmpty()) {
+                        for (EDIHeadingOEM2020 headingOEM2020 : headingOEM2020List) {
+                            if ("".equals(headingOEM2020.getCtns()) || null == headingOEM2020.getCtns()) {
+                                String CTNs = ediDetailOEM2020Mapper.selectCTNsByHeadingId(headingOEM2020.getId());
+                                headingOEM2020.setCtns(CTNs);
+                            }
+                            if ("".equals(headingOEM2020.getQty()) || null == headingOEM2020.getQty()) {
+                                String QTY = ediDetailOEM2020Mapper.selectQTYByHeadingId(headingOEM2020.getId());
+                                headingOEM2020.setQty(QTY);
+                            }
+                            if ("".equals(headingOEM2020.getFactoryWeight()) || null == headingOEM2020.getFactoryWeight()) {
+                                Double factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
+                                headingOEM2020.setFactoryWeight(String.format("%.2f", factoryWeight));
+                            }
                         }
                     }
+                    return headingOEM2020List;
                 }
-                return headingOEM2020List;
-            }
-        }).handle(request);
+            }).handle(request);
+        } else {
+            return new PageTableHandler(new CountHandler() {
+                @Override
+                public int count(PageTableRequest request) {
+                    return ediHeadingOEM2020Mapper.count(request.getParams());
+                }
+            }, new ListHandler() {
+                @Override
+                public List<EDIHeadingOEM2020> list(PageTableRequest request) {
+                    List<EDIHeadingOEM2020> headingOEM2020List = ediHeadingOEM2020Mapper.list(request.getParams(), request.getOffset(), request.getLimit());
+                    if (!headingOEM2020List.isEmpty()) {
+                        for (EDIHeadingOEM2020 headingOEM2020 : headingOEM2020List) {
+                            if ("".equals(headingOEM2020.getCtns()) || null == headingOEM2020.getCtns()) {
+                                String CTNs = ediDetailOEM2020Mapper.selectCTNsByHeadingId(headingOEM2020.getId());
+                                headingOEM2020.setCtns(CTNs);
+                            }
+                            if ("".equals(headingOEM2020.getQty()) || null == headingOEM2020.getQty()) {
+                                String QTY = ediDetailOEM2020Mapper.selectQTYByHeadingId(headingOEM2020.getId());
+                                headingOEM2020.setQty(QTY);
+                            }
+                            if ("".equals(headingOEM2020.getFactoryWeight()) || null == headingOEM2020.getFactoryWeight()) {
+                                Double factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
+                                headingOEM2020.setFactoryWeight(String.format("%.2f", factoryWeight));
+                            }
+                        }
+                    }
+                    return headingOEM2020List;
+                }
+            }).handle(request);
+        }
     }
 
     @GetMapping("getShipperHHCDetail")
