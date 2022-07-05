@@ -5,6 +5,7 @@
     <title>Insert title here</title>
     <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/select.dataTables.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
 </head>
 <body>
@@ -24,6 +25,12 @@
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
+                                    <button id="editTruck" class="layui-btn layui-btn-normal layui-btn-sm"><i
+                                            class="layui-icon">&#xe642;</i>编辑车牌号
+                                    </button>
+                                    <button id="exportExcel" class="layui-btn layui-btn-warm layui-btn-sm"><i
+                                            class="layui-icon">&#xe601;</i>导出
+                                    </button>
                                 </div>
                             </form>
                         </td>
@@ -39,6 +46,7 @@
                     <tr>
                     </tr>
                     <tr>
+                        <th>id</th>
                         <th>Ship Date</th>
                         <th>Actual Date</th>
                         <th>Sender</th>
@@ -76,6 +84,12 @@
         </div>
     </div>
 </div>
+<form class="form-horizontal" id="form" method="post" action="/shipper/exportEDI945" onsubmit="return false"
+      enctype="multipart/form-data">
+    <br/>
+    <input id="ids" name="ids" hidden="true">
+    <input id="token" name="token" hidden="true">
+</form>
 </body>
 </html>
 
@@ -83,6 +97,7 @@
 <script type="text/javascript" src="../../js/jq.js"></script>
 <script type="text/javascript" src="../../layui/layui.js"></script>
 <script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.select.min.js"></script>
 <script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="../../js/my/permission.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
@@ -141,6 +156,7 @@
                 },
                 "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
                 "columns": [
+                    {"data": "id", "defaultContent": "", "visible": false},
                     {"data": "shipDate", "defaultContent": ""},
                     {"data": "actualDate", "defaultContent": ""},
                     {"data": "sender", "defaultContent": ""},
@@ -169,7 +185,10 @@
                     {"data": "position", "defaultContent": ""},
                     {"data": "longitude", "defaultContent": ""},
                     {"data": "latitude", "defaultContent": ""},
-                ]
+                ],
+                "select": {
+                    style: 'multi'
+                },
             });
     }
 
@@ -185,6 +204,46 @@
 
     $("#searchBt").click(function () {
         example.ajax.reload();
+    });
+
+    $("#editTruck").click(function () {
+        var array = example.rows({selected: true}).data().toArray();
+        var ids = array.map((obj) => {
+            return "" + obj.id + ""
+        }).join(",");
+        if (array.length == 0) {//如果一个没有勾选
+            layer.open({
+                title: '提示',
+                content: '请先选择需要修改的数据'
+            });
+        } else {
+            layer.open({
+                type: 2,
+                title: false,
+                area: ['800px', '300px'],
+                shadeClose: true,
+                content: ['updateShipperHHC.html?ids=' + ids]
+            });
+        }
+    });
+
+    $("#exportExcel").click(function () {
+        var array = example.rows({selected: true}).data().toArray();
+        var ids = array.map((obj) => {
+            return "" + obj.id + ""
+        }).join(",");
+        if (array.length == 0) {//如果一个没有勾选
+            layer.open({
+                title: '提示',
+                content: '请先选择需要导出的数据'
+            });
+        } else {
+            $("#ids").val(ids);
+            $("#token").val(localStorage.getItem("token"));
+            $("#form").attr("onsubmit", "return true");
+            $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
+            $("#form").attr("onsubmit", "return false");
+        }
     });
 
     init();

@@ -3,12 +3,12 @@ package com.boot.security.server.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.boot.security.server.annotation.LogAnnotation;
-import com.boot.security.server.dao.EDIDetailOEM2020Mapper;
-import com.boot.security.server.dao.EDIHeadingOEM2020Mapper;
-import com.boot.security.server.dao.EDIHeadingUpdateMapper;
-import com.boot.security.server.dao.EDIManOEM2020Mapper;
+import com.boot.security.server.dao.*;
+import com.boot.security.server.dto.EDI945ExportExcelDTO;
 import com.boot.security.server.dto.EDIExportExcelDTO;
+import com.boot.security.server.dto.EditTruckDTO;
 import com.boot.security.server.dto.ShipperDetailDTO;
+import com.boot.security.server.model.EDI945;
 import com.boot.security.server.model.EDIHeadingOEM2020;
 import com.boot.security.server.model.EDIHeadingUpdate;
 import com.boot.security.server.page.table.PageTableHandler;
@@ -20,9 +20,11 @@ import com.boot.security.server.utils.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +47,9 @@ public class ShipperController {
 
     @Autowired
     private EDIManOEM2020Mapper ediManOEM2020Mapper;
+
+    @Autowired
+    private EDI945Mapper edi945Mapper;
 
     @GetMapping("/HHC/{id}")
     @ApiOperation(value = "根据id HHC shipper")
@@ -78,6 +83,13 @@ public class ShipperController {
             ediHeadingUpdateMapper.updateByPrimaryKey(update);
         }
         return headingOEM2020;
+    }
+
+    @LogAnnotation
+    @PutMapping("editTruck")
+    @ApiOperation(value = "修改EDI945 Truck")
+    public void editTruck(@RequestBody EditTruckDTO editTruckDTO) {
+        edi945Mapper.editTruck(editTruckDTO);
     }
 
     //    @LogAnnotation
@@ -129,6 +141,23 @@ public class ShipperController {
         ExcelUtil.excelExport2("detail", headers, data, response);
     }
 
+    @PostMapping("exportEDI945")
+    @ApiOperation(value = "导出EDI945数据")
+    public void exportEDI945(HttpServletRequest request, HttpServletResponse response) {
+        List<Object[]> data = new ArrayList<>();
+        String ids = request.getParameter("ids");
+        String[] split = ids.split(",");
+        List<EDI945> edi945List = edi945Mapper.selectByIds(split);
+        for (EDI945 edi945 : edi945List) {
+            EDI945ExportExcelDTO excelDTO = new EDI945ExportExcelDTO();
+            BeanUtils.copyProperties(edi945, excelDTO);
+            data.add(excelDTO.toString().split(","));
+        }
+        String headerStr = "Ship Date,Actual Date,Sender,Tracking Number,PO/DN,Shipment Number,Waybill,Ship Way,FWD,FWD Code,OEM,Gateway,CTNS,Units,GW,Ship Mode,POE,POE Country,Region,Truck Plant Number,CT Tracking,GPS Device,GPS Updating,City,Province,Position,Longitude,Latitude";
+        String[] headers = headerStr.split(",");
+        ExcelUtil.excelExport2("EDI945", headers, data, response);
+    }
+
     private void setExportData(EDIExportExcelDTO exportExcelDTO, ShipperDetailDTO detailDTO, EDIHeadingOEM2020 headingOEM2020) {
         detailDTO.setState(exportExcelDTO.getState());
         detailDTO.setReason(exportExcelDTO.getReason());
@@ -151,29 +180,13 @@ public class ShipperController {
             return new PageTableHandler(new CountHandler() {
                 @Override
                 public int count(PageTableRequest request) {
-                    return ediHeadingOEM2020Mapper.count(request.getParams());
+                    return edi945Mapper.count(request.getParams());
                 }
             }, new ListHandler() {
                 @Override
-                public List<EDIHeadingOEM2020> list(PageTableRequest request) {
-                    List<EDIHeadingOEM2020> headingOEM2020List = ediHeadingOEM2020Mapper.list(request.getParams(), request.getOffset(), request.getLimit());
-                    if (!headingOEM2020List.isEmpty()) {
-                        for (EDIHeadingOEM2020 headingOEM2020 : headingOEM2020List) {
-                            if ("".equals(headingOEM2020.getCtns()) || null == headingOEM2020.getCtns()) {
-                                String CTNs = ediDetailOEM2020Mapper.selectCTNsByHeadingId(headingOEM2020.getId());
-                                headingOEM2020.setCtns(CTNs);
-                            }
-                            if ("".equals(headingOEM2020.getQty()) || null == headingOEM2020.getQty()) {
-                                String QTY = ediDetailOEM2020Mapper.selectQTYByHeadingId(headingOEM2020.getId());
-                                headingOEM2020.setQty(QTY);
-                            }
-                            if ("".equals(headingOEM2020.getFactoryWeight()) || null == headingOEM2020.getFactoryWeight()) {
-                                Double factoryWeight = ediDetailOEM2020Mapper.selectFactoryWeightByHeadingId(headingOEM2020.getId());
-                                headingOEM2020.setFactoryWeight(String.format("%.2f", factoryWeight));
-                            }
-                        }
-                    }
-                    return headingOEM2020List;
+                public List<EDI945> list(PageTableRequest request) {
+                    List<EDI945> edi945List = edi945Mapper.list(request.getParams(), request.getOffset(), request.getLimit());
+                    return edi945List;
                 }
             }).handle(request);
         } else {
