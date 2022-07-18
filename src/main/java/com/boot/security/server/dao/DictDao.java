@@ -39,4 +39,7 @@ public interface DictDao {
 
     @Select("select * from t_dict t where t.name = #{name}")
     List<Dict> listByName(String name);
+
+    @Select("select type from t_dict t where t.name = 'region' and t.k = #{k}")
+    List<String> getRegionTypeByK(String k);
 }

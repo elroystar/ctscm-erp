@@ -43,6 +43,8 @@ public class EDI945 {
 
     private String poeCountry;
 
+    private String region;
+
     private String truckPlantNumber;
 
     private String ctTracking;
@@ -227,6 +229,14 @@ public class EDI945 {
 
     public void setPoeCountry(String poeCountry) {
         this.poeCountry = poeCountry == null ? null : poeCountry.trim();
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public String getTruckPlantNumber() {

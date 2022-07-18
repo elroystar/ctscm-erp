@@ -37,16 +37,31 @@
         id
         , status, create_date, ship_date, actual_date, sender, tracking_number, dn, shipment_number,
     waybill, shipway, fwd, fwd_code, oem, gateway, ctns, units, gw, ship_mode, poe, poe_country, 
-    truck_plant_number, ct_tracking, gps_device, gps_updating, city, province, position, 
+    truck_plant_number, ct_tracking, gps_device, gps_updating, city, province, `position`,
     longitude, latitude
     </sql>
     <sql id="where">
         <where>
-            <if test="params.hawb != null and params.hawb != ''">
-                and hawb = #{params.hawb,jdbcType=VARCHAR}
+            <if test="params.shipmentNumber != null and params.shipmentNumber != ''">
+                and shipment_number = #{params.shipmentNumber,jdbcType=VARCHAR}
             </if>
-            <if test="params.awb != null and params.awb != ''">
-                and awb = #{params.awb,jdbcType=VARCHAR}
+            <if test="params.shipway != null and params.shipway != ''">
+                and shipway = #{params.shipway,jdbcType=VARCHAR}
+            </if>
+            <if test="params.oem != null and params.oem != ''">
+                and oem = #{params.oem,jdbcType=VARCHAR}
+            </if>
+            <if test="params.gateway != null and params.gateway != ''">
+                and gateway = #{params.gateway,jdbcType=VARCHAR}
+            </if>
+            <if test="params.region != null and params.region != ''">
+                and poe_country IN
+                <foreach collection="params.region" item="poeCountry" index="index" open="(" close=")" separator=",">
+                    #{poeCountry}
+                </foreach>
+            </if>
+            <if test="params.truckPlantNumber != null and params.truckPlantNumber != ''">
+                and truck_plant_number = #{params.truckPlantNumber,jdbcType=VARCHAR}
             </if>
         </where>
     </sql>
@@ -189,7 +204,7 @@
                 province,
             </if>
             <if test="position != null">
-                position,
+                `position`,
             </if>
             <if test="longitude != null">
                 longitude,
@@ -373,7 +388,7 @@
                 province = #{province,jdbcType=VARCHAR},
             </if>
             <if test="position != null">
-                position = #{position,jdbcType=VARCHAR},
+                `position` = #{position,jdbcType=VARCHAR},
             </if>
             <if test="longitude != null">
                 longitude = #{longitude,jdbcType=VARCHAR},

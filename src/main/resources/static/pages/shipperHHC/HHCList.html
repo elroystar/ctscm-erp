@@ -18,10 +18,20 @@
                         <td>
                             <form class="form-inline" onsubmit="return false">
                                 <div class="form-group">
-                                    hawb：
-                                    <input id="hawb" type="text" class="form-control" placeholder="hawb">
-                                    awb：
-                                    <input id="awb" type="text" class="form-control" placeholder="awb">
+                                    Shipment Number：
+                                    <input id="shipmentNumber" type="text" class="form-control" placeholder="shipmentNumber">
+                                    Ship Way：
+                                    <input id="shipway" type="text" class="form-control" placeholder="Ship Way">
+                                    OEM：
+                                    <input id="oem" type="text" class="form-control" placeholder="OEM">
+                                    Gateway：
+                                    <input id="gateway" type="text" class="form-control" placeholder="Gateway">
+                                    Region：
+                                    <select class="form-control input-sm" id="region">
+
+                                    </select>
+                                    Truck Plant Number：
+                                    <input id="truckPlantNumber" type="text" class="form-control" placeholder="Truck Plant Number">
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
@@ -115,6 +125,8 @@
 
     var example;
 
+    showDictNameSelect("region", "region", true);
+
     function init() {
         example =
             $('#dt-table').DataTable({
@@ -130,8 +142,12 @@
                     "type": "get",
                     "data": function (d) {
                         d.shipper = "edi945";
-                        // d.hawb = $('#hawb').val();
-                        // d.awb = $('#awb').val();
+                        d.shipmentNumber = $('#shipmentNumber').val();
+                        d.shipway = $('#shipway').val();
+                        d.oem = $('#oem').val();
+                        d.gateway = $('#gateway').val();
+                        d.region = $('#region').val();
+                        d.truckPlantNumber = $('#truckPlantNumber').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;

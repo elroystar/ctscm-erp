@@ -8,6 +8,7 @@ import com.boot.security.server.dto.EDI945ExportExcelDTO;
 import com.boot.security.server.dto.EDIExportExcelDTO;
 import com.boot.security.server.dto.EditTruckDTO;
 import com.boot.security.server.dto.ShipperDetailDTO;
+import com.boot.security.server.model.Dict;
 import com.boot.security.server.model.EDI945;
 import com.boot.security.server.model.EDIHeadingOEM2020;
 import com.boot.security.server.model.EDIHeadingUpdate;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Api(tags = "日志")
 @RestController
@@ -50,6 +52,9 @@ public class ShipperController {
 
     @Autowired
     private EDI945Mapper edi945Mapper;
+
+    @Autowired
+    private DictDao dictDao;
 
     @GetMapping("/HHC/{id}")
     @ApiOperation(value = "根据id HHC shipper")
@@ -177,6 +182,13 @@ public class ShipperController {
         Map<String, Object> params = request.getParams();
         String shipper = (String) params.get("shipper");
         if ("edi945".equals(shipper)) {
+            String region = (String) params.get("region");
+            if (StringUtils.isNotBlank(region)) {
+                List<Dict> dicts = dictDao.listByType(region);
+                String collect = dicts.stream().map(Dict::getK).collect(Collectors.joining(","));
+                String[] split = collect.split(",");
+                params.put("region", split);
+            }
             return new PageTableHandler(new CountHandler() {
                 @Override
                 public int count(PageTableRequest request) {
@@ -186,6 +198,12 @@ public class ShipperController {
                 @Override
                 public List<EDI945> list(PageTableRequest request) {
                     List<EDI945> edi945List = edi945Mapper.list(request.getParams(), request.getOffset(), request.getLimit());
+                    for (EDI945 edi945 : edi945List) {
+                        List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
+                        if (!regionTypeByK.isEmpty()) {
+                            edi945.setRegion(regionTypeByK.get(0));
+                        }
+                    }
                     return edi945List;
                 }
             }).handle(request);
