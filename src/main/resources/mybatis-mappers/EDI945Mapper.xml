@@ -63,6 +63,9 @@
             <if test="params.truckPlantNumber != null and params.truckPlantNumber != ''">
                 and truck_plant_number = #{params.truckPlantNumber,jdbcType=VARCHAR}
             </if>
+            <if test="params.sender != null and params.sender != ''">
+                and sender = #{params.sender,jdbcType=VARCHAR}
+            </if>
         </where>
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">

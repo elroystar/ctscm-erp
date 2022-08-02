@@ -19,7 +19,8 @@
                             <form class="form-inline" onsubmit="return false">
                                 <div class="form-group">
                                     Shipment Number：
-                                    <input id="shipmentNumber" type="text" class="form-control" placeholder="shipmentNumber">
+                                    <input id="shipmentNumber" type="text" class="form-control"
+                                           placeholder="shipmentNumber">
                                     Ship Way：
                                     <input id="shipway" type="text" class="form-control" placeholder="Ship Way">
                                     OEM：
@@ -27,11 +28,12 @@
                                     Gateway：
                                     <input id="gateway" type="text" class="form-control" placeholder="Gateway">
                                     Region：
-                                    <select class="form-control input-sm" id="region">
-
-                                    </select>
+                                    <select id="region" class="form-control input-sm"></select>
                                     Truck Plant Number：
-                                    <input id="truckPlantNumber" type="text" class="form-control" placeholder="Truck Plant Number">
+                                    <input id="truckPlantNumber" type="text" class="form-control"
+                                           placeholder="Truck Plant Number">
+                                    Sender：
+                                    <input id="sender" type="text" class="form-control" placeholder="sender">
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
@@ -40,6 +42,9 @@
                                     </button>
                                     <button id="exportExcel" class="layui-btn layui-btn-warm layui-btn-sm"><i
                                             class="layui-icon">&#xe601;</i>导出
+                                    </button>
+                                    <button id="getGPSInformation" class="layui-btn layui-btn-warm layui-btn-sm"><i
+                                            class="layui-icon">&#xe666;</i>开始获取GPS信息
                                     </button>
                                 </div>
                             </form>
@@ -148,6 +153,7 @@
                         d.gateway = $('#gateway').val();
                         d.region = $('#region').val();
                         d.truckPlantNumber = $('#truckPlantNumber').val();
+                        d.sender = $('#sender').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;
@@ -260,6 +266,42 @@
             $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
             $("#form").attr("onsubmit", "return false");
         }
+    });
+
+    $("#getGPSInformation").click(function () {
+        layer.prompt({
+            formType: 0,
+            title: "请录入车牌信息",
+        }, function (value, index, elem) {
+            $.ajax({
+                type: 'get',
+                url: '/shipper/getGPSInformation/' + value,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    layer.close(index);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    var msg = xhr.responseText;
+                    console.log(msg);
+                    var response = JSON.parse(msg);
+                    var code = response.code;
+                    var message = response.message;
+                    if (code == 400) {
+                        layer.msg(message);
+                    } else if (code == 401) {
+                        localStorage.removeItem("token");
+                        layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                            location.href = '/login.html';
+                        });
+                    } else if (code == 403) {
+                        console.log("未授权:" + message);
+                        layer.msg('未授权');
+                    } else if (code == 500) {
+                        layer.msg('系统错误：' + message);
+                    }
+                }
+            });
+        });
     });
 
     init();

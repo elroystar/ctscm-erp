@@ -63,6 +63,12 @@ public class ShipperController {
         return headingOEM2020;
     }
 
+    @GetMapping("/getGPSInformation/{truckPlantNumber}")
+    @ApiOperation(value = "根据id HHC shipper")
+    public void getGPSInformation(@PathVariable String truckPlantNumber) {
+        System.out.println(truckPlantNumber);
+    }
+
     @LogAnnotation
     @PutMapping("updateShipperHHC")
     @ApiOperation(value = "修改HHC shipper")

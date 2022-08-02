@@ -138,6 +138,13 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-pool2</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>openapi-sdk</groupId>
+			<artifactId>openapi-sdk</artifactId>
+			<version>6.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/openapi-sdk-6.0.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 
