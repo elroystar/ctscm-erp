@@ -68,6 +68,22 @@
             </if>
         </where>
     </sql>
+    <select id="selectByGPSState" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select *
+        from edi_945_gps
+        where gps_state = #{state,jdbcType=INTEGER}
+    </select>
+    <select id="selectByTruckPlantNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edi_945
+        where truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR}
+    </select>
+    <select id="selectGPSByTruckPlantNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from edi_945_gps
+        where truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR}
+    </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -78,10 +94,21 @@
         select count(1) from edi_945
         <include refid="where"/>
     </select>
+    <select id="countOEM" resultType="int">
+        select count(1) from edi_945_oem
+        <include refid="where"/>
+    </select>
     <select id="list" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from edi_945
+        <include refid="where"/>
+        limit #{offset}, #{limit}
+    </select>
+    <select id="listOEM" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edi_945_oem
         <include refid="where"/>
         limit #{offset}, #{limit}
     </select>
@@ -94,11 +121,31 @@
             #{id}
         </foreach>
     </select>
+    <select id="selectOEMByIds" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edi_945_oem
+        where id IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from edi_945
         where id = #{id,jdbcType=INTEGER}
     </delete>
+    <insert id="insertGPS" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.boot.security.server.model.EDI945">
+        insert into edi_945_gps (truck_plant_number, create_date,
+                                 ct_tracking, gps_updating,
+                                 city, province, position,
+                                 longitude, latitude)
+        values (#{truckPlantNumber,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR},
+                #{ctTracking,jdbcType=VARCHAR}, #{gpsUpdating,jdbcType=VARCHAR},
+                #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
+                #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR})
+    </insert>
     <insert id="insert" parameterType="com.boot.security.server.model.EDI945">
         insert into edi_945 (id, status, create_date,
                              ship_date, actual_date, sender,
@@ -402,8 +449,74 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <update id="updateByTruckPlantNumber" parameterType="com.boot.security.server.model.EDI945">
+        update edi_945
+        <set>
+            <if test="gpsUpdating != null">
+                gps_updating = #{gpsUpdating,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                `position` = #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR}
+    </update>
+    <update id="updateGPSByTruckPlantNumber" parameterType="com.boot.security.server.model.EDI945">
+        update edi_945_gps
+        <set>
+            <if test="gpsUpdating != null">
+                gps_updating = #{gpsUpdating,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                `position` = #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR}
+    </update>
     <update id="editTruck" parameterType="com.boot.security.server.dto.EditTruckDTO">
         update edi_945
+        <set>
+            <if test="truckPlantNumber != null">
+                truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="ctTracking != null">
+                ct_tracking = #{ctTracking,jdbcType=VARCHAR},
+            </if>
+            <if test="gpsDevice != null">
+                gps_device = #{gpsDevice,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+    <update id="editTruckOEM" parameterType="com.boot.security.server.dto.EditTruckDTO">
+        update edi_945_oem
         <set>
             <if test="truckPlantNumber != null">
                 truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR},

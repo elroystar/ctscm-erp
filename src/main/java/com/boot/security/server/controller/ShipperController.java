@@ -66,7 +66,18 @@ public class ShipperController {
     @GetMapping("/getGPSInformation/{truckPlantNumber}")
     @ApiOperation(value = "根据id HHC shipper")
     public void getGPSInformation(@PathVariable String truckPlantNumber) {
-        System.out.println(truckPlantNumber);
+        try {
+            List<EDI945> edi945List1 = edi945Mapper.selectGPSByTruckPlantNumber(truckPlantNumber);
+            if (edi945List1.isEmpty()) {
+                // 获取truckPlantNumber的数据
+                List<EDI945> edi945List = edi945Mapper.selectByTruckPlantNumber(truckPlantNumber);
+                EDI945 edi945GPS = edi945List.get(0);
+                // 插入gps表
+                edi945Mapper.insertGPS(edi945GPS);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @LogAnnotation
@@ -100,7 +111,12 @@ public class ShipperController {
     @PutMapping("editTruck")
     @ApiOperation(value = "修改EDI945 Truck")
     public void editTruck(@RequestBody EditTruckDTO editTruckDTO) {
-        edi945Mapper.editTruck(editTruckDTO);
+        String shipperType = editTruckDTO.getShipperType();
+        if (StringUtils.isNotBlank(shipperType) && "oem".equals(shipperType)) {
+            edi945Mapper.editTruckOEM(editTruckDTO);
+        } else {
+            edi945Mapper.editTruck(editTruckDTO);
+        }
     }
 
     //    @LogAnnotation
@@ -169,6 +185,23 @@ public class ShipperController {
         ExcelUtil.excelExport2("EDI945", headers, data, response);
     }
 
+    @PostMapping("exportOEM")
+    @ApiOperation(value = "导出OEM数据")
+    public void exportOEM(HttpServletRequest request, HttpServletResponse response) {
+        List<Object[]> data = new ArrayList<>();
+        String ids = request.getParameter("ids");
+        String[] split = ids.split(",");
+        List<EDI945> edi945List = edi945Mapper.selectOEMByIds(split);
+        for (EDI945 edi945 : edi945List) {
+            EDI945ExportExcelDTO excelDTO = new EDI945ExportExcelDTO();
+            BeanUtils.copyProperties(edi945, excelDTO);
+            data.add(excelDTO.toString().split(","));
+        }
+        String headerStr = "Ship Date,Actual Date,Sender,Tracking Number,PO/DN,Shipment Number,Waybill,Ship Way,FWD,FWD Code,OEM,Gateway,CTNS,Units,GW,Ship Mode,POE,POE Country,Region,Truck Plant Number,CT Tracking,GPS Device,GPS Updating,City,Province,Position,Longitude,Latitude";
+        String[] headers = headerStr.split(",");
+        ExcelUtil.excelExport2("OEM", headers, data, response);
+    }
+
     private void setExportData(EDIExportExcelDTO exportExcelDTO, ShipperDetailDTO detailDTO, EDIHeadingOEM2020 headingOEM2020) {
         detailDTO.setState(exportExcelDTO.getState());
         detailDTO.setReason(exportExcelDTO.getReason());
@@ -204,6 +237,32 @@ public class ShipperController {
                 @Override
                 public List<EDI945> list(PageTableRequest request) {
                     List<EDI945> edi945List = edi945Mapper.list(request.getParams(), request.getOffset(), request.getLimit());
+                    for (EDI945 edi945 : edi945List) {
+                        List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
+                        if (!regionTypeByK.isEmpty()) {
+                            edi945.setRegion(regionTypeByK.get(0));
+                        }
+                    }
+                    return edi945List;
+                }
+            }).handle(request);
+        } else if ("OEM".equals(shipper)) {
+            String region = (String) params.get("region");
+            if (StringUtils.isNotBlank(region)) {
+                List<Dict> dicts = dictDao.listByType(region);
+                String collect = dicts.stream().map(Dict::getK).collect(Collectors.joining(","));
+                String[] split = collect.split(",");
+                params.put("region", split);
+            }
+            return new PageTableHandler(new CountHandler() {
+                @Override
+                public int count(PageTableRequest request) {
+                    return edi945Mapper.countOEM(request.getParams());
+                }
+            }, new ListHandler() {
+                @Override
+                public List<EDI945> list(PageTableRequest request) {
+                    List<EDI945> edi945List = edi945Mapper.listOEM(request.getParams(), request.getOffset(), request.getLimit());
                     for (EDI945 edi945 : edi945List) {
                         List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
                         if (!regionTypeByK.isEmpty()) {

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <form class="form-horizontal" onsubmit="return false" id="form">
+        <br/>
+        <input type="hidden" id="id" name="id">
+        <div class="form-group">
+            <label class="col-md-2 control-label">Truck Plant Number</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="Truck Plant Number" type="text" name="truckPlantNumber" id="truckPlantNumber">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">CT Tracking</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="CT Tracking" type="text" name="ctTracking" id="ctTracking">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">GPS Device</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="GPS Device" type="text" name="gpsDevice" id="gpsDevice">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="row" align="center">
+                <div class="col-md-12">
+                    <button class="btn btn-primary" type="submit" onclick="update(this)">
+                        <i class="fa fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript">
+    // initData();
+    //
+    // function initData() {
+    //     var ids = getUrlParam("ids");
+    //     if (id != "") {
+    //         $("#id").val(data.id);
+    //         $.ajax({
+    //             type: 'get',
+    //             url: '/shipper/HHC/' + id,
+    //             async: false,
+    //             success: function (data) {
+    //                 $("#id").val(data.id);
+    //                 $("#plts").val(data.totalPallet);
+    //                 $("#ctns").val(data.ctns);
+    //                 $("#qty").val(data.qty);
+    //                 $("#factoryWeight").val(data.factoryWeight);
+    //
+    //             }
+    //         });
+    //
+    //     }
+    // }
+
+    var pro = window.location.protocol;
+    var host = window.location.host;
+    var domain = pro + "//" + host;
+
+    var layedit, index;
+    layui.use('layedit', function () {
+        layedit = layui.layedit;
+        layedit.set({
+            uploadImage: {
+                url: '/files/layui?domain=' + domain + "&token=" + localStorage.getItem("token"),
+                type: 'post'
+            }
+        });
+        index = layedit.build('demo');
+    });
+
+
+    function update(obj) {
+        var truckPlantNumber = $("#truckPlantNumber").val();
+        var ctTracking = $("#ctTracking").val();
+        var gpsDevice = $("#gpsDevice").val();
+        $(obj).attr("disabled", true);
+        var ids = getUrlParam("ids").split(",");
+        var formdata = $("#form").serializeObject();
+        formdata.ids = ids;
+        formdata.truckPlantNumber = truckPlantNumber;
+        formdata.ctTracking = ctTracking;
+        formdata.gpsDevice = gpsDevice;
+        formdata.shipperType = "oem";
+
+        $.ajax({
+            type: 'put',
+            url: '/shipper/editTruck',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(formdata),
+            success: function (data) {
+                window.parent.location.reload(); //刷新父页面
+                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                parent.layer.close(index);  // 关闭layer
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

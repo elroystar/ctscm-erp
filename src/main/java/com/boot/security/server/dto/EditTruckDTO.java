@@ -12,6 +12,8 @@ public class EditTruckDTO implements Serializable {
 
     private String gpsDevice;
 
+    private String shipperType;
+
     public Integer[] getIds() {
         return ids;
     }
@@ -42,5 +44,13 @@ public class EditTruckDTO implements Serializable {
 
     public void setGpsDevice(String gpsDevice) {
         this.gpsDevice = gpsDevice;
+    }
+
+    public String getShipperType() {
+        return shipperType;
+    }
+
+    public void setShipperType(String shipperType) {
+        this.shipperType = shipperType;
     }
 }
