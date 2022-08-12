@@ -10,7 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-@Configuration
+//@Configuration
 public class JobConfig {
 
 	public static final String KEY = "applicationContextSchedulerContextKey";

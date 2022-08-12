@@ -32,6 +32,8 @@
         <result column="position" jdbcType="VARCHAR" property="position"/>
         <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
         <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+        <result column="des_lon" jdbcType="VARCHAR" property="desLon"/>
+        <result column="des_lat" jdbcType="VARCHAR" property="desLat"/>
     </resultMap>
     <sql id="Base_Column_List">
         id
@@ -140,11 +142,13 @@
         insert into edi_945_gps (truck_plant_number, create_date,
                                  ct_tracking, gps_updating,
                                  city, province, position,
-                                 longitude, latitude)
+                                 longitude, latitude,
+                                 des_lon, des_lat)
         values (#{truckPlantNumber,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR},
                 #{ctTracking,jdbcType=VARCHAR}, #{gpsUpdating,jdbcType=VARCHAR},
                 #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
-                #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR})
+                #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR},
+                #{desLon,jdbcType=VARCHAR}, #{desLat,jdbcType=VARCHAR})
     </insert>
     <insert id="insert" parameterType="com.boot.security.server.model.EDI945">
         insert into edi_945 (id, status, create_date,
@@ -493,6 +497,15 @@
             </if>
             <if test="latitude != null">
                 latitude = #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="desLon != null">
+                des_lon = #{desLon,jdbcType=VARCHAR},
+            </if>
+            <if test="desLat != null">
+                des_lat = #{desLat,jdbcType=VARCHAR},
+            </if>
+            <if test="gpsState != null">
+                gps_state = #{gpsState,jdbcType=INTEGER},
             </if>
         </set>
         where truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR}

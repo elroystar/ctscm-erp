@@ -194,7 +194,7 @@
                     {"data": "ctns", "defaultContent": ""},
                     {"data": "units", "defaultContent": ""},
                     {"data": "gw", "defaultContent": ""},
-                    {"data": "ship_mode", "defaultContent": ""},
+                    {"data": "shipMode", "defaultContent": ""},
                     {"data": "poe", "defaultContent": ""},
                     {"data": "poeCountry", "defaultContent": ""},
                     {"data": "region", "defaultContent": ""},
@@ -270,38 +270,59 @@
 
     $("#getGPSInformation").click(function () {
         layer.prompt({
-            formType: 0,
-            title: "请录入车牌信息",
-        }, function (value, index, elem) {
-            $.ajax({
-                type: 'get',
-                url: '/shipper/getGPSInformation/' + value,
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    layer.close(index);
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    var msg = xhr.responseText;
-                    console.log(msg);
-                    var response = JSON.parse(msg);
-                    var code = response.code;
-                    var message = response.message;
-                    if (code == 400) {
-                        layer.msg(message);
-                    } else if (code == 401) {
-                        localStorage.removeItem("token");
-                        layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
-                            location.href = '/login.html';
-                        });
-                    } else if (code == 403) {
-                        console.log("未授权:" + message);
-                        layer.msg('未授权');
-                    } else if (code == 500) {
-                        layer.msg('系统错误：' + message);
-                    }
+            title: '请输入信息',
+            formType: 0, //输入框类型，支持0（文本）默认1（密码）2（多行文本）
+            yes: function (index) {
+                let desPlantNumber = $('#desPlantNumber').val();
+                let desLon = $('#desLon').val();
+                let desLat = $('#desLat').val();
+                if (desPlantNumber === "") {
+                    layer.tips("请填写车牌号", $('#desPlantNumber'));
+                    return;
                 }
-            });
+                if (desLon === "") {
+                    layer.tips("请填写目的地经度", $('#desLon'));
+                    return;
+                }
+                if (desLat === "") {
+                    layer.tips("请填写目的地纬度", $('#desLat'));
+                    return;
+                }
+                $.ajax({
+                    type: 'get',
+                    url: '/shipper/getGPSInformation/' + desPlantNumber + '/' + desLon + '/' + desLat,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        layer.close(index);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        var msg = xhr.responseText;
+                        console.log(msg);
+                        var response = JSON.parse(msg);
+                        var code = response.code;
+                        var message = response.message;
+                        if (code == 400) {
+                            layer.msg(message);
+                        } else if (code == 401) {
+                            localStorage.removeItem("token");
+                            layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                                location.href = '/login.html';
+                            });
+                        } else if (code == 403) {
+                            console.log("未授权:" + message);
+                            layer.msg('未授权');
+                        } else if (code == 500) {
+                            layer.msg('系统错误：' + message);
+                        }
+                    }
+                });
+            }
         });
+        $(".layui-layer-content").empty();
+        $(".layui-layer-content").append("<input type=\"text\" id= \"desPlantNumber\" class=\"layui-input\" placeholder=\"车牌号\"/>");
+        $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desLon\" class=\"layui-input\" placeholder=\"目的地经度\"/>");
+        $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desLat\" class=\"layui-input\" placeholder=\"目的地纬度\"/>");
+
     });
 
     init();

@@ -63,6 +63,12 @@ public class EDI945 {
 
     private String latitude;
 
+    private String desLon;
+
+    private String desLat;
+
+    private Integer gpsState;
+
     public Integer getId() {
         return id;
     }
@@ -309,5 +315,29 @@ public class EDI945 {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude == null ? null : latitude.trim();
+    }
+
+    public String getDesLon() {
+        return desLon;
+    }
+
+    public void setDesLon(String desLon) {
+        this.desLon = desLon;
+    }
+
+    public String getDesLat() {
+        return desLat;
+    }
+
+    public void setDesLat(String desLat) {
+        this.desLat = desLat;
+    }
+
+    public Integer getGpsState() {
+        return gpsState;
+    }
+
+    public void setGpsState(Integer gpsState) {
+        this.gpsState = gpsState;
     }
 }

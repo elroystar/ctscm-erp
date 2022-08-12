@@ -63,18 +63,28 @@ public class ShipperController {
         return headingOEM2020;
     }
 
-    @GetMapping("/getGPSInformation/{truckPlantNumber}")
+    @GetMapping("/getGPSInformation/{truckPlantNumber}/{desLon}/{desLat}")
     @ApiOperation(value = "根据id HHC shipper")
-    public void getGPSInformation(@PathVariable String truckPlantNumber) {
+    public void getGPSInformation(@PathVariable String truckPlantNumber, @PathVariable String desLon, @PathVariable String desLat) {
         try {
             List<EDI945> edi945List1 = edi945Mapper.selectGPSByTruckPlantNumber(truckPlantNumber);
             if (edi945List1.isEmpty()) {
                 // 获取truckPlantNumber的数据
                 List<EDI945> edi945List = edi945Mapper.selectByTruckPlantNumber(truckPlantNumber);
-                EDI945 edi945GPS = edi945List.get(0);
-                // 插入gps表
-                edi945Mapper.insertGPS(edi945GPS);
+                if (!edi945List.isEmpty()) {
+                    EDI945 edi945GPS = edi945List.get(0);
+                    edi945GPS.setDesLon(desLon);
+                    edi945GPS.setDesLat(desLat);
+                    edi945Mapper.insertGPS(edi945GPS);
+                }
+            } else {
+                for (EDI945 edi945GPS : edi945List1) {
+                    edi945GPS.setDesLon(desLon);
+                    edi945GPS.setDesLat(desLat);
+                    edi945Mapper.updateGPSByTruckPlantNumber(edi945GPS);
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

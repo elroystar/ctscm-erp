@@ -56,10 +56,14 @@ public class GPSTask {
                     edi945.setPosition(adr);
                     edi945.setCity(city);
                     edi945.setProvince(province);
-                    BigDecimal latitude = BigDecimal.valueOf(Long.parseLong(lat)).divide(BigDecimal.valueOf(600000L), 6, BigDecimal.ROUND_HALF_UP);
-                    BigDecimal longitude = BigDecimal.valueOf(Long.parseLong(lon)).divide(BigDecimal.valueOf(600000L), 6, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal latitude = BigDecimal.valueOf(Long.parseLong(lat)).divide(BigDecimal.valueOf(600000L), 3, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal longitude = BigDecimal.valueOf(Long.parseLong(lon)).divide(BigDecimal.valueOf(600000L), 3, BigDecimal.ROUND_HALF_UP);
                     edi945.setLatitude(latitude.toString());
                     edi945.setLongitude(longitude.toString());
+                    // 如果获取的经纬度与一开始输入的经纬度相等，停止获取数据
+                    if (edi945.getDesLon().equals(longitude) && edi945.getDesLat().equals(latitude)) {
+                        edi945.setGpsState(1);
+                    }
                     edi945Mapper.updateByTruckPlantNumber(edi945);
                     edi945Mapper.updateGPSByTruckPlantNumber(edi945);
                 }
