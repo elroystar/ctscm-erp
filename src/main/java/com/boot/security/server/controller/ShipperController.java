@@ -63,28 +63,25 @@ public class ShipperController {
         return headingOEM2020;
     }
 
-    @GetMapping("/getGPSInformation/{truckPlantNumber}/{desLon}/{desLat}")
-    @ApiOperation(value = "根据id HHC shipper")
-    public void getGPSInformation(@PathVariable String truckPlantNumber, @PathVariable String desLon, @PathVariable String desLat) {
+    @GetMapping("/getGPSInformation/{truckPlantNumber}/{desLon}/{desLat}/{gpsDevice}/{ctTracking}")
+    @ApiOperation(value = "获取gps数据")
+    public void getGPSInformation(@PathVariable String truckPlantNumber,
+                                  @PathVariable String desLon,
+                                  @PathVariable String desLat,
+                                  @PathVariable String gpsDevice,
+                                  @PathVariable String ctTracking) {
         try {
-            List<EDI945> edi945List1 = edi945Mapper.selectGPSByTruckPlantNumber(truckPlantNumber);
-            if (edi945List1.isEmpty()) {
-                // 获取truckPlantNumber的数据
-                List<EDI945> edi945List = edi945Mapper.selectByTruckPlantNumber(truckPlantNumber);
-                if (!edi945List.isEmpty()) {
-                    EDI945 edi945GPS = edi945List.get(0);
-                    edi945GPS.setDesLon(desLon);
-                    edi945GPS.setDesLat(desLat);
-                    edi945Mapper.insertGPS(edi945GPS);
-                }
-            } else {
-                for (EDI945 edi945GPS : edi945List1) {
-                    edi945GPS.setDesLon(desLon);
-                    edi945GPS.setDesLat(desLat);
-                    edi945Mapper.updateGPSByTruckPlantNumber(edi945GPS);
-                }
-            }
-
+            EDI945 edi945GPS = new EDI945();
+            edi945GPS.setTruckPlantNumber(truckPlantNumber);
+            edi945GPS.setGpsDevice(gpsDevice);
+            edi945GPS.setCtTracking(ctTracking);
+            edi945GPS.setDesLon(desLon);
+            edi945GPS.setDesLat(desLat);
+            edi945GPS.setDeviceType("GPS");
+            edi945GPS.setSource("北斗标机");
+            edi945GPS.setCompanyCode("CTSCM");
+            edi945GPS.setLocationTime(new Date());
+            edi945Mapper.insertGPS(edi945GPS);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -68,6 +68,9 @@
             <if test="params.sender != null and params.sender != ''">
                 and sender = #{params.sender,jdbcType=VARCHAR}
             </if>
+            <if test="params.shipDate != null and params.shipDate != ''">
+                and ship_date = #{params.shipDate,jdbcType=VARCHAR}
+            </if>
         </where>
     </sql>
     <select id="selectByGPSState" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -139,16 +142,20 @@
     </delete>
     <insert id="insertGPS" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.boot.security.server.model.EDI945">
-        insert into edi_945_gps (truck_plant_number, create_date,
-                                 ct_tracking, gps_updating,
+        insert into edi_945_gps (truck_plant_number, gps_device,
+                                 create_date,ct_tracking, gps_updating,
                                  city, province, position,
                                  longitude, latitude,
-                                 des_lon, des_lat)
-        values (#{truckPlantNumber,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR},
+                                 des_lon, des_lat,
+                                 device_type, source,
+                                 company_code, location_time)
+        values (#{truckPlantNumber,jdbcType=VARCHAR}, #{gpsDevice,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR},
                 #{ctTracking,jdbcType=VARCHAR}, #{gpsUpdating,jdbcType=VARCHAR},
                 #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
                 #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR},
-                #{desLon,jdbcType=VARCHAR}, #{desLat,jdbcType=VARCHAR})
+                #{desLon,jdbcType=VARCHAR}, #{desLat,jdbcType=VARCHAR},
+                #{deviceType,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR},
+                #{companyCode,jdbcType=VARCHAR}, #{locationTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insert" parameterType="com.boot.security.server.model.EDI945">
         insert into edi_945 (id, status, create_date,
@@ -506,6 +513,9 @@
             </if>
             <if test="gpsState != null">
                 gps_state = #{gpsState,jdbcType=INTEGER},
+            </if>
+            <if test="trackEndTime != null">
+                track_end_time = #{trackEndTime,jdbcType=TIMESTAMP},
             </if>
         </set>
         where truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR}

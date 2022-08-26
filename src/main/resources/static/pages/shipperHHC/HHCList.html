@@ -34,6 +34,8 @@
                                            placeholder="Truck Plant Number">
                                     Sender：
                                     <input id="sender" type="text" class="form-control" placeholder="sender">
+                                    Ship Date：
+                                    <input id="shipDate" type="text" class="form-control" placeholder="Ship Date">
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
@@ -154,6 +156,7 @@
                         d.region = $('#region').val();
                         d.truckPlantNumber = $('#truckPlantNumber').val();
                         d.sender = $('#sender').val();
+                        d.shipDate = $('#shipDate').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;
@@ -273,11 +276,21 @@
             title: '请输入信息',
             formType: 0, //输入框类型，支持0（文本）默认1（密码）2（多行文本）
             yes: function (index) {
+                let desGpsDevice = $('#desGpsDevice').val();
                 let desPlantNumber = $('#desPlantNumber').val();
+                let desCtTracking = $('#desCtTracking').val();
                 let desLon = $('#desLon').val();
                 let desLat = $('#desLat').val();
+                if (desGpsDevice === "") {
+                    layer.tips("请填写车牌号", $('#desGpsDevice'));
+                    return;
+                }
                 if (desPlantNumber === "") {
-                    layer.tips("请填写车牌号", $('#desPlantNumber'));
+                    layer.tips("请填写track_plant_number", $('#desPlantNumber'));
+                    return;
+                }
+                if (desCtTracking === "") {
+                    layer.tips("请填写ct_tracking", $('#desCtTracking'));
                     return;
                 }
                 if (desLon === "") {
@@ -290,7 +303,7 @@
                 }
                 $.ajax({
                     type: 'get',
-                    url: '/shipper/getGPSInformation/' + desPlantNumber + '/' + desLon + '/' + desLat,
+                    url: '/shipper/getGPSInformation/' + desPlantNumber + '/' + desLon + '/' + desLat+ '/' + desGpsDevice + '/' + desCtTracking,
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         layer.close(index);
@@ -319,7 +332,9 @@
             }
         });
         $(".layui-layer-content").empty();
-        $(".layui-layer-content").append("<input type=\"text\" id= \"desPlantNumber\" class=\"layui-input\" placeholder=\"车牌号\"/>");
+        $(".layui-layer-content").append("<input type=\"text\" id= \"desGpsDevice\" class=\"layui-input\" placeholder=\"车牌号\"/>");
+        $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desPlantNumber\" class=\"layui-input\" placeholder=\"track_plant_number\"/>");
+        $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desCtTracking\" class=\"layui-input\" placeholder=\"ct_tracking\"/>");
         $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desLon\" class=\"layui-input\" placeholder=\"目的地经度\"/>");
         $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desLat\" class=\"layui-input\" placeholder=\"目的地纬度\"/>");
 

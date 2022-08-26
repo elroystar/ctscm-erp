@@ -37,7 +37,7 @@ public class GPSTask {
         List<EDI945> edi945List = edi945Mapper.selectByGPSState(0);
         for (EDI945 edi945 : edi945List) {
             String token = gpsService.login();
-            String transTimeManageV2 = gpsService.transTimeManageV2(token, edi945.getTruckPlantNumber());
+            String transTimeManageV2 = gpsService.transTimeManageV2(token, edi945.getGpsDevice());
             if (StringUtils.isNotBlank(transTimeManageV2)) {
                 TransTimeManageV2 transTime = JSON.parseObject(transTimeManageV2, TransTimeManageV2.class);
                 if (transTime.getStatus() == 1001) {
@@ -61,14 +61,15 @@ public class GPSTask {
                     edi945.setLatitude(latitude.toString());
                     edi945.setLongitude(longitude.toString());
                     // 如果获取的经纬度与一开始输入的经纬度相等，停止获取数据
-                    if (edi945.getDesLon().equals(longitude) && edi945.getDesLat().equals(latitude)) {
+                    if (edi945.getDesLon().equals(longitude.toString()) && edi945.getDesLat().equals(latitude.toString())) {
                         edi945.setGpsState(1);
+                        edi945.setTrackEndTime(new Date());
                     }
                     edi945Mapper.updateByTruckPlantNumber(edi945);
                     edi945Mapper.updateGPSByTruckPlantNumber(edi945);
                 }
             }
-            logger.info("GPSTask getTruckPlantNumberGPS log, TruckPlantNumber:{}, gps info:{}", edi945.getTruckPlantNumber(), transTimeManageV2);
+            logger.debug("GPSTask getTruckPlantNumberGPS log, TruckPlantNumber:{}, gps info:{}", edi945.getGpsDevice(), transTimeManageV2);
         }
     }
 }

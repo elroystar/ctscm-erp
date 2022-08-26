@@ -1,5 +1,7 @@
 package com.boot.security.server.model;
 
+import java.util.Date;
+
 public class EDI945 {
     private Integer id;
 
@@ -68,6 +70,16 @@ public class EDI945 {
     private String desLat;
 
     private Integer gpsState;
+
+    private String deviceType;
+
+    private String source;
+
+    private String companyCode;
+
+    private Date locationTime;
+
+    private Date trackEndTime;
 
     public Integer getId() {
         return id;
@@ -339,5 +351,45 @@ public class EDI945 {
 
     public void setGpsState(Integer gpsState) {
         this.gpsState = gpsState;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public Date getLocationTime() {
+        return locationTime;
+    }
+
+    public void setLocationTime(Date locationTime) {
+        this.locationTime = locationTime;
+    }
+
+    public Date getTrackEndTime() {
+        return trackEndTime;
+    }
+
+    public void setTrackEndTime(Date trackEndTime) {
+        this.trackEndTime = trackEndTime;
     }
 }

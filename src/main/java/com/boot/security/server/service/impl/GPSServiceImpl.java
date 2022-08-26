@@ -66,7 +66,7 @@ public class GPSServiceImpl implements GPSService {
             map.put("cid", "72ca4ad1-dec0-45ab-91a7-1d99627e9427");
             map.put("vnos", truckPlantNumber);
 //            map.put("timeNearby", "30");
-            String url = "https://zhiyunopenapi.95155.com/save/apis/login/save/apis/transTimeManageV2";
+            String url = "https://zhiyunopenapi.95155.com/save/apis/transTimeManageV2";
             DataExchangeService des = new DataExchangeService(5000, 8000);
             logger.info("请求地址:{}", url);
             // 通过 https 方式调用，此方法内部会使用私钥生成签名参数 sign,私钥不会发送
