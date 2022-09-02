@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EdiWzUploadMapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EdiWzUpload">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="deviceId" jdbcType="VARCHAR" property="deviceid" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="locationTime" jdbcType="VARCHAR" property="locationtime" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="brng" jdbcType="VARCHAR" property="brng" />
+    <result column="speed" jdbcType="VARCHAR" property="speed" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="doorsensorStatus" jdbcType="VARCHAR" property="doorsensorstatus" />
+    <result column="humidity" jdbcType="VARCHAR" property="humidity" />
+    <result column="temperatures" jdbcType="VARCHAR" property="temperatures" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, status, deviceId, longitude, latitude, locationTime, city, province, position, 
+    brng, speed, type, doorsensorStatus, humidity, temperatures
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_wz_upload
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_wz_upload
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EdiWzUpload">
+    insert into edi_wz_upload (id, status, deviceId, 
+      longitude, latitude, locationTime, 
+      city, province, position, 
+      brng, speed, type, 
+      doorsensorStatus, humidity, temperatures
+      )
+    values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{deviceid,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{locationtime,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{brng,jdbcType=VARCHAR}, #{speed,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{doorsensorstatus,jdbcType=VARCHAR}, #{humidity,jdbcType=VARCHAR}, #{temperatures,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EdiWzUpload">
+    insert into edi_wz_upload
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deviceid != null">
+        deviceId,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="locationtime != null">
+        locationTime,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="brng != null">
+        brng,
+      </if>
+      <if test="speed != null">
+        speed,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="doorsensorstatus != null">
+        doorsensorStatus,
+      </if>
+      <if test="humidity != null">
+        humidity,
+      </if>
+      <if test="temperatures != null">
+        temperatures,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null">
+        #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="locationtime != null">
+        #{locationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="brng != null">
+        #{brng,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        #{speed,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="doorsensorstatus != null">
+        #{doorsensorstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="humidity != null">
+        #{humidity,jdbcType=VARCHAR},
+      </if>
+      <if test="temperatures != null">
+        #{temperatures,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EdiWzUpload">
+    update edi_wz_upload
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="deviceid != null">
+        deviceId = #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="locationtime != null">
+        locationTime = #{locationtime,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="brng != null">
+        brng = #{brng,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        speed = #{speed,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="doorsensorstatus != null">
+        doorsensorStatus = #{doorsensorstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="humidity != null">
+        humidity = #{humidity,jdbcType=VARCHAR},
+      </if>
+      <if test="temperatures != null">
+        temperatures = #{temperatures,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EdiWzUpload">
+    update edi_wz_upload
+    set status = #{status,jdbcType=INTEGER},
+      deviceId = #{deviceid,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      locationTime = #{locationtime,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      brng = #{brng,jdbcType=VARCHAR},
+      speed = #{speed,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      doorsensorStatus = #{doorsensorstatus,jdbcType=VARCHAR},
+      humidity = #{humidity,jdbcType=VARCHAR},
+      temperatures = #{temperatures,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

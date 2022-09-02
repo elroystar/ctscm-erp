@@ -34,6 +34,11 @@
         <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
         <result column="des_lon" jdbcType="VARCHAR" property="desLon"/>
         <result column="des_lat" jdbcType="VARCHAR" property="desLat"/>
+        <result column="device_type" jdbcType="VARCHAR" property="deviceType"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="company_code" jdbcType="VARCHAR" property="companyCode"/>
+        <result column="location_time" jdbcType="TIMESTAMP" property="locationTime"/>
+        <result column="track_end_time" jdbcType="TIMESTAMP" property="trackEndTime"/>
     </resultMap>
     <sql id="Base_Column_List">
         id

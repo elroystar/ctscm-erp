@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EdiWzRegisterMapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EdiWzRegister">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="trackNo" jdbcType="VARCHAR" property="trackno" />
+    <result column="deviceId" jdbcType="VARCHAR" property="deviceid" />
+    <result column="trackStartTime" jdbcType="VARCHAR" property="trackstarttime" />
+    <result column="companyCode" jdbcType="VARCHAR" property="companycode" />
+    <result column="orderNo" jdbcType="VARCHAR" property="orderno" />
+    <result column="trackEndTime" jdbcType="VARCHAR" property="trackendtime" />
+    <result column="bePushLocation" jdbcType="VARCHAR" property="bepushlocation" />
+    <result column="bePushTemperature" jdbcType="VARCHAR" property="bepushtemperature" />
+    <result column="bePushDoorsensor" jdbcType="VARCHAR" property="bepushdoorsensor" />
+    <result column="returnField" jdbcType="VARCHAR" property="returnfield" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, status, trackNo, deviceId, trackStartTime, companyCode, orderNo, trackEndTime, 
+    bePushLocation, bePushTemperature, bePushDoorsensor, returnField
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_wz_register
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_wz_register
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EdiWzRegister">
+    insert into edi_wz_register (id, status, trackNo, 
+      deviceId, trackStartTime, companyCode, 
+      orderNo, trackEndTime, bePushLocation, 
+      bePushTemperature, bePushDoorsensor, returnField
+      )
+    values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{trackno,jdbcType=VARCHAR}, 
+      #{deviceid,jdbcType=VARCHAR}, #{trackstarttime,jdbcType=VARCHAR}, #{companycode,jdbcType=VARCHAR}, 
+      #{orderno,jdbcType=VARCHAR}, #{trackendtime,jdbcType=VARCHAR}, #{bepushlocation,jdbcType=VARCHAR}, 
+      #{bepushtemperature,jdbcType=VARCHAR}, #{bepushdoorsensor,jdbcType=VARCHAR}, #{returnfield,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EdiWzRegister">
+    insert into edi_wz_register
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="trackno != null">
+        trackNo,
+      </if>
+      <if test="deviceid != null">
+        deviceId,
+      </if>
+      <if test="trackstarttime != null">
+        trackStartTime,
+      </if>
+      <if test="companycode != null">
+        companyCode,
+      </if>
+      <if test="orderno != null">
+        orderNo,
+      </if>
+      <if test="trackendtime != null">
+        trackEndTime,
+      </if>
+      <if test="bepushlocation != null">
+        bePushLocation,
+      </if>
+      <if test="bepushtemperature != null">
+        bePushTemperature,
+      </if>
+      <if test="bepushdoorsensor != null">
+        bePushDoorsensor,
+      </if>
+      <if test="returnfield != null">
+        returnField,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="trackno != null">
+        #{trackno,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceid != null">
+        #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="trackstarttime != null">
+        #{trackstarttime,jdbcType=VARCHAR},
+      </if>
+      <if test="companycode != null">
+        #{companycode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderno != null">
+        #{orderno,jdbcType=VARCHAR},
+      </if>
+      <if test="trackendtime != null">
+        #{trackendtime,jdbcType=VARCHAR},
+      </if>
+      <if test="bepushlocation != null">
+        #{bepushlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="bepushtemperature != null">
+        #{bepushtemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="bepushdoorsensor != null">
+        #{bepushdoorsensor,jdbcType=VARCHAR},
+      </if>
+      <if test="returnfield != null">
+        #{returnfield,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EdiWzRegister">
+    update edi_wz_register
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="trackno != null">
+        trackNo = #{trackno,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceid != null">
+        deviceId = #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="trackstarttime != null">
+        trackStartTime = #{trackstarttime,jdbcType=VARCHAR},
+      </if>
+      <if test="companycode != null">
+        companyCode = #{companycode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderno != null">
+        orderNo = #{orderno,jdbcType=VARCHAR},
+      </if>
+      <if test="trackendtime != null">
+        trackEndTime = #{trackendtime,jdbcType=VARCHAR},
+      </if>
+      <if test="bepushlocation != null">
+        bePushLocation = #{bepushlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="bepushtemperature != null">
+        bePushTemperature = #{bepushtemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="bepushdoorsensor != null">
+        bePushDoorsensor = #{bepushdoorsensor,jdbcType=VARCHAR},
+      </if>
+      <if test="returnfield != null">
+        returnField = #{returnfield,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EdiWzRegister">
+    update edi_wz_register
+    set status = #{status,jdbcType=INTEGER},
+      trackNo = #{trackno,jdbcType=VARCHAR},
+      deviceId = #{deviceid,jdbcType=VARCHAR},
+      trackStartTime = #{trackstarttime,jdbcType=VARCHAR},
+      companyCode = #{companycode,jdbcType=VARCHAR},
+      orderNo = #{orderno,jdbcType=VARCHAR},
+      trackEndTime = #{trackendtime,jdbcType=VARCHAR},
+      bePushLocation = #{bepushlocation,jdbcType=VARCHAR},
+      bePushTemperature = #{bepushtemperature,jdbcType=VARCHAR},
+      bePushDoorsensor = #{bepushdoorsensor,jdbcType=VARCHAR},
+      returnField = #{returnfield,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,11 +1,12 @@
 package com.boot.security.server.task;
 
 import com.alibaba.fastjson.JSON;
-import com.boot.security.server.dao.EDI945Mapper;
+import com.boot.security.server.dao.*;
 import com.boot.security.server.dto.gps.FirstVcl;
 import com.boot.security.server.dto.gps.TransTimeManageV2;
-import com.boot.security.server.model.EDI945;
+import com.boot.security.server.model.*;
 import com.boot.security.server.service.GPSService;
+import com.boot.security.server.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,13 +32,32 @@ public class GPSTask {
     @Autowired
     private EDI945Mapper edi945Mapper;
 
+    @Autowired
+    private EdiWzDeviceMapper ediWzDeviceMapper;
+
+    @Autowired
+    private EdiWzUploadMapper ediWzUploadMapper;
+
+    @Autowired
+    private EdiWzRegisterMapper ediWzRegisterMapper;
+
+    @Autowired
+    private EdiWzTrackMapper ediWzTrackMapper;
+
+    @Autowired
+    private EdiWzCancelMapper ediWzCancelMapper;
+
     @Scheduled(cron = "0 */1 * * * ? ")
     public void getTruckPlantNumberGPS() {
         // 定时获取所有需要获取数据的车辆
         List<EDI945> edi945List = edi945Mapper.selectByGPSState(0);
         for (EDI945 edi945 : edi945List) {
+            Boolean isFirst = Boolean.FALSE;
             String token = gpsService.login();
             String transTimeManageV2 = gpsService.transTimeManageV2(token, edi945.getGpsDevice());
+            if (StringUtils.isBlank(edi945.getLatitude()) && StringUtils.isBlank(edi945.getLongitude())) {
+                isFirst = Boolean.TRUE;
+            }
             if (StringUtils.isNotBlank(transTimeManageV2)) {
                 TransTimeManageV2 transTime = JSON.parseObject(transTimeManageV2, TransTimeManageV2.class);
                 if (transTime.getStatus() == 1001) {
@@ -64,9 +84,50 @@ public class GPSTask {
                     if (edi945.getDesLon().equals(longitude.toString()) && edi945.getDesLat().equals(latitude.toString())) {
                         edi945.setGpsState(1);
                         edi945.setTrackEndTime(new Date());
+                        // 取消数据edi表数据写入
+                        EdiWzCancel ediWzCancel = new EdiWzCancel();
+                        ediWzCancel.setStatus(0);
+                        ediWzCancel.setTrackno(edi945.getCtTracking());
+                        ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
+                        ediWzCancel.setTrackendtime(DateUtil.format(edi945.getTrackEndTime(), DateUtil.NORM_DATETIME_PATTERN));
+                        ediWzCancelMapper.insertSelective(ediWzCancel);
                     }
                     edi945Mapper.updateByTruckPlantNumber(edi945);
                     edi945Mapper.updateGPSByTruckPlantNumber(edi945);
+                    if (isFirst) {
+                        // 首次数据edi表数据写入
+                        EdiWzDevice ediWzDevice = new EdiWzDevice();
+                        ediWzDevice.setStatus(0);
+                        ediWzDevice.setDeviceid(edi945.getTruckPlantNumber());
+                        ediWzDevice.setDevicetype(edi945.getDeviceType());
+                        ediWzDevice.setSource(edi945.getSource());
+                        ediWzDeviceMapper.insertSelective(ediWzDevice);
+                        EdiWzUpload ediWzUpload = new EdiWzUpload();
+                        ediWzUpload.setStatus(0);
+                        ediWzUpload.setDeviceid(edi945.getTruckPlantNumber());
+                        ediWzUpload.setLongitude(edi945.getLongitude());
+                        ediWzUpload.setLatitude(edi945.getLatitude());
+                        ediWzUpload.setLocationtime(DateUtil.format(edi945.getLocationTime(), DateUtil.NORM_DATETIME_PATTERN));
+                        ediWzUploadMapper.insertSelective(ediWzUpload);
+                        EdiWzRegister ediWzRegister = new EdiWzRegister();
+                        ediWzRegister.setStatus(0);
+                        ediWzRegister.setDeviceid(edi945.getTruckPlantNumber());
+                        ediWzRegister.setTrackstarttime(DateUtil.format(edi945.getLocationTime(), DateUtil.NORM_DATETIME_PATTERN));
+                        ediWzRegister.setCompanycode(edi945.getCompanyCode());
+                        ediWzRegister.setOrderno(edi945.getCtTracking());
+                        ediWzRegisterMapper.insertSelective(ediWzRegister);
+                    }
+                    // 轨迹数据edi表数据写入
+                    EdiWzTrack ediWzTrack = new EdiWzTrack();
+                    ediWzTrack.setStatus(0);
+                    ediWzTrack.setLocationtime(edi945.getGpsUpdating());
+                    ediWzTrack.setDeviceid(edi945.getTruckPlantNumber());
+                    ediWzTrack.setProvince(edi945.getProvince());
+                    ediWzTrack.setCity(edi945.getCity());
+                    ediWzTrack.setPosition(edi945.getPosition());
+                    ediWzTrack.setLongitude(edi945.getLongitude());
+                    ediWzTrack.setLatitude(edi945.getLatitude());
+                    ediWzTrackMapper.insertSelective(ediWzTrack);
                 }
             }
             logger.debug("GPSTask getTruckPlantNumberGPS log, TruckPlantNumber:{}, gps info:{}", edi945.getGpsDevice(), transTimeManageV2);
