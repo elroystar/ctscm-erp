@@ -4,7 +4,15 @@ import java.io.Serializable;
 
 public class EditTruckDTO implements Serializable {
 
-    private Integer[] ids;
+    private String shipmentNumberSub;
+    private String shipwaySub;
+    private String oemSub;
+    private String gatewaySub;
+    private String regionSub;
+    private String[] region;
+    private String truckPlantNumberSub;
+    private String senderSub;
+    private String shipDateSub;
 
     private String truckPlantNumber;
 
@@ -14,12 +22,68 @@ public class EditTruckDTO implements Serializable {
 
     private String shipperType;
 
-    public Integer[] getIds() {
-        return ids;
+    public String getShipmentNumberSub() {
+        return shipmentNumberSub;
     }
 
-    public void setIds(Integer[] ids) {
-        this.ids = ids;
+    public void setShipmentNumberSub(String shipmentNumberSub) {
+        this.shipmentNumberSub = shipmentNumberSub;
+    }
+
+    public String getShipwaySub() {
+        return shipwaySub;
+    }
+
+    public void setShipwaySub(String shipwaySub) {
+        this.shipwaySub = shipwaySub;
+    }
+
+    public String getOemSub() {
+        return oemSub;
+    }
+
+    public void setOemSub(String oemSub) {
+        this.oemSub = oemSub;
+    }
+
+    public String getGatewaySub() {
+        return gatewaySub;
+    }
+
+    public void setGatewaySub(String gatewaySub) {
+        this.gatewaySub = gatewaySub;
+    }
+
+    public String getRegionSub() {
+        return regionSub;
+    }
+
+    public void setRegionSub(String regionSub) {
+        this.regionSub = regionSub;
+    }
+
+    public String getTruckPlantNumberSub() {
+        return truckPlantNumberSub;
+    }
+
+    public void setTruckPlantNumberSub(String truckPlantNumberSub) {
+        this.truckPlantNumberSub = truckPlantNumberSub;
+    }
+
+    public String getSenderSub() {
+        return senderSub;
+    }
+
+    public void setSenderSub(String senderSub) {
+        this.senderSub = senderSub;
+    }
+
+    public String getShipDateSub() {
+        return shipDateSub;
+    }
+
+    public void setShipDateSub(String shipDateSub) {
+        this.shipDateSub = shipDateSub;
     }
 
     public String getTruckPlantNumber() {
@@ -52,5 +116,13 @@ public class EditTruckDTO implements Serializable {
 
     public void setShipperType(String shipperType) {
         this.shipperType = shipperType;
+    }
+
+    public String[] getRegion() {
+        return region;
+    }
+
+    public void setRegion(String[] region) {
+        this.region = region;
     }
 }

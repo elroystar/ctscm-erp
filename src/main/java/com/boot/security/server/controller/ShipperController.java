@@ -8,16 +8,14 @@ import com.boot.security.server.dto.EDI945ExportExcelDTO;
 import com.boot.security.server.dto.EDIExportExcelDTO;
 import com.boot.security.server.dto.EditTruckDTO;
 import com.boot.security.server.dto.ShipperDetailDTO;
-import com.boot.security.server.model.Dict;
-import com.boot.security.server.model.EDI945;
-import com.boot.security.server.model.EDIHeadingOEM2020;
-import com.boot.security.server.model.EDIHeadingUpdate;
+import com.boot.security.server.model.*;
 import com.boot.security.server.page.table.PageTableHandler;
 import com.boot.security.server.page.table.PageTableHandler.CountHandler;
 import com.boot.security.server.page.table.PageTableHandler.ListHandler;
 import com.boot.security.server.page.table.PageTableRequest;
 import com.boot.security.server.page.table.PageTableResponse;
 import com.boot.security.server.utils.ExcelUtil;
+import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +54,12 @@ public class ShipperController {
     @Autowired
     private DictDao dictDao;
 
+    @Autowired
+    private EdiWzUploadMapper ediWzUploadMapper;
+
+    @Autowired
+    private EdiWzTrackMapper ediWzTrackMapper;
+
     @GetMapping("/HHC/{id}")
     @ApiOperation(value = "根据id HHC shipper")
     public EDIHeadingOEM2020 getShipperHHC(@PathVariable Integer id) {
@@ -79,9 +83,35 @@ public class ShipperController {
             edi945GPS.setDesLat(desLat);
             edi945GPS.setDeviceType("GPS");
             edi945GPS.setSource("北斗标机");
-            edi945GPS.setCompanyCode("CTSCM");
+            edi945GPS.setCompanyCode("CTSC");
             edi945GPS.setLocationTime(new Date());
             edi945Mapper.insertGPS(edi945GPS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/stopGPSInformation/{stopGpsDevice}")
+    @ApiOperation(value = "停止获取gps数据")
+    public void stopGPSInformation(@PathVariable String stopGpsDevice) {
+        try {
+            List<EDI945> edi945List = edi945Mapper.selectGPSByGpsDevice(stopGpsDevice);
+            if (!edi945List.isEmpty()) {
+                for (EDI945 edi945 : edi945List) {
+                    String truckPlantNumber = edi945.getTruckPlantNumber();
+                    EdiWzUpload ediWzUpload = new EdiWzUpload();
+                    ediWzUpload.setStatus(0);
+                    ediWzUpload.setDeviceid(truckPlantNumber);
+                    ediWzUploadMapper.updateStatusByTruckPlantNumber(ediWzUpload);
+                    EdiWzTrack ediWzTrack = new EdiWzTrack();
+                    ediWzTrack.setStatus(0);
+                    ediWzTrack.setDeviceid(truckPlantNumber);
+                    ediWzTrackMapper.updateStatusByTruckPlantNumber(ediWzTrack);
+                    edi945.setGpsState(1);
+                    edi945.setTrackEndTime(new Date());
+                    edi945Mapper.updateGPSByTruckPlantNumber(edi945);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,7 +152,15 @@ public class ShipperController {
         if (StringUtils.isNotBlank(shipperType) && "oem".equals(shipperType)) {
             edi945Mapper.editTruckOEM(editTruckDTO);
         } else {
-            edi945Mapper.editTruck(editTruckDTO);
+//            edi945Mapper.editTruck(editTruckDTO);
+            String region = editTruckDTO.getRegionSub();
+            if (StringUtils.isNotBlank(region)) {
+                List<Dict> dicts = dictDao.listByType(region);
+                String collect = dicts.stream().map(Dict::getK).collect(Collectors.joining(","));
+                String[] split = collect.split(",");
+                editTruckDTO.setRegion(split);
+            }
+            edi945Mapper.editTruckBy(editTruckDTO);
         }
     }
 
@@ -178,10 +216,30 @@ public class ShipperController {
     @PostMapping("exportEDI945")
     @ApiOperation(value = "导出EDI945数据")
     public void exportEDI945(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> params = Maps.newHashMap();
+        String shipmentNumber = request.getParameter("shipmentNumberForm");
+        String shipway = request.getParameter("shipwayForm");
+        String oem = request.getParameter("oemForm");
+        String gateway = request.getParameter("gatewayForm");
+        String region = request.getParameter("regionForm");
+        if (StringUtils.isNotBlank(region)) {
+            List<Dict> dicts = dictDao.listByType(region);
+            String collect = dicts.stream().map(Dict::getK).collect(Collectors.joining(","));
+            String[] split = collect.split(",");
+            params.put("region", split);
+        }
+        String truckPlantNumber = request.getParameter("truckPlantNumberForm");
+        String sender = request.getParameter("senderForm");
+        String shipDate = request.getParameter("shipDateForm");
+        params.put("shipmentNumber", shipmentNumber);
+        params.put("shipway", shipway);
+        params.put("oem", oem);
+        params.put("gateway", gateway);
+        params.put("truckPlantNumber", truckPlantNumber);
+        params.put("sender", sender);
+        params.put("shipDate", shipDate);
         List<Object[]> data = new ArrayList<>();
-        String ids = request.getParameter("ids");
-        String[] split = ids.split(",");
-        List<EDI945> edi945List = edi945Mapper.selectByIds(split);
+        List<EDI945> edi945List = edi945Mapper.list(params, 0, 1000);
         for (EDI945 edi945 : edi945List) {
             EDI945ExportExcelDTO excelDTO = new EDI945ExportExcelDTO();
             BeanUtils.copyProperties(edi945, excelDTO);

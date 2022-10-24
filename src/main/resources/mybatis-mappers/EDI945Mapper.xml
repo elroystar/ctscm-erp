@@ -83,16 +83,10 @@
         from edi_945_gps
         where gps_state = #{state,jdbcType=INTEGER}
     </select>
-    <select id="selectByTruckPlantNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from edi_945
-        where truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR}
-    </select>
-    <select id="selectGPSByTruckPlantNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectGPSByGpsDevice" parameterType="java.lang.String" resultMap="BaseResultMap">
         select *
         from edi_945_gps
-        where truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR}
+        where gps_device = #{gpsDevice,jdbcType=VARCHAR}
     </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -148,7 +142,7 @@
     <insert id="insertGPS" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.boot.security.server.model.EDI945">
         insert into edi_945_gps (truck_plant_number, gps_device,
-                                 create_date,ct_tracking, gps_updating,
+                                 create_date, ct_tracking, gps_updating,
                                  city, province, position,
                                  longitude, latitude,
                                  des_lon, des_lat,
@@ -542,6 +536,49 @@
         <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
             #{id}
         </foreach>
+    </update>
+    <update id="editTruckBy" parameterType="com.boot.security.server.dto.EditTruckDTO">
+        update edi_945
+        <set>
+            <if test="truckPlantNumber != null">
+                truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="ctTracking != null">
+                ct_tracking = #{ctTracking,jdbcType=VARCHAR},
+            </if>
+            <if test="gpsDevice != null">
+                gps_device = #{gpsDevice,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            <if test="shipmentNumberSub != null and shipmentNumberSub != ''">
+                and shipment_number = #{shipmentNumberSub,jdbcType=VARCHAR}
+            </if>
+            <if test="shipwaySub != null and shipwaySub != ''">
+                and shipway = #{shipwaySub,jdbcType=VARCHAR}
+            </if>
+            <if test="oemSub != null and oemSub != ''">
+                and oem = #{oemSub,jdbcType=VARCHAR}
+            </if>
+            <if test="gatewaySub != null and gatewaySub != ''">
+                and gateway = #{gatewaySub,jdbcType=VARCHAR}
+            </if>
+            <if test="region != null and region != ''">
+                and poe_country IN
+                <foreach collection="region" item="poeCountry" index="index" open="(" close=")" separator=",">
+                    #{poeCountry}
+                </foreach>
+            </if>
+            <if test="truckPlantNumberSub != null and truckPlantNumberSub != ''">
+                and truck_plant_number = #{truckPlantNumberSub,jdbcType=VARCHAR}
+            </if>
+            <if test="senderSub != null and senderSub != ''">
+                and sender = #{senderSub,jdbcType=VARCHAR}
+            </if>
+            <if test="shipDateSub != null and shipDateSub != ''">
+                and ship_date = #{shipDateSub,jdbcType=VARCHAR}
+            </if>
+        </where>
     </update>
     <update id="editTruckOEM" parameterType="com.boot.security.server.dto.EditTruckDTO">
         update edi_945_oem

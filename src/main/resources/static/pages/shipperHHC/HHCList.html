@@ -48,6 +48,9 @@
                                     <button id="getGPSInformation" class="layui-btn layui-btn-warm layui-btn-sm"><i
                                             class="layui-icon">&#xe666;</i>开始获取GPS信息
                                     </button>
+                                    <button id="stopGPSInformation" class="layui-btn layui-btn-normal layui-btn-sm"><i
+                                            class="layui-icon">&#xe642;</i>停止获取GPS信息
+                                    </button>
                                 </div>
                             </form>
                         </td>
@@ -104,7 +107,14 @@
 <form class="form-horizontal" id="form" method="post" action="/shipper/exportEDI945" onsubmit="return false"
       enctype="multipart/form-data">
     <br/>
-    <input id="ids" name="ids" hidden="true">
+    <input id="shipmentNumberForm" name="shipmentNumberForm" hidden="true">
+    <input id="shipwayForm" name="shipwayForm" hidden="true">
+    <input id="oemForm" name="oemForm" hidden="true">
+    <input id="gatewayForm" name="gatewayForm" hidden="true">
+    <input id="regionForm" name="regionForm" hidden="true"></input>
+    <input id="truckPlantNumberForm" name="truckPlantNumberForm" hidden="true">
+    <input id="senderForm" name="senderForm" hidden="true">
+    <input id="shipDateForm" name="shipDateForm" hidden="true">
     <input id="token" name="token" hidden="true">
 </form>
 </body>
@@ -232,14 +242,43 @@
     });
 
     $("#editTruck").click(function () {
-        var array = example.rows({selected: true}).data().toArray();
-        var ids = array.map((obj) => {
-            return "" + obj.id + ""
-        }).join(",");
-        if (array.length == 0) {//如果一个没有勾选
+        // var array = example.rows({selected: true}).data().toArray();
+        // var ids = array.map((obj) => {
+        //     return "" + obj.id + ""
+        // }).join(",");
+        // if (array.length == 0) {//如果一个没有勾选
+        //     layer.open({
+        //         title: '提示',
+        //         content: '请先选择需要修改的数据'
+        //     });
+        // } else {
+        //     layer.open({
+        //         type: 2,
+        //         title: false,
+        //         area: ['800px', '300px'],
+        //         shadeClose: true,
+        //         content: ['updateShipperHHC.html?ids=' + ids]
+        //     });
+        // }
+        var shipmentNumber = $('#shipmentNumber').val();
+        var shipway = $('#shipway').val();
+        var oem = $('#oem').val();
+        var gateway = $('#gateway').val();
+        var region = $('#region').val();
+        var truckPlantNumber = $('#truckPlantNumber').val();
+        var sender = $('#sender').val();
+        var shipDate = $('#shipDate').val();
+        if (shipmentNumber.length == 0
+            && shipway.length == 0
+            && oem.length == 0
+            && gateway.length == 0
+            && region.length == 0
+            && truckPlantNumber.length == 0
+            && sender.length == 0
+            && shipDate.length == 0) {
             layer.open({
                 title: '提示',
-                content: '请先选择需要修改的数据'
+                content: '请先输入至少一个条件'
             });
         } else {
             layer.open({
@@ -247,28 +286,119 @@
                 title: false,
                 area: ['800px', '300px'],
                 shadeClose: true,
-                content: ['updateShipperHHC.html?ids=' + ids]
+                content: ['updateShipperHHC.html'],
+                success: function (layero, index) {
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                    // console.log(body.html()) //得到iframe页的body内容
+                    body.find('#shipmentNumberSub').val(shipmentNumber);
+                    body.find('#shipwaySub').val(shipway);
+                    body.find('#oemSub').val(oem);
+                    body.find('#gatewaySub').val(gateway);
+                    body.find('#regionSub').val(region);
+                    body.find('#truckPlantNumberSub').val(truckPlantNumber);
+                    body.find('#senderSub').val(sender);
+                    body.find('#shipDateSub').val(shipDate);
+                }
             });
         }
     });
 
     $("#exportExcel").click(function () {
-        var array = example.rows({selected: true}).data().toArray();
-        var ids = array.map((obj) => {
-            return "" + obj.id + ""
-        }).join(",");
-        if (array.length == 0) {//如果一个没有勾选
+        // var array = example.rows({selected: true}).data().toArray();
+        // var ids = array.map((obj) => {
+        //     return "" + obj.id + ""
+        // }).join(",");
+        // if (array.length == 0) {//如果一个没有勾选
+        //     layer.open({
+        //         title: '提示',
+        //         content: '请先选择需要导出的数据'
+        //     });
+        // } else {
+        //     $("#ids").val(ids);
+        //     $("#token").val(localStorage.getItem("token"));
+        //     $("#form").attr("onsubmit", "return true");
+        //     $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
+        //     $("#form").attr("onsubmit", "return false");
+        // }
+        var shipmentNumber = $('#shipmentNumber').val();
+        var shipway = $('#shipway').val();
+        var oem = $('#oem').val();
+        var gateway = $('#gateway').val();
+        var region = $('#region').val();
+        var truckPlantNumber = $('#truckPlantNumber').val();
+        var sender = $('#sender').val();
+        var shipDate = $('#shipDate').val();
+        if (shipmentNumber.length == 0
+            && shipway.length == 0
+            && oem.length == 0
+            && gateway.length == 0
+            && region.length == 0
+            && truckPlantNumber.length == 0
+            && sender.length == 0
+            && shipDate.length == 0) {
             layer.open({
                 title: '提示',
-                content: '请先选择需要导出的数据'
+                content: '请先输入至少一个条件'
             });
         } else {
-            $("#ids").val(ids);
+            $("#shipmentNumberForm").val(shipmentNumber);
+            $("#shipwayForm").val(shipway);
+            $("#oemForm").val(oem);
+            $("#gatewayForm").val(gateway);
+            $("#regionForm").val(region);
+            $("#truckPlantNumberForm").val(truckPlantNumber);
+            $("#senderForm").val(sender);
+            $("#shipDateForm").val(shipDate);
             $("#token").val(localStorage.getItem("token"));
             $("#form").attr("onsubmit", "return true");
             $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
             $("#form").attr("onsubmit", "return false");
         }
+    });
+
+    $("#stopGPSInformation").click(function () {
+        layer.prompt({
+            title: '请输入信息',
+            formType: 0, //输入框类型，支持0（文本）默认1（密码）2（多行文本）
+            yes: function (index) {
+                let stopGpsDevice = $('#stopGpsDevice').val();
+                if (stopGpsDevice === "") {
+                    layer.tips("请填写车牌号", $('#stopGpsDevice'));
+                    return;
+                }
+                $.ajax({
+                    type: 'get',
+                    url: '/shipper/stopGPSInformation/' + stopGpsDevice,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        layer.close(index);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        var msg = xhr.responseText;
+                        console.log(msg);
+                        var response = JSON.parse(msg);
+                        var code = response.code;
+                        var message = response.message;
+                        if (code == 400) {
+                            layer.msg(message);
+                        } else if (code == 401) {
+                            localStorage.removeItem("token");
+                            layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                                location.href = '/login.html';
+                            });
+                        } else if (code == 403) {
+                            console.log("未授权:" + message);
+                            layer.msg('未授权');
+                        } else if (code == 500) {
+                            layer.msg('系统错误：' + message);
+                        }
+                    }
+                });
+            }
+        });
+        $(".layui-layer-content").empty();
+        $(".layui-layer-content").append("<input type=\"text\" id= \"stopGpsDevice\" class=\"layui-input\" placeholder=\"车牌号\"/>");
     });
 
     $("#getGPSInformation").click(function () {
@@ -303,7 +433,7 @@
                 }
                 $.ajax({
                     type: 'get',
-                    url: '/shipper/getGPSInformation/' + desPlantNumber + '/' + desLon + '/' + desLat+ '/' + desGpsDevice + '/' + desCtTracking,
+                    url: '/shipper/getGPSInformation/' + desPlantNumber + '/' + desLon + '/' + desLat + '/' + desGpsDevice + '/' + desCtTracking,
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         layer.close(index);
@@ -337,6 +467,7 @@
         $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desCtTracking\" class=\"layui-input\" placeholder=\"ct_tracking\"/>");
         $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desLon\" class=\"layui-input\" placeholder=\"目的地经度\"/>");
         $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desLat\" class=\"layui-input\" placeholder=\"目的地纬度\"/>");
+        $(".layui-layer-content").append("<br/><span style='color: red;'>请仔细核对录入信息</span>");
 
     });
 

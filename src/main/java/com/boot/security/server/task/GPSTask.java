@@ -102,32 +102,61 @@ public class GPSTask {
                         ediWzDevice.setDevicetype(edi945.getDeviceType());
                         ediWzDevice.setSource(edi945.getSource());
                         ediWzDeviceMapper.insertSelective(ediWzDevice);
-                        EdiWzUpload ediWzUpload = new EdiWzUpload();
-                        ediWzUpload.setStatus(0);
-                        ediWzUpload.setDeviceid(edi945.getTruckPlantNumber());
-                        ediWzUpload.setLongitude(edi945.getLongitude());
-                        ediWzUpload.setLatitude(edi945.getLatitude());
-                        ediWzUpload.setLocationtime(DateUtil.format(edi945.getLocationTime(), DateUtil.NORM_DATETIME_PATTERN));
-                        ediWzUploadMapper.insertSelective(ediWzUpload);
                         EdiWzRegister ediWzRegister = new EdiWzRegister();
                         ediWzRegister.setStatus(0);
                         ediWzRegister.setDeviceid(edi945.getTruckPlantNumber());
                         ediWzRegister.setTrackstarttime(DateUtil.format(edi945.getLocationTime(), DateUtil.NORM_DATETIME_PATTERN));
                         ediWzRegister.setCompanycode(edi945.getCompanyCode());
                         ediWzRegister.setOrderno(edi945.getCtTracking());
+                        ediWzRegister.setTrackno(edi945.getCtTracking());
                         ediWzRegisterMapper.insertSelective(ediWzRegister);
                     }
+                    // upload表数据写入
+                    List<EdiWzUpload> ediWzUploads = ediWzUploadMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+                    if (ediWzUploads.isEmpty()) {
+                        EdiWzUpload ediWzUpload = new EdiWzUpload();
+                        ediWzUpload.setStatus(0);
+                        ediWzUpload.setDeviceid(edi945.getTruckPlantNumber());
+                        ediWzUpload.setLongitude(edi945.getLongitude());
+                        ediWzUpload.setLatitude(edi945.getLatitude());
+                        ediWzUpload.setLocationtime(edi945.getGpsUpdating());
+                        ediWzUploadMapper.insertSelective(ediWzUpload);
+                    } else {
+                        EdiWzUpload ediWzUpload = ediWzUploads.get(0);
+                        ediWzUpload.setStatus(0);
+                        ediWzUpload.setDeviceid(edi945.getTruckPlantNumber());
+                        ediWzUpload.setLongitude(edi945.getLongitude());
+                        ediWzUpload.setLatitude(edi945.getLatitude());
+                        ediWzUpload.setLocationtime(edi945.getGpsUpdating());
+                        ediWzUploadMapper.updateByPrimaryKey(ediWzUpload);
+                    }
                     // 轨迹数据edi表数据写入
-                    EdiWzTrack ediWzTrack = new EdiWzTrack();
-                    ediWzTrack.setStatus(0);
-                    ediWzTrack.setLocationtime(edi945.getGpsUpdating());
-                    ediWzTrack.setDeviceid(edi945.getTruckPlantNumber());
-                    ediWzTrack.setProvince(edi945.getProvince());
-                    ediWzTrack.setCity(edi945.getCity());
-                    ediWzTrack.setPosition(edi945.getPosition());
-                    ediWzTrack.setLongitude(edi945.getLongitude());
-                    ediWzTrack.setLatitude(edi945.getLatitude());
-                    ediWzTrackMapper.insertSelective(ediWzTrack);
+                    List<EdiWzTrack> ediWzTracks = ediWzTrackMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+                    if (ediWzTracks.isEmpty()) {
+                        EdiWzTrack ediWzTrack = new EdiWzTrack();
+                        ediWzTrack.setStatus(0);
+                        ediWzTrack.setTracknos(edi945.getCtTracking());
+                        ediWzTrack.setLocationtime(edi945.getGpsUpdating());
+                        ediWzTrack.setDeviceid(edi945.getTruckPlantNumber());
+                        ediWzTrack.setProvince(edi945.getProvince());
+                        ediWzTrack.setCity(edi945.getCity());
+                        ediWzTrack.setPosition(edi945.getPosition());
+                        ediWzTrack.setLongitude(edi945.getLongitude());
+                        ediWzTrack.setLatitude(edi945.getLatitude());
+                        ediWzTrackMapper.insertSelective(ediWzTrack);
+                    } else {
+                        EdiWzTrack ediWzTrack = ediWzTracks.get(0);
+                        ediWzTrack.setStatus(0);
+                        ediWzTrack.setTracknos(edi945.getCtTracking());
+                        ediWzTrack.setLocationtime(edi945.getGpsUpdating());
+                        ediWzTrack.setDeviceid(edi945.getTruckPlantNumber());
+                        ediWzTrack.setProvince(edi945.getProvince());
+                        ediWzTrack.setCity(edi945.getCity());
+                        ediWzTrack.setPosition(edi945.getPosition());
+                        ediWzTrack.setLongitude(edi945.getLongitude());
+                        ediWzTrack.setLatitude(edi945.getLatitude());
+                        ediWzTrackMapper.updateByPrimaryKey(ediWzTrack);
+                    }
                 }
             }
             logger.debug("GPSTask getTruckPlantNumberGPS log, TruckPlantNumber:{}, gps info:{}", edi945.getGpsDevice(), transTimeManageV2);

@@ -37,9 +37,7 @@ public interface EDI945Mapper {
 
     List<EDI945> selectByGPSState(@Param("state") int state);
 
-    List<EDI945> selectByTruckPlantNumber(@Param("truckPlantNumber") String truckPlantNumber);
-
-    List<EDI945> selectGPSByTruckPlantNumber(@Param("truckPlantNumber") String truckPlantNumber);
+    List<EDI945> selectGPSByGpsDevice(@Param("gpsDevice") String gpsDevice);
 
     void insertGPS(EDI945 edi945GPS);
 
@@ -51,4 +49,6 @@ public interface EDI945Mapper {
     void updateByTruckPlantNumber(EDI945 edi945);
 
     void updateGPSByTruckPlantNumber(EDI945 edi945);
+
+    void editTruckBy(EditTruckDTO editTruckDTO);
 }
