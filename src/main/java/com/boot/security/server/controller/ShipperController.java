@@ -14,17 +14,26 @@ import com.boot.security.server.page.table.PageTableHandler.CountHandler;
 import com.boot.security.server.page.table.PageTableHandler.ListHandler;
 import com.boot.security.server.page.table.PageTableRequest;
 import com.boot.security.server.page.table.PageTableResponse;
+import com.boot.security.server.utils.DateUtil;
 import com.boot.security.server.utils.ExcelUtil;
+import com.boot.security.server.utils.FileUtil;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,6 +116,12 @@ public class ShipperController {
                     ediWzTrack.setStatus(0);
                     ediWzTrack.setDeviceid(truckPlantNumber);
                     ediWzTrackMapper.updateStatusByTruckPlantNumber(ediWzTrack);
+                    // 取消数据edi表数据写入
+                    EdiWzCancel ediWzCancel = new EdiWzCancel();
+                    ediWzCancel.setStatus(0);
+                    ediWzCancel.setTrackno(edi945.getCtTracking());
+                    ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
+                    ediWzCancel.setTrackendtime(DateUtil.format(edi945.getTrackEndTime(), DateUtil.NORM_DATETIME_PATTERN));
                     edi945.setGpsState(1);
                     edi945.setTrackEndTime(new Date());
                     edi945Mapper.updateGPSByTruckPlantNumber(edi945);
@@ -162,6 +177,53 @@ public class ShipperController {
             }
             edi945Mapper.editTruckBy(editTruckDTO);
         }
+    }
+
+    @LogAnnotation
+    @PostMapping("importTruck")
+    @ApiOperation(value = "文件上传")
+    public FileInfo uploadFile(MultipartFile file) throws IOException {
+        String fileOrigName = file.getOriginalFilename();
+        if (!fileOrigName.contains(".")) {
+            throw new IllegalArgumentException("缺少后缀名");
+        }
+        // 读取Excel
+        XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet sheet = xssfWorkbook.getSheetAt(0); //获取文件的第一个sheet
+        int rows = sheet.getPhysicalNumberOfRows();
+        for (int r = 1; r < rows; r++) {
+            XSSFRow xssfRow = sheet.getRow(r);  //获取sheet的第一行
+            try {
+                String shipDate = ExcelUtil.getCellValue(xssfRow.getCell(0));
+                String shipmentNumber = ExcelUtil.getCellValue(xssfRow.getCell(1));
+                String driverName = ExcelUtil.getCellValue(xssfRow.getCell(2));
+                String cellular = ExcelUtil.getCellValue(xssfRow.getCell(3));
+                String truckPlantNumber = ExcelUtil.getCellValue(xssfRow.getCell(4));
+                String ctTracking = ExcelUtil.getCellValue(xssfRow.getCell(5));
+                String gpsDevice = ExcelUtil.getCellValue(xssfRow.getCell(6));
+                EditTruckDTO editTruckDTO = new EditTruckDTO();
+                editTruckDTO.setShipDateSub(shipDate);
+                editTruckDTO.setShipmentNumberSub(shipmentNumber);
+                editTruckDTO.setDriverName(driverName);
+                editTruckDTO.setCellular(cellular);
+                editTruckDTO.setTruckPlantNumber(truckPlantNumber);
+                editTruckDTO.setCtTracking(ctTracking);
+                editTruckDTO.setGpsDevice(gpsDevice);
+                edi945Mapper.editTruckBy(editTruckDTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        String md5 = FileUtil.fileMd5(file.getInputStream());
+        long size = file.getSize();
+        String contentType = file.getContentType();
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setId(md5);
+        fileInfo.setContentType(contentType);
+        fileInfo.setSize(size);
+        fileInfo.setType(contentType.startsWith("image/") ? 1 : 0);
+
+        return fileInfo;
     }
 
     //    @LogAnnotation
@@ -241,11 +303,15 @@ public class ShipperController {
         List<Object[]> data = new ArrayList<>();
         List<EDI945> edi945List = edi945Mapper.list(params, 0, 1000);
         for (EDI945 edi945 : edi945List) {
+            List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
+            if (!regionTypeByK.isEmpty()) {
+                edi945.setRegion(regionTypeByK.get(0));
+            }
             EDI945ExportExcelDTO excelDTO = new EDI945ExportExcelDTO();
             BeanUtils.copyProperties(edi945, excelDTO);
             data.add(excelDTO.toString().split(","));
         }
-        String headerStr = "Ship Date,Actual Date,Sender,Tracking Number,PO/DN,Shipment Number,Waybill,Ship Way,FWD,FWD Code,OEM,Gateway,CTNS,Units,GW,Ship Mode,POE,POE Country,Region,Truck Plant Number,CT Tracking,GPS Device,GPS Updating,City,Province,Position,Longitude,Latitude";
+        String headerStr = ",Ship Date,Actual Date,Sender,Tracking Number,PO/DN,Shipment Number,Waybill,Ship Way,FWD,FWD Code,OEM,Gateway,CTNS,Units,GW,Ship Mode,POE,POE Country,Region,Driver Name,Cellular,Truck Plant Number,CT Tracking,GPS Device";
         String[] headers = headerStr.split(",");
         ExcelUtil.excelExport2("EDI945", headers, data, response);
     }

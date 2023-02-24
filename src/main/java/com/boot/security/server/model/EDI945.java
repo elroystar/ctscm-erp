@@ -49,6 +49,10 @@ public class EDI945 {
 
     private String truckPlantNumber;
 
+    private String driverName;
+
+    private String cellular;
+
     private String ctTracking;
 
     private String gpsDevice;
@@ -263,6 +267,22 @@ public class EDI945 {
 
     public void setTruckPlantNumber(String truckPlantNumber) {
         this.truckPlantNumber = truckPlantNumber == null ? null : truckPlantNumber.trim();
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public String getCellular() {
+        return cellular;
+    }
+
+    public void setCellular(String cellular) {
+        this.cellular = cellular;
     }
 
     public String getCtTracking() {

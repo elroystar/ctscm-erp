@@ -14,6 +14,10 @@ public class EditTruckDTO implements Serializable {
     private String senderSub;
     private String shipDateSub;
 
+    private String driverName;
+
+    private String cellular;
+
     private String truckPlantNumber;
 
     private String ctTracking;
@@ -84,6 +88,22 @@ public class EditTruckDTO implements Serializable {
 
     public void setShipDateSub(String shipDateSub) {
         this.shipDateSub = shipDateSub;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public String getCellular() {
+        return cellular;
+    }
+
+    public void setCellular(String cellular) {
+        this.cellular = cellular;
     }
 
     public String getTruckPlantNumber() {

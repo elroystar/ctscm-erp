@@ -42,23 +42,31 @@ public class EDI945ExportExcelDTO implements Serializable {
 
     private String region;
 
+    private String driverName;
+
+    private String cellular;
+
     private String truckPlantNumber;
 
     private String ctTracking;
 
     private String gpsDevice;
 
-    private String gpsUpdating;
+    public String getDriverName() {
+        return driverName;
+    }
 
-    private String city;
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
 
-    private String province;
+    public String getCellular() {
+        return cellular;
+    }
 
-    private String position;
-
-    private String longitude;
-
-    private String latitude;
+    public void setCellular(String cellular) {
+        this.cellular = cellular;
+    }
 
     public String getShipDate() {
         return shipDate;
@@ -236,57 +244,10 @@ public class EDI945ExportExcelDTO implements Serializable {
         this.gpsDevice = gpsDevice == null ? null : gpsDevice.trim();
     }
 
-    public String getGpsUpdating() {
-        return gpsUpdating;
-    }
-
-    public void setGpsUpdating(String gpsUpdating) {
-        this.gpsUpdating = gpsUpdating == null ? null : gpsUpdating.trim();
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city == null ? null : city.trim();
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position == null ? null : position.trim();
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude == null ? null : longitude.trim();
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude == null ? null : latitude.trim();
-    }
-
     @Override
     public String toString() {
-        return shipDate +
+        return "" +
+                "," + shipDate +
                 "," + actualDate +
                 "," + sender +
                 "," + trackingNumber +
@@ -305,14 +266,10 @@ public class EDI945ExportExcelDTO implements Serializable {
                 "," + poe +
                 "," + poeCountry +
                 "," + region +
+                "," + driverName +
+                "," + cellular +
                 "," + truckPlantNumber +
                 "," + ctTracking +
-                "," + gpsDevice +
-                "," + gpsUpdating +
-                "," + city +
-                "," + province +
-                "," + position +
-                "," + longitude +
-                "," + latitude;
+                "," + gpsDevice;
     }
 }

@@ -24,6 +24,8 @@
         <result column="poe" jdbcType="VARCHAR" property="poe"/>
         <result column="poe_country" jdbcType="VARCHAR" property="poeCountry"/>
         <result column="truck_plant_number" jdbcType="VARCHAR" property="truckPlantNumber"/>
+        <result column="driver_name" jdbcType="VARCHAR" property="driverName"/>
+        <result column="cellular" jdbcType="VARCHAR" property="cellular"/>
         <result column="ct_tracking" jdbcType="VARCHAR" property="ctTracking"/>
         <result column="gps_device" jdbcType="VARCHAR" property="gpsDevice"/>
         <result column="gps_updating" jdbcType="VARCHAR" property="gpsUpdating"/>
@@ -44,7 +46,7 @@
         id
         , status, create_date, ship_date, actual_date, sender, tracking_number, dn, shipment_number,
     waybill, shipway, fwd, fwd_code, oem, gateway, ctns, units, gw, ship_mode, poe, poe_country, 
-    truck_plant_number, ct_tracking, gps_device, gps_updating, city, province, `position`,
+    truck_plant_number, driver_name, cellular, ct_tracking, gps_device, gps_updating, city, province, `position`,
     longitude, latitude
     </sql>
     <sql id="where">
@@ -542,6 +544,12 @@
         <set>
             <if test="truckPlantNumber != null">
                 truck_plant_number = #{truckPlantNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="driverName != null">
+                driver_name = #{driverName,jdbcType=VARCHAR},
+            </if>
+            <if test="cellular != null">
+                cellular = #{cellular,jdbcType=VARCHAR},
             </if>
             <if test="ctTracking != null">
                 ct_tracking = #{ctTracking,jdbcType=VARCHAR},

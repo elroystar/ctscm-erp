@@ -19,13 +19,26 @@
         <input id="shipDateSub" name="shipDateSub" hidden="true">
         <input id="token" name="token" hidden="true">
         <div class="form-group">
+            <label class="col-md-2 control-label">Driver Name</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="Driver Name" type="text" name="driverName"
+                       id="driverName">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Cellular</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="Cellular" type="text" name="cellular"
+                       id="cellular">
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-md-2 control-label">Truck Plant Number</label>
             <div class="col-md-10">
                 <input class="form-control" placeholder="Truck Plant Number" type="text" name="truckPlantNumber"
                        id="truckPlantNumber">
             </div>
         </div>
-
         <div class="form-group">
             <label class="col-md-2 control-label">CT Tracking</label>
             <div class="col-md-10">
@@ -100,6 +113,8 @@
 
 
     function update(obj) {
+        var driverName = $("#driverName").val();
+        var cellular = $("#cellular").val();
         var truckPlantNumber = $("#truckPlantNumber").val();
         var ctTracking = $("#ctTracking").val();
         var gpsDevice = $("#gpsDevice").val();
@@ -113,6 +128,8 @@
         formdata.truckPlantNumberSub = $('#truckPlantNumberSub').val();
         formdata.senderSub = $('#senderSub').val();
         formdata.shipDateSub = $('#shipDateSub').val();
+        formdata.driverName = driverName;
+        formdata.cellular = cellular;
         formdata.truckPlantNumber = truckPlantNumber;
         formdata.ctTracking = ctTracking;
         formdata.gpsDevice = gpsDevice;

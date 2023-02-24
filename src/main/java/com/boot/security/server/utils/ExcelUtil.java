@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -220,5 +222,46 @@ public class ExcelUtil {
 		}
 
 		return workbook;
+	}
+
+	/**
+	 * 获取单元格的值
+	 * @param cell
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getCellValue(Cell cell) throws Exception {
+		String cellVal = "";
+		if (cell == null) {
+			return cellVal;
+		}
+		int cellType = cell.getCellType();
+		switch (cellType) {
+			case Cell.CELL_TYPE_STRING:
+				cellVal = cell.getStringCellValue();
+				break;
+			case Cell.CELL_TYPE_BLANK:
+				break;
+			case Cell.CELL_TYPE_NUMERIC:
+				if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)) {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+					cellVal = sdf.format(cell.getDateCellValue());
+				} else {
+					HSSFDataFormatter dataFormatter = new HSSFDataFormatter();
+					cellVal = dataFormatter.formatCellValue(cell);
+				}
+				break;
+			case Cell.CELL_TYPE_BOOLEAN:
+				cellVal = String.valueOf(cell.getBooleanCellValue());
+				break;
+			case Cell.CELL_TYPE_FORMULA:
+				cell.setCellType(Cell.CELL_TYPE_STRING);
+				cellVal = cell.getStringCellValue();
+				break;
+			case Cell.CELL_TYPE_ERROR:
+			default:
+				throw new Exception("单元格格式异常！");
+		}
+		return cellVal.trim();
 	}
 }
