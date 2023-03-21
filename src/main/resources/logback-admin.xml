@@ -9,7 +9,7 @@
 		<encoder>
 			<pattern>%d [%thread] %-5level %logger{50} -[%file:%line]- %msg%n
 			</pattern>
-			<charset>UTF-8</charset>
+<!--			<charset>UTF-8</charset>-->
 		</encoder>
 	</appender>
 
@@ -19,7 +19,7 @@
 		<encoder>
 			<pattern>%d [%thread] %-5level -[%file:%line]- %msg%n
 			</pattern>
-			<charset>UTF-8</charset>
+<!--			<charset>UTF-8</charset>-->
 		</encoder>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<fileNamePattern>${logFile}.%d{yyyy-MM-dd}.%i</fileNamePattern>
@@ -33,7 +33,7 @@
 		<encoder>
 			<pattern>%d [%thread] %-5level %logger{36} -[%file:%line]- %msg%n
 			</pattern>
-			<charset>UTF-8</charset>
+<!--			<charset>UTF-8</charset>-->
 		</encoder>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<fileNamePattern>${logFile}.error.%d{yyyy-MM-dd}.%i</fileNamePattern>
@@ -52,7 +52,7 @@
 		<encoder>
 			<pattern>%d [%thread] %msg%n
 			</pattern>
-			<charset>UTF-8</charset>
+<!--			<charset>UTF-8</charset>-->
 		</encoder>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<fileNamePattern>${logFile}.sql.%d{yyyy-MM-dd}.%i</fileNamePattern>

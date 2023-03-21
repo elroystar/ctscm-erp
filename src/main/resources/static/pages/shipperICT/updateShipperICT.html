@@ -9,33 +9,47 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <form class="form-horizontal" onsubmit="return false" id="form">
         <br/>
-        <input type="hidden" id="hid" name="hid">
+        <input id="shipmentNumberSub" name="shipmentNumberSub" hidden="true">
+        <input id="shipwaySub" name="shipwaySub" hidden="true">
+        <input id="oemSub" name="oemSub" hidden="true">
+        <input id="gatewaySub" name="gatewaySub" hidden="true">
+        <input id="regionSub" name="regionSub" hidden="true"></input>
+        <input id="truckPlantNumberSub" name="truckPlantNumberSub" hidden="true">
+        <input id="senderSub" name="senderSub" hidden="true">
+        <input id="shipDateSub" name="shipDateSub" hidden="true">
+        <input id="token" name="token" hidden="true">
         <div class="form-group">
-            <label class="col-md-2 control-label">PLTs</label>
+            <label class="col-md-2 control-label">Driver Name</label>
             <div class="col-md-10">
-                <input class="form-control" placeholder="PLTs" type="text" name="plts" id="plts">
+                <input class="form-control" placeholder="Driver Name" type="text" name="driverName"
+                       id="driverName">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Cellular</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="Cellular" type="text" name="cellular"
+                       id="cellular">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Truck Plant Number</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="Truck Plant Number" type="text" name="truckPlantNumber"
+                       id="truckPlantNumber">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">CT Tracking</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="CT Tracking" type="text" name="ctTracking" id="ctTracking">
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-md-2 control-label">CTNs</label>
+            <label class="col-md-2 control-label">GPS Device</label>
             <div class="col-md-10">
-                <input class="form-control" placeholder="CTNs" type="text" name="ctns" id="ctns">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-2 control-label">QTY</label>
-            <div class="col-md-10">
-                <input class="form-control" placeholder="QTY" type="text" name="qty" id="qty">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-2 control-label">Factory Weight</label>
-            <div class="col-md-10">
-                <input class="form-control" placeholder="Factory Weight" type="text" name="factoryWeight"
-                       id="factoryWeight">
+                <input class="form-control" placeholder="GPS Device" type="text" name="gpsDevice" id="gpsDevice">
             </div>
         </div>
 
@@ -58,27 +72,28 @@
 <script type="text/javascript" src="../../js/common.js"></script>
 <script type="text/javascript" src="../../js/dict.js"></script>
 <script type="text/javascript">
-    initData();
-
-    function initData() {
-        var hid = getUrlParam("hid");
-        if (hid != "") {
-            $.ajax({
-                type: 'get',
-                url: '/shipper/ICT/' + hid,
-                async: false,
-                success: function (data) {
-                    $("#hid").val(data.hid);
-                    $("#plts").val(data.totalPallet);
-                    $("#ctns").val(data.ctns);
-                    $("#qty").val(data.qty);
-                    $("#factoryWeight").val(data.factoryWeight);
-
-                }
-            });
-
-        }
-    }
+    // initData();
+    //
+    // function initData() {
+    //     var ids = getUrlParam("ids");
+    //     if (id != "") {
+    //         $("#id").val(data.id);
+    //         $.ajax({
+    //             type: 'get',
+    //             url: '/shipper/HHC/' + id,
+    //             async: false,
+    //             success: function (data) {
+    //                 $("#id").val(data.id);
+    //                 $("#plts").val(data.totalPallet);
+    //                 $("#ctns").val(data.ctns);
+    //                 $("#qty").val(data.qty);
+    //                 $("#factoryWeight").val(data.factoryWeight);
+    //
+    //             }
+    //         });
+    //
+    //     }
+    // }
 
     var pro = window.location.protocol;
     var host = window.location.host;
@@ -98,23 +113,29 @@
 
 
     function update(obj) {
-        var plts = $("#plts").val();
-        var ctns = $("#ctns").val();
-        var qty = $("#qty").val();
-        var factoryWeight = $("#factoryWeight").val();
+        var driverName = $("#driverName").val();
+        var cellular = $("#cellular").val();
+        var truckPlantNumber = $("#truckPlantNumber").val();
+        var ctTracking = $("#ctTracking").val();
+        var gpsDevice = $("#gpsDevice").val();
         $(obj).attr("disabled", true);
-
         var formdata = $("#form").serializeObject();
-        formdata.id = $("#hid").val();
-        formdata.shipper = "ICT";
-        formdata.totalPallet = plts;
-        formdata.ctns = ctns;
-        formdata.qty = qty;
-        formdata.factoryWeight = factoryWeight;
-
+        formdata.shipmentNumberSub = $('#shipmentNumberSub').val();
+        formdata.shipwaySub = $('#shipwaySub').val();
+        formdata.oemSub = $('#oemSub').val();
+        formdata.gatewaySub = $('#gatewaySub').val();
+        formdata.regionSub = $('#regionSub').val();
+        formdata.truckPlantNumberSub = $('#truckPlantNumberSub').val();
+        formdata.senderSub = $('#senderSub').val();
+        formdata.shipDateSub = $('#shipDateSub').val();
+        formdata.driverName = driverName;
+        formdata.cellular = cellular;
+        formdata.truckPlantNumber = truckPlantNumber;
+        formdata.ctTracking = ctTracking;
+        formdata.gpsDevice = gpsDevice;
         $.ajax({
             type: 'put',
-            url: '/shipper/updateShipperICT',
+            url: '/shipper/editTruckICT',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(formdata),
             success: function (data) {

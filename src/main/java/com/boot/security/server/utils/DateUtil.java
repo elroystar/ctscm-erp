@@ -51,6 +51,7 @@ public class DateUtil {
      * 标准时间格式
      */
     public final static String NORM_DATE_TIME_PATTERN = "yyyyMMddHHmm";
+    public final static String NORM_DATE_TIME_PATTERN_TWO = "yyyyMMddHHmmss";
     /**
      * 标准日期时间格式
      */

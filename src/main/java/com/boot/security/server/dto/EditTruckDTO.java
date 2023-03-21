@@ -25,6 +25,8 @@ public class EditTruckDTO implements Serializable {
     private String gpsDevice;
 
     private String shipperType;
+    private String fwd;
+    private String fwdCode;
 
     public String getShipmentNumberSub() {
         return shipmentNumberSub;
@@ -144,5 +146,21 @@ public class EditTruckDTO implements Serializable {
 
     public void setRegion(String[] region) {
         this.region = region;
+    }
+
+    public String getFwd() {
+        return fwd;
+    }
+
+    public void setFwd(String fwd) {
+        this.fwd = fwd;
+    }
+
+    public String getFwdCode() {
+        return fwdCode;
+    }
+
+    public void setFwdCode(String fwdCode) {
+        this.fwdCode = fwdCode;
     }
 }

@@ -48,6 +48,9 @@
                                     <button id="exportExcel" class="layui-btn layui-btn-warm layui-btn-sm"><i
                                             class="layui-icon">&#xe601;</i>导出
                                     </button>
+                                    <button id="exportExcel214" class="layui-btn layui-btn-warm layui-btn-sm"><i
+                                            class="layui-icon">&#xe601;</i>导出214
+                                    </button>
                                     <button id="getGPSInformation" class="layui-btn layui-btn-warm layui-btn-sm"><i
                                             class="layui-icon">&#xe666;</i>开始获取GPS信息
                                     </button>
@@ -121,6 +124,7 @@
     <input id="senderForm" name="senderForm" hidden="true">
     <input id="shipDateForm" name="shipDateForm" hidden="true">
     <input id="token" name="token" hidden="true">
+    <input id="exportType" name="exportType" hidden="true">
 </form>
 </body>
 </html>
@@ -151,8 +155,26 @@
             elem: '#importTruck' //绑定元素
             , accept: 'file' //允许上传的文件类型
             , url: '/shipper/importTruck' //上传接口
+            , before: function () {
+                //开始加载效果
+                layui.use('layer', function () {
+                    layui.layer.load();
+                    $(".layui-layer-shade").css('background', '#000000')
+                    $(".layui-layer-shade").css('opacity', '0.2')
+                    $(".layui-layer-shade").click(function (event) {
+                        event.stopPropagation();
+                    })
+                })
+            }
             , done: function (res, index, upload) {
                 layer.msg("上传成功");
+                //上传成功结束加载效果
+                layui.use('layer', function () {
+                    layui.layer.closeAll();
+                    setTimeout(function () {
+                        layui.layer.closeAll();
+                    }, 1000);
+                });
                 example.ajax.reload();
             }
         });
@@ -175,7 +197,6 @@
                     "url": "/shipper/listShipperHHC",
                     "type": "get",
                     "data": function (d) {
-                        d.shipper = "edi945";
                         d.shipmentNumber = $('#shipmentNumber').val();
                         d.shipway = $('#shipway').val();
                         d.oem = $('#oem').val();
@@ -240,20 +261,31 @@
                     {"data": "longitude", "defaultContent": ""},
                     {"data": "latitude", "defaultContent": ""},
                 ],
+                "columnDefs": [
+                    {
+                        "targets": [28],
+                        render: function (data, type, full, meta) {
+                            if (data) {
+                                if (data.length > 8) {
+                                    // return data.substr(0, 8) + " <a href = 'javascript:void(0);' onclick = 'javascript:searchBtn3(\""+data+"\")' >...</a> ";
+                                    return "<a title='" + data + "' href='#' style='text-decoration: none;'>" + data.trim().substr(0, 8) + "..." + "</a>";
+                                } else {
+                                    return data;
+                                }
+                            } else {
+                                return "";
+                            }
+                        }
+                    }
+                ],
                 "select": {
                     style: 'multi'
                 },
             });
     }
 
-    function updateShipperHHC(id) {
-        layer.open({
-            type: 2,
-            title: false,
-            area: ['800px', '400px'],
-            shadeClose: true,
-            content: ['updateShipperHHC.html?id=' + id]
-        });
+    function searchBtn3(id) {
+        alert(id);
     }
 
     $("#searchBt").click(function () {
@@ -369,6 +401,45 @@
             $("#truckPlantNumberForm").val(truckPlantNumber);
             $("#senderForm").val(sender);
             $("#shipDateForm").val(shipDate);
+            $("#exportType").val("945");
+            $("#token").val(localStorage.getItem("token"));
+            $("#form").attr("onsubmit", "return true");
+            $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
+            $("#form").attr("onsubmit", "return false");
+        }
+    });
+
+    $("#exportExcel214").click(function () {
+        var shipmentNumber = $('#shipmentNumber').val();
+        var shipway = $('#shipway').val();
+        var oem = $('#oem').val();
+        var gateway = $('#gateway').val();
+        var region = $('#region').val();
+        var truckPlantNumber = $('#truckPlantNumber').val();
+        var sender = $('#sender').val();
+        var shipDate = $('#shipDate').val();
+        if (shipmentNumber.length == 0
+            && shipway.length == 0
+            && oem.length == 0
+            && gateway.length == 0
+            && region.length == 0
+            && truckPlantNumber.length == 0
+            && sender.length == 0
+            && shipDate.length == 0) {
+            layer.open({
+                title: '提示',
+                content: '请先输入至少一个条件'
+            });
+        } else {
+            $("#shipmentNumberForm").val(shipmentNumber);
+            $("#shipwayForm").val(shipway);
+            $("#oemForm").val(oem);
+            $("#gatewayForm").val(gateway);
+            $("#regionForm").val(region);
+            $("#truckPlantNumberForm").val(truckPlantNumber);
+            $("#senderForm").val(sender);
+            $("#shipDateForm").val(shipDate);
+            $("#exportType").val("214");
             $("#token").val(localStorage.getItem("token"));
             $("#form").attr("onsubmit", "return true");
             $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题

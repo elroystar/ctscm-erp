@@ -24,31 +24,53 @@ public interface EDI945Mapper {
 
     int count(@Param("params") Map<String, Object> params);
 
+    int countOEM(@Param("params") Map<String, Object> params);
+
+    int countICT(@Param("params") Map<String, Object> params);
+
     List<EDI945> list(@Param("params") Map<String, Object> params, @Param("offset") Integer offset,
                       @Param("limit") Integer limit);
-
-    void editTruck(EditTruckDTO editTruckDTO);
-
-    void editTruckOEM(EditTruckDTO editTruckDTO);
-
-    List<EDI945> selectByIds(@Param("ids") String[] split);
-
-    List<EDI945> selectOEMByIds(@Param("ids") String[] split);
-
-    List<EDI945> selectByGPSState(@Param("state") int state);
-
-    List<EDI945> selectGPSByGpsDevice(@Param("gpsDevice") String gpsDevice);
-
-    void insertGPS(EDI945 edi945GPS);
-
-    int countOEM(@Param("params") Map<String, Object> params);
 
     List<EDI945> listOEM(@Param("params") Map<String, Object> params, @Param("offset") Integer offset,
                          @Param("limit") Integer limit);
 
+    List<EDI945> listICT(@Param("params") Map<String, Object> params, @Param("offset") Integer offset,
+                         @Param("limit") Integer limit);
+
+    List<EDI945> selectByGPSState(@Param("state") int state);
+
+    List<EDI945> selectByGPSStateOEM(@Param("state") int state);
+
+    List<EDI945> selectByGPSStateICT(@Param("state") int state);
+
+    List<EDI945> selectGPSByGpsDevice(@Param("gpsDevice") String gpsDevice);
+
+    List<EDI945> selectGPSByGpsDeviceOEM(@Param("gpsDevice") String gpsDevice);
+
+    List<EDI945> selectGPSByGpsDeviceICT(@Param("gpsDevice") String gpsDevice);
+
+    void insertGPS(EDI945 edi945GPS);
+
+    void insertGPSOEM(EDI945 edi945GPS);
+
+    void insertGPSICT(EDI945 edi945GPS);
+
     void updateByTruckPlantNumber(EDI945 edi945);
+
+    void updateByTruckPlantNumberOEM(EDI945 edi945);
+
+    void updateByTruckPlantNumberICT(EDI945 edi945);
 
     void updateGPSByTruckPlantNumber(EDI945 edi945);
 
+    void updateGPSByTruckPlantNumberOEM(EDI945 edi945);
+
+    void updateGPSByTruckPlantNumberICT(EDI945 edi945);
+
     void editTruckBy(EditTruckDTO editTruckDTO);
+
+    void editTruckByOEM(EditTruckDTO editTruckDTO);
+
+    void editTruckByICT(EditTruckDTO editTruckDTO);
+
 }
