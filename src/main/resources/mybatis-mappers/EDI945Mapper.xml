@@ -133,6 +133,7 @@
         <include refid="Base_Column_List"/>
         from edi_945
         <include refid="where"/>
+        order by ship_date desc
         limit #{offset}, #{limit}
     </select>
     <select id="listOEM" resultMap="BaseResultMap">
@@ -140,6 +141,7 @@
         <include refid="Base_Column_List"/>
         from edi_945_oem
         <include refid="where"/>
+        order by ship_date desc
         limit #{offset}, #{limit}
     </select>
     <select id="listICT" resultMap="BaseResultMap">
@@ -147,6 +149,7 @@
         <include refid="Base_Column_List"/>
         from edi_945_ict
         <include refid="where"/>
+        order by ship_date desc
         limit #{offset}, #{limit}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
