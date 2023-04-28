@@ -1,93 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.boot.security.server.dao.EdiWzCancelMapper">
-  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EdiWzCancel">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="trackNo" jdbcType="VARCHAR" property="trackno" />
-    <result column="deviceId" jdbcType="VARCHAR" property="deviceid" />
-    <result column="trackEndTime" jdbcType="VARCHAR" property="trackendtime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, status, trackNo, deviceId, trackEndTime
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from edi_wz_cancel
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from edi_wz_cancel
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.boot.security.server.model.EdiWzCancel">
-    insert into edi_wz_cancel (id, status, trackNo, 
-      deviceId, trackEndTime)
-    values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{trackno,jdbcType=VARCHAR}, 
-      #{deviceid,jdbcType=VARCHAR}, #{trackendtime,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.boot.security.server.model.EdiWzCancel">
-    insert into edi_wz_cancel
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="trackno != null">
-        trackNo,
-      </if>
-      <if test="deviceid != null">
-        deviceId,
-      </if>
-      <if test="trackendtime != null">
-        trackEndTime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="trackno != null">
-        #{trackno,jdbcType=VARCHAR},
-      </if>
-      <if test="deviceid != null">
-        #{deviceid,jdbcType=VARCHAR},
-      </if>
-      <if test="trackendtime != null">
-        #{trackendtime,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EdiWzCancel">
-    update edi_wz_cancel
-    <set>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="trackno != null">
-        trackNo = #{trackno,jdbcType=VARCHAR},
-      </if>
-      <if test="deviceid != null">
-        deviceId = #{deviceid,jdbcType=VARCHAR},
-      </if>
-      <if test="trackendtime != null">
-        trackEndTime = #{trackendtime,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EdiWzCancel">
-    update edi_wz_cancel
-    set status = #{status,jdbcType=INTEGER},
-      trackNo = #{trackno,jdbcType=VARCHAR},
-      deviceId = #{deviceid,jdbcType=VARCHAR},
-      trackEndTime = #{trackendtime,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <resultMap id="BaseResultMap" type="com.boot.security.server.model.EdiWzCancel">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="trackNo" jdbcType="VARCHAR" property="trackno"/>
+        <result column="deviceId" jdbcType="VARCHAR" property="deviceid"/>
+        <result column="trackEndTime" jdbcType="VARCHAR" property="trackendtime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , status, trackNo, deviceId, trackEndTime
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edi_wz_cancel
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectBykPlantNumber" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edi_wz_cancel
+        where deviceid = #{truckPlantNumber,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from edi_wz_cancel
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.boot.security.server.model.EdiWzCancel">
+        insert into edi_wz_cancel (id, status, trackNo,
+                                   deviceId, trackEndTime)
+        values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{trackno,jdbcType=VARCHAR},
+                #{deviceid,jdbcType=VARCHAR}, #{trackendtime,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.boot.security.server.model.EdiWzCancel">
+        insert into edi_wz_cancel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="trackno != null">
+                trackNo,
+            </if>
+            <if test="deviceid != null">
+                deviceId,
+            </if>
+            <if test="trackendtime != null">
+                trackEndTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="trackno != null">
+                #{trackno,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceid != null">
+                #{deviceid,jdbcType=VARCHAR},
+            </if>
+            <if test="trackendtime != null">
+                #{trackendtime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EdiWzCancel">
+        update edi_wz_cancel
+        <set>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="trackno != null">
+                trackNo = #{trackno,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceid != null">
+                deviceId = #{deviceid,jdbcType=VARCHAR},
+            </if>
+            <if test="trackendtime != null">
+                trackEndTime = #{trackendtime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EdiWzCancel">
+        update edi_wz_cancel
+        set status       = #{status,jdbcType=INTEGER},
+            trackNo      = #{trackno,jdbcType=VARCHAR},
+            deviceId     = #{deviceid,jdbcType=VARCHAR},
+            trackEndTime = #{trackendtime,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

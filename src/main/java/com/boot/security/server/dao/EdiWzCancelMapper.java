@@ -3,6 +3,8 @@ package com.boot.security.server.dao;
 import com.boot.security.server.model.EdiWzCancel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface EdiWzCancelMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,4 +18,6 @@ public interface EdiWzCancelMapper {
     int updateByPrimaryKeySelective(EdiWzCancel row);
 
     int updateByPrimaryKey(EdiWzCancel row);
+
+    List<EdiWzCancel> selectBykPlantNumber(String truckPlantNumber);
 }

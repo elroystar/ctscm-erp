@@ -170,51 +170,38 @@ public class ShipperController {
             EdiWzUpload ediWzUpload = new EdiWzUpload();
             ediWzUpload.setStatus(0);
             ediWzUpload.setDeviceid(edi945.getTruckPlantNumber());
-            ediWzUpload.setLongitude(edi945.getLongitude());
-            ediWzUpload.setLatitude(edi945.getLatitude());
-            ediWzUpload.setLocationtime(edi945.getGpsUpdating());
+            ediWzUpload.setLongitude(edi945.getDesLon());
+            ediWzUpload.setLatitude(edi945.getDesLat());
+            ediWzUpload.setLocationtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
             ediWzUploadMapper.insertSelective(ediWzUpload);
         } else {
             EdiWzUpload ediWzUpload = ediWzUploads.get(0);
             ediWzUpload.setStatus(0);
             ediWzUpload.setDeviceid(edi945.getTruckPlantNumber());
-            ediWzUpload.setLongitude(edi945.getLongitude());
-            ediWzUpload.setLatitude(edi945.getLatitude());
-            ediWzUpload.setLocationtime(edi945.getGpsUpdating());
+            ediWzUpload.setLongitude(edi945.getDesLon());
+            ediWzUpload.setLatitude(edi945.getDesLat());
+            ediWzUpload.setLocationtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
             ediWzUploadMapper.updateByPrimaryKey(ediWzUpload);
         }
-        // 轨迹数据edi表数据写入
-        List<EdiWzTrack> ediWzTracks = ediWzTrackMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
-        if (ediWzTracks.isEmpty()) {
-            EdiWzTrack ediWzTrack = new EdiWzTrack();
-            getEdiWzTrack(edi945, ediWzTrack);
-            ediWzTrackMapper.insertSelective(ediWzTrack);
-        } else {
-            EdiWzTrack ediWzTrack = ediWzTracks.get(0);
-            getEdiWzTrack(edi945, ediWzTrack);
-            ediWzTrackMapper.updateByPrimaryKey(ediWzTrack);
-        }
         // 取消数据edi表数据写入
-        EdiWzCancel ediWzCancel = new EdiWzCancel();
-        ediWzCancel.setStatus(0);
-        ediWzCancel.setTrackno(edi945.getCtTracking());
-        ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
-        ediWzCancel.setTrackendtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
-        ediWzCancelMapper.insertSelective(ediWzCancel);
+        List<EdiWzCancel> ediWzCancels = ediWzCancelMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+        if (ediWzCancels.isEmpty()) {
+            EdiWzCancel ediWzCancel = new EdiWzCancel();
+            ediWzCancel.setStatus(0);
+            ediWzCancel.setTrackno(edi945.getCtTracking());
+            ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
+            ediWzCancel.setTrackendtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
+            ediWzCancelMapper.insertSelective(ediWzCancel);
+        } else {
+            EdiWzCancel ediWzCancel = ediWzCancels.get(0);
+            ediWzCancel.setStatus(0);
+            ediWzCancel.setTrackno(edi945.getCtTracking());
+            ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
+            ediWzCancel.setTrackendtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
+            ediWzCancelMapper.updateByPrimaryKey(ediWzCancel);
+        }
         edi945.setGpsState(1);
         edi945.setTrackEndTime(new Date());
-    }
-
-    private void getEdiWzTrack(EDI945 edi945, EdiWzTrack ediWzTrack) {
-        ediWzTrack.setStatus(0);
-        ediWzTrack.setTracknos(edi945.getCtTracking());
-        ediWzTrack.setLocationtime(edi945.getGpsUpdating());
-        ediWzTrack.setDeviceid(edi945.getTruckPlantNumber());
-        ediWzTrack.setProvince(edi945.getProvince());
-        ediWzTrack.setCity(edi945.getCity());
-        ediWzTrack.setPosition(edi945.getPosition());
-        ediWzTrack.setLongitude(edi945.getLongitude());
-        ediWzTrack.setLatitude(edi945.getLatitude());
     }
 
     @LogAnnotation
