@@ -154,7 +154,7 @@ public class GPSTask {
             ediWzCancel.setTrackno(edi945.getCtTracking());
             ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
             ediWzCancel.setTrackendtime(DateUtil.format(edi945.getTrackEndTime(), DateUtil.NORM_DATETIME_PATTERN));
-            ediWzCancelMapper.insertSelective(ediWzCancel);
+//            ediWzCancelMapper.insertSelective(ediWzCancel);
         }
     }
 
@@ -168,7 +168,7 @@ public class GPSTask {
             ediWzUpload.setLongitude(edi945.getLongitude());
             ediWzUpload.setLatitude(edi945.getLatitude());
             ediWzUpload.setLocationtime(edi945.getGpsUpdating());
-            ediWzUploadMapper.insertSelective(ediWzUpload);
+//            ediWzUploadMapper.insertSelective(ediWzUpload);
         } else {
             EdiWzUpload ediWzUpload = ediWzUploads.get(0);
             ediWzUpload.setStatus(0);
@@ -176,18 +176,18 @@ public class GPSTask {
             ediWzUpload.setLongitude(edi945.getLongitude());
             ediWzUpload.setLatitude(edi945.getLatitude());
             ediWzUpload.setLocationtime(edi945.getGpsUpdating());
-            ediWzUploadMapper.updateByPrimaryKey(ediWzUpload);
+//            ediWzUploadMapper.updateByPrimaryKey(ediWzUpload);
         }
         // 轨迹数据edi表数据写入
         List<EdiWzTrack> ediWzTracks = ediWzTrackMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
         if (ediWzTracks.isEmpty()) {
             EdiWzTrack ediWzTrack = new EdiWzTrack();
             getEdiWzTrack(edi945, ediWzTrack);
-            ediWzTrackMapper.insertSelective(ediWzTrack);
+//            ediWzTrackMapper.insertSelective(ediWzTrack);
         } else {
             EdiWzTrack ediWzTrack = ediWzTracks.get(0);
             getEdiWzTrack(edi945, ediWzTrack);
-            ediWzTrackMapper.updateByPrimaryKey(ediWzTrack);
+//            ediWzTrackMapper.updateByPrimaryKey(ediWzTrack);
         }
     }
 
@@ -211,7 +211,7 @@ public class GPSTask {
             ediWzDevice.setDeviceid(edi945.getTruckPlantNumber());
             ediWzDevice.setDevicetype(edi945.getDeviceType());
             ediWzDevice.setSource(edi945.getSource());
-            ediWzDeviceMapper.insertSelective(ediWzDevice);
+//            ediWzDeviceMapper.insertSelective(ediWzDevice);
             EdiWzRegister ediWzRegister = new EdiWzRegister();
             ediWzRegister.setStatus(0);
             ediWzRegister.setDeviceid(edi945.getTruckPlantNumber());
@@ -219,7 +219,7 @@ public class GPSTask {
             ediWzRegister.setCompanycode(edi945.getCompanyCode());
             ediWzRegister.setOrderno(edi945.getCtTracking());
             ediWzRegister.setTrackno(edi945.getCtTracking());
-            ediWzRegisterMapper.insertSelective(ediWzRegister);
+//            ediWzRegisterMapper.insertSelective(ediWzRegister);
         }
     }
 }

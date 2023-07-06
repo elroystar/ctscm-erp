@@ -10,7 +10,7 @@
     <form class="form-horizontal" onsubmit="return false" id="form">
         <br/>
         <input id="shipmentNumberSub" name="shipmentNumberSub" hidden="true">
-        <input id="shipwaySub" name="shipwaySub" hidden="true">
+        <input id="waybillSub" name="waybillSub" hidden="true">
         <input id="oemSub" name="oemSub" hidden="true">
         <input id="gatewaySub" name="gatewaySub" hidden="true">
         <input id="regionSub" name="regionSub" hidden="true"></input>
@@ -121,7 +121,7 @@
         $(obj).attr("disabled", true);
         var formdata = $("#form").serializeObject();
         formdata.shipmentNumberSub = $('#shipmentNumberSub').val();
-        formdata.shipwaySub = $('#shipwaySub').val();
+        formdata.waybillSub = $('#waybillSub').val();
         formdata.oemSub = $('#oemSub').val();
         formdata.gatewaySub = $('#gatewaySub').val();
         formdata.regionSub = $('#regionSub').val();

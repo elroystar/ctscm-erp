@@ -69,6 +69,17 @@ public class EDI945 {
 
     private String latitude;
 
+    private String messageid;
+    private String inreceiverid;
+    private String insenderid;
+    private String appreceivercode;
+    private String orisenderid;
+    private String controlnumber;
+    private String transationrp;
+    private String fuctionalrp;
+
+    private String dispose997;
+
     private String desLon;
 
     private String desLat;
@@ -411,5 +422,77 @@ public class EDI945 {
 
     public void setTrackEndTime(Date trackEndTime) {
         this.trackEndTime = trackEndTime;
+    }
+
+    public String getMessageid() {
+        return messageid;
+    }
+
+    public void setMessageid(String messageid) {
+        this.messageid = messageid;
+    }
+
+    public String getDispose997() {
+        return dispose997;
+    }
+
+    public void setDispose997(String dispose997) {
+        this.dispose997 = dispose997;
+    }
+
+    public String getInreceiverid() {
+        return inreceiverid;
+    }
+
+    public void setInreceiverid(String inreceiverid) {
+        this.inreceiverid = inreceiverid;
+    }
+
+    public String getInsenderid() {
+        return insenderid;
+    }
+
+    public void setInsenderid(String insenderid) {
+        this.insenderid = insenderid;
+    }
+
+    public String getAppreceivercode() {
+        return appreceivercode;
+    }
+
+    public void setAppreceivercode(String appreceivercode) {
+        this.appreceivercode = appreceivercode;
+    }
+
+    public String getOrisenderid() {
+        return orisenderid;
+    }
+
+    public void setOrisenderid(String orisenderid) {
+        this.orisenderid = orisenderid;
+    }
+
+    public String getControlnumber() {
+        return controlnumber;
+    }
+
+    public void setControlnumber(String controlnumber) {
+        this.controlnumber = controlnumber;
+    }
+
+    public String getTransationrp() {
+        return transationrp;
+    }
+
+    public void setTransationrp(String transationrp) {
+        this.transationrp = transationrp;
+    }
+
+    public String getFuctionalrp() {
+        return fuctionalrp;
+    }
+
+    public void setFuctionalrp(String fuctionalrp) {
+        this.fuctionalrp = fuctionalrp;
     }
 }

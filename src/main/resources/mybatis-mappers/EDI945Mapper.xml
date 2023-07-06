@@ -34,6 +34,15 @@
         <result column="position" jdbcType="VARCHAR" property="position"/>
         <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
         <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+        <result column="messageid" jdbcType="VARCHAR" property="messageid"/>
+        <result column="inreceiverid" jdbcType="VARCHAR" property="inreceiverid"/>
+        <result column="insenderid" jdbcType="VARCHAR" property="insenderid"/>
+        <result column="appreceivercode" jdbcType="VARCHAR" property="appreceivercode"/>
+        <result column="orisenderid" jdbcType="VARCHAR" property="orisenderid"/>
+        <result column="controlnumber" jdbcType="VARCHAR" property="controlnumber"/>
+        <result column="transationrp" jdbcType="VARCHAR" property="transationrp"/>
+        <result column="fuctionalrp" jdbcType="VARCHAR" property="fuctionalrp"/>
+        <result column="dispose_997" jdbcType="VARCHAR" property="dispose997"/>
         <result column="des_lon" jdbcType="VARCHAR" property="desLon"/>
         <result column="des_lat" jdbcType="VARCHAR" property="desLat"/>
         <result column="device_type" jdbcType="VARCHAR" property="deviceType"/>
@@ -47,15 +56,16 @@
         , status, create_date, ship_date, actual_date, sender, tracking_number, dn, shipment_number,
     waybill, shipway, fwd, fwd_code, oem, gateway, ctns, units, gw, ship_mode, poe, poe_country, 
     truck_plant_number, driver_name, cellular, ct_tracking, gps_device, gps_updating, city, province, `position`,
-    longitude, latitude
+    longitude, latitude, messageid, dispose_997, inreceiverid, insenderid, appreceivercode, orisenderid, controlnumber, transationrp,
+    fuctionalrp
     </sql>
     <sql id="where">
         <where>
             <if test="params.shipmentNumber != null and params.shipmentNumber != ''">
                 and shipment_number = #{params.shipmentNumber,jdbcType=VARCHAR}
             </if>
-            <if test="params.shipway != null and params.shipway != ''">
-                and shipway = #{params.shipway,jdbcType=VARCHAR}
+            <if test="params.waybill != null and params.waybill != ''">
+                and waybill = #{params.waybill,jdbcType=VARCHAR}
             </if>
             <if test="params.oem != null and params.oem != ''">
                 and oem = #{params.oem,jdbcType=VARCHAR}
@@ -78,6 +88,9 @@
             <if test="params.shipDate != null and params.shipDate != ''">
                 and ship_date = #{params.shipDate,jdbcType=VARCHAR}
             </if>
+            <if test="params.dispose997 != null and params.dispose997 != ''">
+                and dispose_997 = #{params.dispose997,jdbcType=INTEGER}
+            </if>
         </where>
     </sql>
     <select id="selectByGPSState" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -99,16 +112,19 @@
         select *
         from edi_945_gps
         where gps_device = #{gpsDevice,jdbcType=VARCHAR}
+          and gps_state = 0
     </select>
     <select id="selectGPSByGpsDeviceOEM" parameterType="java.lang.String" resultMap="BaseResultMap">
         select *
         from edi_945_gps_oem
         where gps_device = #{gpsDevice,jdbcType=VARCHAR}
+          and gps_state = 0
     </select>
     <select id="selectGPSByGpsDeviceICT" parameterType="java.lang.String" resultMap="BaseResultMap">
         select *
         from edi_945_gps_ict
         where gps_device = #{gpsDevice,jdbcType=VARCHAR}
+          and gps_state = 0
     </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -149,6 +165,15 @@
         <include refid="Base_Column_List"/>
         from edi_945_ict
         <include refid="where"/>
+        order by ship_date desc
+        limit #{offset}, #{limit}
+    </select>
+    <select id="getSend997Data" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edi_945
+        <include refid="where"/>
+        and dispose_997 = 0
         order by ship_date desc
         limit #{offset}, #{limit}
     </select>
@@ -531,6 +556,9 @@
             <if test="latitude != null">
                 latitude = #{latitude,jdbcType=VARCHAR},
             </if>
+            <if test="gpsState != null">
+                gps_state = #{gpsState,jdbcType=INTEGER},
+            </if>
         </set>
     </sql>
     <update id="updateByTruckPlantNumber" parameterType="com.boot.security.server.model.EDI945">
@@ -697,6 +725,13 @@
             position           = #{position,jdbcType=VARCHAR},
             longitude          = #{longitude,jdbcType=VARCHAR},
             latitude           = #{latitude,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateDispose997" parameterType="com.boot.security.server.model.EDI945">
+        update edi_945
+        set dispose_997  = #{dispose997,jdbcType=VARCHAR},
+            transationrp = #{transationrp,jdbcType=VARCHAR},
+            fuctionalrp  = #{fuctionalrp,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

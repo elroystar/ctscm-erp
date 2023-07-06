@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.FieldIhub997Mapper">
+    <resultMap id="BaseResultMap" type="com.boot.security.server.model.FieldIhub997">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="orimessageid" jdbcType="VARCHAR" property="orimessageid"/>
+        <result column="fareceiverid" jdbcType="VARCHAR" property="fareceiverid"/>
+        <result column="fasenderid" jdbcType="VARCHAR" property="fasenderid"/>
+        <result column="appreceivercode" jdbcType="VARCHAR" property="appreceivercode"/>
+        <result column="orisenderid" jdbcType="VARCHAR" property="orisenderid"/>
+        <result column="controlnumber" jdbcType="VARCHAR" property="controlnumber"/>
+        <result column="transationrp" jdbcType="VARCHAR" property="transationrp"/>
+        <result column="fuctionalrp" jdbcType="VARCHAR" property="fuctionalrp"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , status, orimessageid, fareceiverid, fasenderid, appreceivercode, orisenderid,
+    controlnumber, transationrp, fuctionalrp
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from field_ihub_997
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from field_ihub_997
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.boot.security.server.model.FieldIhub997">
+        insert into field_ihub_997 (id, status, orimessageid,
+                                      fareceiverid, fasenderid, appreceivercode,
+                                      orisenderid, controlnumber, transationrp,
+                                      fuctionalrp)
+        values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{orimessageid,jdbcType=VARCHAR},
+                #{fareceiverid,jdbcType=VARCHAR}, #{fasenderid,jdbcType=VARCHAR}, #{appreceivercode,jdbcType=VARCHAR},
+                #{orisenderid,jdbcType=VARCHAR}, #{controlnumber,jdbcType=VARCHAR}, #{transationrp,jdbcType=VARCHAR},
+                #{fuctionalrp,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.boot.security.server.model.FieldIhub997">
+        insert into field_ihub_997
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="orimessageid != null">
+                orimessageid,
+            </if>
+            <if test="fareceiverid != null">
+                fareceiverid,
+            </if>
+            <if test="fasenderid != null">
+                fasenderid,
+            </if>
+            <if test="appreceivercode != null">
+                appreceivercode,
+            </if>
+            <if test="orisenderid != null">
+                orisenderid,
+            </if>
+            <if test="controlnumber != null">
+                controlnumber,
+            </if>
+            <if test="transationrp != null">
+                transationrp,
+            </if>
+            <if test="fuctionalrp != null">
+                fuctionalrp,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="orimessageid != null">
+                #{orimessageid,jdbcType=VARCHAR},
+            </if>
+            <if test="fareceiverid != null">
+                #{fareceiverid,jdbcType=VARCHAR},
+            </if>
+            <if test="fasenderid != null">
+                #{fasenderid,jdbcType=VARCHAR},
+            </if>
+            <if test="appreceivercode != null">
+                #{appreceivercode,jdbcType=VARCHAR},
+            </if>
+            <if test="orisenderid != null">
+                #{orisenderid,jdbcType=VARCHAR},
+            </if>
+            <if test="controlnumber != null">
+                #{controlnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="transationrp != null">
+                #{transationrp,jdbcType=VARCHAR},
+            </if>
+            <if test="fuctionalrp != null">
+                #{fuctionalrp,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.FieldIhub997">
+        update field_ihub_997
+        <set>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="orimessageid != null">
+                orimessageid = #{orimessageid,jdbcType=VARCHAR},
+            </if>
+            <if test="fareceiverid != null">
+                fareceiverid = #{fareceiverid,jdbcType=VARCHAR},
+            </if>
+            <if test="fasenderid != null">
+                fasenderid = #{fasenderid,jdbcType=VARCHAR},
+            </if>
+            <if test="appreceivercode != null">
+                appreceivercode = #{appreceivercode,jdbcType=VARCHAR},
+            </if>
+            <if test="orisenderid != null">
+                orisenderid = #{orisenderid,jdbcType=VARCHAR},
+            </if>
+            <if test="controlnumber != null">
+                controlnumber = #{controlnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="transationrp != null">
+                transationrp = #{transationrp,jdbcType=VARCHAR},
+            </if>
+            <if test="fuctionalrp != null">
+                fuctionalrp = #{fuctionalrp,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.FieldIhub997">
+        update field_ihub_997
+        set status          = #{status,jdbcType=INTEGER},
+            orimessageid    = #{orimessageid,jdbcType=VARCHAR},
+            fareceiverid    = #{fareceiverid,jdbcType=VARCHAR},
+            fasenderid      = #{fasenderid,jdbcType=VARCHAR},
+            appreceivercode = #{appreceivercode,jdbcType=VARCHAR},
+            orisenderid     = #{orisenderid,jdbcType=VARCHAR},
+            controlnumber   = #{controlnumber,jdbcType=VARCHAR},
+            transationrp    = #{transationrp,jdbcType=VARCHAR},
+            fuctionalrp     = #{fuctionalrp,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -5,6 +5,7 @@ import com.boot.security.server.dao.*;
 import com.boot.security.server.dto.EDI214ExportExcelDTO;
 import com.boot.security.server.dto.EDI945ExportExcelDTO;
 import com.boot.security.server.dto.EditTruckDTO;
+import com.boot.security.server.dto.Send997InfoDTO;
 import com.boot.security.server.model.*;
 import com.boot.security.server.page.table.PageTableHandler;
 import com.boot.security.server.page.table.PageTableHandler.CountHandler;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,10 +53,10 @@ public class ShipperController {
     private EdiWzUploadMapper ediWzUploadMapper;
 
     @Autowired
-    private EdiWzTrackMapper ediWzTrackMapper;
+    private EdiWzCancelMapper ediWzCancelMapper;
 
     @Autowired
-    private EdiWzCancelMapper ediWzCancelMapper;
+    private FieldIhub997Mapper fieldIhub997Mapper;
 
     @GetMapping("/getGPSInformation/{truckPlantNumber}/{desLon}/{desLat}/{gpsDevice}/{ctTracking}")
     @ApiOperation(value = "获取gps数据")
@@ -124,6 +126,7 @@ public class ShipperController {
                 for (EDI945 edi945 : edi945List) {
                     handleEDITable(edi945);
                     edi945Mapper.updateGPSByTruckPlantNumber(edi945);
+                    edi945Mapper.updateByTruckPlantNumber(edi945);
                 }
             }
         } catch (Exception e) {
@@ -140,6 +143,7 @@ public class ShipperController {
                 for (EDI945 edi945 : edi945List) {
                     handleEDITable(edi945);
                     edi945Mapper.updateGPSByTruckPlantNumberOEM(edi945);
+                    edi945Mapper.updateByTruckPlantNumberOEM(edi945);
                 }
             }
         } catch (Exception e) {
@@ -156,6 +160,7 @@ public class ShipperController {
                 for (EDI945 edi945 : edi945List) {
                     handleEDITable(edi945);
                     edi945Mapper.updateGPSByTruckPlantNumberICT(edi945);
+                    edi945Mapper.updateByTruckPlantNumberICT(edi945);
                 }
             }
         } catch (Exception e) {
@@ -460,10 +465,10 @@ public class ShipperController {
             excelDTO.setReason("");
             excelDTO.setDate(shipDate);
             excelDTO.setTime("");
-            excelDTO.setTimeCode("");
+            excelDTO.setTimeCode("08");
             excelDTO.setCity("");
             excelDTO.setState("");
-            excelDTO.setCountry("");
+            excelDTO.setCountry("CN");
             if (edi945.getShipway().equals("DIRECT")) {
                 excelDTO.setPoid(edi945.getDn());
             } else if (edi945.getShipway().equals("STO")) {
@@ -499,6 +504,12 @@ public class ShipperController {
             excelDTO.setExcepPackage("");
             excelDTO.setExcepQty("");
             excelDTO.setAccStatus("");
+            String dispose997 = edi945.getDispose997();
+            if ("1".equals(dispose997)) {
+                excelDTO.setDispose997("已发送");
+            } else if ("0".equals(dispose997)) {
+                excelDTO.setDispose997("未发送");
+            }
 
             data.add(excelDTO.toString().split(","));
         }
@@ -544,7 +555,8 @@ public class ShipperController {
                 "Excep Code," +
                 "Excep Package," +
                 "Excep QTY," +
-                "ACC Status";
+                "ACC Status," +
+                "Dispose 997";
         String[] headers = headerStr.split(",");
         String fileName = MessageFormat.format("{0}_{1}", "214", DateUtil.format(new Date(), DateUtil.NORM_DATE_TIME_PATTERN_TWO));
         ExcelUtil.excelExport2(fileName, "214 template", headers, data, response);
@@ -552,10 +564,7 @@ public class ShipperController {
 
     private void export945(HttpServletResponse response, List<Object[]> data, List<EDI945> edi945List) {
         for (EDI945 edi945 : edi945List) {
-            List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
-            if (!regionTypeByK.isEmpty()) {
-                edi945.setRegion(regionTypeByK.get(0));
-            }
+            setSenderAndRegion(edi945);
             EDI945ExportExcelDTO excelDTO = new EDI945ExportExcelDTO();
             BeanUtils.copyProperties(edi945, excelDTO);
             data.add(excelDTO.toString().split(","));
@@ -602,7 +611,7 @@ public class ShipperController {
             @Override
             public List<EDI945> list(PageTableRequest request) {
                 List<EDI945> edi945List = edi945Mapper.list(request.getParams(), request.getOffset(), request.getLimit());
-                return getList(edi945List);
+                return getList(edi945List, "iHub");
             }
         }).handle(request);
     }
@@ -620,7 +629,7 @@ public class ShipperController {
             @Override
             public List<EDI945> list(PageTableRequest request) {
                 List<EDI945> edi945List = edi945Mapper.listICT(request.getParams(), request.getOffset(), request.getLimit());
-                return getList(edi945List);
+                return getList(edi945List, "ICT");
             }
         }).handle(request);
     }
@@ -638,31 +647,123 @@ public class ShipperController {
             @Override
             public List<EDI945> list(PageTableRequest request) {
                 List<EDI945> edi945List = edi945Mapper.listOEM(request.getParams(), request.getOffset(), request.getLimit());
-                return getList(edi945List);
+                return getList(edi945List, "OEM");
             }
         }).handle(request);
     }
 
-    private List<EDI945> getList(List<EDI945> edi945List) {
+    @PostMapping("send997Info")
+    @ApiOperation(value = "发送997数据")
+    public Integer send997Info(@RequestBody Send997InfoDTO send997Info) {
+        Map<String, Object> params = convert(send997Info);
+        List<EDI945> edi945List = edi945Mapper.getSend997Data(params, 0, 9999);
         for (EDI945 edi945 : edi945List) {
-            List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
-            if (!regionTypeByK.isEmpty()) {
-                edi945.setRegion(regionTypeByK.get(0));
-            }
-            if (edi945.getSender().equals("HHAZZ-000295A7P")
-                    || edi945.getSender().equals("HHETY-000295AJP")
-                    || edi945.getSender().equals("HHEZZ-000295A7P")
-                    || edi945.getSender().equals("HHUTY-000295AJP")
-                    || edi945.getSender().equals("ICTJX")) {
-                edi945.setSender("FG");
-            } else if (edi945.getSender().equals("HHGL-HUBACP")
-                    || edi945.getSender().equals("HHZZ-HUBACP")
-                    || edi945.getSender().equals("HHTY-HUBACP")
-                    || edi945.getSender().equals("ICTJXACP")) {
-                edi945.setSender("AC");
+            try {
+                FieldIhub997 fieldIhub997 = new FieldIhub997();
+                if (StringUtils.isNotBlank(edi945.getShipDate())
+                        && StringUtils.isNotBlank(edi945.getTrackingNumber())
+                        && StringUtils.isNotBlank(edi945.getDn())
+                        && StringUtils.isNotBlank(edi945.getShipmentNumber())
+                        && StringUtils.isNotBlank(edi945.getWaybill())
+                        && StringUtils.isNotBlank(edi945.getShipway())
+                        && StringUtils.isNotBlank(edi945.getGateway())
+                        && StringUtils.isNotBlank(edi945.getCtns())
+                        && StringUtils.isNotBlank(edi945.getUnits())
+                        && StringUtils.isNotBlank(edi945.getGw())
+                        && StringUtils.isNotBlank(edi945.getPoe())
+                        && StringUtils.isNotBlank(edi945.getPoeCountry())) {
+                    fieldIhub997.setTransationrp("A");
+                    fieldIhub997.setFuctionalrp("A");
+                    edi945.setTransationrp("A");
+                    edi945.setFuctionalrp("A");
+                } else if (StringUtils.isBlank(edi945.getShipDate())
+                        && StringUtils.isBlank(edi945.getTrackingNumber())
+                        && StringUtils.isBlank(edi945.getDn())
+                        && StringUtils.isBlank(edi945.getShipmentNumber())
+                        && StringUtils.isBlank(edi945.getWaybill())
+                        && StringUtils.isBlank(edi945.getShipway())
+                        && StringUtils.isBlank(edi945.getGateway())
+                        && StringUtils.isBlank(edi945.getCtns())
+                        && StringUtils.isBlank(edi945.getUnits())
+                        && StringUtils.isBlank(edi945.getGw())
+                        && StringUtils.isBlank(edi945.getPoe())
+                        && StringUtils.isBlank(edi945.getPoeCountry())) {
+                    fieldIhub997.setTransationrp("R");
+                    fieldIhub997.setFuctionalrp("R");
+                    edi945.setTransationrp("R");
+                    edi945.setFuctionalrp("R");
+                } else {
+                    fieldIhub997.setTransationrp("R");
+                    fieldIhub997.setFuctionalrp("P");
+                    edi945.setTransationrp("R");
+                    edi945.setFuctionalrp("P");
+                }
+                fieldIhub997.setStatus(0);
+                fieldIhub997.setOrimessageid(edi945.getMessageid());
+                fieldIhub997.setFareceiverid(edi945.getInreceiverid());
+                fieldIhub997.setFasenderid(edi945.getInsenderid());
+                fieldIhub997.setAppreceivercode(edi945.getAppreceivercode());
+                fieldIhub997.setOrisenderid(edi945.getOrisenderid());
+                fieldIhub997.setControlnumber(edi945.getControlnumber());
+                fieldIhub997Mapper.insertSelective(fieldIhub997);
+                // 推送完毕后标记为已推送
+                edi945.setDispose997("1");
+                edi945Mapper.updateDispose997(edi945);
+            } catch (Exception e) {
+                // 推送完毕后标记为已推送
+                edi945.setDispose997("1");
+                edi945Mapper.updateDispose997(edi945);
+                e.printStackTrace();
             }
         }
+        return 1;
+    }
+
+    private List<EDI945> getList(List<EDI945> edi945List, String listType) {
+        for (EDI945 edi945 : edi945List) {
+            if (StringUtils.equals(listType, "iHub")) {
+                List<EDI945> ediGps = edi945Mapper.selectGPSByGpsDevice(edi945.getGpsDevice());
+                if (null != ediGps && !ediGps.isEmpty()) {
+                    edi945.setGpsState(ediGps.get(0).getGpsState());
+                }
+            } else if (StringUtils.equals(listType, "ICT")) {
+                List<EDI945> ediGps = edi945Mapper.selectGPSByGpsDeviceICT(edi945.getGpsDevice());
+                if (null != ediGps && !ediGps.isEmpty()) {
+                    edi945.setGpsState(ediGps.get(0).getGpsState());
+                }
+            } else if (StringUtils.equals(listType, "OEM")) {
+                List<EDI945> ediGps = edi945Mapper.selectGPSByGpsDeviceOEM(edi945.getGpsDevice());
+                if (null != ediGps && !ediGps.isEmpty()) {
+                    edi945.setGpsState(ediGps.get(0).getGpsState());
+                }
+            }
+            setSenderAndRegion(edi945);
+        }
         return edi945List;
+    }
+
+    private void setSenderAndRegion(EDI945 edi945) {
+        List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
+        if (!regionTypeByK.isEmpty()) {
+            edi945.setRegion(regionTypeByK.get(0));
+        }
+        if (edi945.getSender().equals("HHUZZ-000295A7P")
+                || edi945.getSender().equals("HHEZZ-000295A7P")
+                || edi945.getSender().equals("HHAZZ-000295A7P")
+                || edi945.getSender().equals("HHETY-000295AJP")
+                || edi945.getSender().equals("HHEGL-00029584P")
+                || edi945.getSender().equals("HHAGL-00029584P")
+                || edi945.getSender().equals("HHUTY-000295AJP")
+                || edi945.getSender().equals("HHETY-000295AJP")
+                || edi945.getSender().equals("HHATY-000295AJP")
+                || edi945.getSender().equals("ICTJX")) {
+            edi945.setSender("FG");
+        } else if (edi945.getSender().equals("HHGL-HUBACP")
+                || edi945.getSender().equals("HHZZ-HUBACP")
+                || edi945.getSender().equals("HHTY-HUBACP")
+                || edi945.getSender().equals("ICTJXACP")) {
+            edi945.setSender("AC");
+        }
     }
 
     private void extractedRegion(PageTableRequest request) {
@@ -678,6 +779,21 @@ public class ShipperController {
             String[] split = collect.split(",");
             params.put("region", split);
         }
+    }
+
+    private Map<String, Object> convert(Object object) {
+        Map<String, Object> map = Maps.newHashMap();
+        Class<?> clazz = object.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                map.put(field.getName(), field.get(object));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return map;
     }
 
 }

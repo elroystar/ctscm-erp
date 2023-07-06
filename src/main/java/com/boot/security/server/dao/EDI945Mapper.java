@@ -73,4 +73,8 @@ public interface EDI945Mapper {
 
     void editTruckByICT(EditTruckDTO editTruckDTO);
 
+    List<EDI945> getSend997Data(@Param("params") Map<String, Object> params, @Param("offset") Integer offset,
+                                @Param("limit") Integer limit);
+
+    void updateDispose997(EDI945 edi945);
 }
