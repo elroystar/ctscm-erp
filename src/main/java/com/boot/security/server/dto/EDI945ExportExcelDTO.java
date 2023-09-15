@@ -52,6 +52,8 @@ public class EDI945ExportExcelDTO implements Serializable {
 
     private String gpsDevice;
 
+    private String dispose997;
+
     public String getDriverName() {
         return driverName;
     }
@@ -244,6 +246,14 @@ public class EDI945ExportExcelDTO implements Serializable {
         this.gpsDevice = gpsDevice == null ? null : gpsDevice.trim();
     }
 
+    public String getDispose997() {
+        return dispose997;
+    }
+
+    public void setDispose997(String dispose997) {
+        this.dispose997 = dispose997;
+    }
+
     @Override
     public String toString() {
         return "" +
@@ -270,6 +280,7 @@ public class EDI945ExportExcelDTO implements Serializable {
                 "," + cellular +
                 "," + truckPlantNumber +
                 "," + ctTracking +
-                "," + gpsDevice;
+                "," + gpsDevice +
+                "," + dispose997;
     }
 }

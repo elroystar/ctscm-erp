@@ -6,6 +6,7 @@ import com.boot.security.server.dto.EDI214ExportExcelDTO;
 import com.boot.security.server.dto.EDI945ExportExcelDTO;
 import com.boot.security.server.dto.EditTruckDTO;
 import com.boot.security.server.dto.Send997InfoDTO;
+import com.boot.security.server.dto.lm.LMInfoIHubDTO;
 import com.boot.security.server.model.*;
 import com.boot.security.server.page.table.PageTableHandler;
 import com.boot.security.server.page.table.PageTableHandler.CountHandler;
@@ -29,13 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Api(tags = "日志")
@@ -57,6 +56,15 @@ public class ShipperController {
 
     @Autowired
     private FieldIhub997Mapper fieldIhub997Mapper;
+
+    @Autowired
+    private EdiLoadIHubMapper ediLoadIHubMapper;
+
+    @Autowired
+    private EdiLoadOemMapper ediLoadOemMapper;
+
+    @Autowired
+    private EdiLoadIctMapper ediLoadIctMapper;
 
     @GetMapping("/getGPSInformation/{truckPlantNumber}/{desLon}/{desLat}/{gpsDevice}/{ctTracking}")
     @ApiOperation(value = "获取gps数据")
@@ -504,12 +512,6 @@ public class ShipperController {
             excelDTO.setExcepPackage("");
             excelDTO.setExcepQty("");
             excelDTO.setAccStatus("");
-            String dispose997 = edi945.getDispose997();
-            if ("1".equals(dispose997)) {
-                excelDTO.setDispose997("已发送");
-            } else if ("0".equals(dispose997)) {
-                excelDTO.setDispose997("未发送");
-            }
 
             data.add(excelDTO.toString().split(","));
         }
@@ -555,8 +557,7 @@ public class ShipperController {
                 "Excep Code," +
                 "Excep Package," +
                 "Excep QTY," +
-                "ACC Status," +
-                "Dispose 997";
+                "ACC Status";
         String[] headers = headerStr.split(",");
         String fileName = MessageFormat.format("{0}_{1}", "214", DateUtil.format(new Date(), DateUtil.NORM_DATE_TIME_PATTERN_TWO));
         ExcelUtil.excelExport2(fileName, "214 template", headers, data, response);
@@ -567,6 +568,12 @@ public class ShipperController {
             setSenderAndRegion(edi945);
             EDI945ExportExcelDTO excelDTO = new EDI945ExportExcelDTO();
             BeanUtils.copyProperties(edi945, excelDTO);
+            String dispose997 = edi945.getDispose997();
+            if ("1".equals(dispose997)) {
+                excelDTO.setDispose997("已发送");
+            } else if ("0".equals(dispose997)) {
+                excelDTO.setDispose997("未发送");
+            }
             data.add(excelDTO.toString().split(","));
         }
         String headerStr = ",Ship Date," +
@@ -592,7 +599,8 @@ public class ShipperController {
                 "Cellular," +
                 "Truck Plant Number," +
                 "CT Tracking," +
-                "GPS Device";
+                "GPS Device," +
+                "Dispose 997";
         String[] headers = headerStr.split(",");
         String fileName = MessageFormat.format("{0}-{1}", "EDI945", DateUtil.format(new Date(), DateUtil.NORM_DATE_TIME_PATTERN_TWO));
         ExcelUtil.excelExport2(fileName, null, headers, data, response);
@@ -796,4 +804,103 @@ public class ShipperController {
         return map;
     }
 
+    @PostMapping("receiveLMInfoIHub")
+    @ApiOperation(value = "接收LM数据-IHUb")
+    public Object receiveLMInfoIHub(@RequestBody LMInfoIHubDTO lmInfoIHubDTO) {
+        Map<String, Object> resMap = Maps.newHashMap();
+        try {
+            String base64 = lmInfoIHubDTO.getBase64();
+            byte[] decode = Base64.getDecoder().decode(base64);
+            String text = FileUtil.getText(new ByteArrayInputStream(decode));
+            String[] splitN = text.split("\n");
+            for (String n : splitN) {
+                String[] strings = n.split(",");
+                EdiLoadIHub loadIHub = new EdiLoadIHub();
+                loadIHub.setStatus(0);
+                loadIHub.setPlantNo(strings[0]);
+                loadIHub.setHawb(strings[1]);
+                loadIHub.setLoadingNo(strings[2]);
+                loadIHub.setPalletId(strings[3]);
+                loadIHub.setPcs(strings[4]);
+                loadIHub.setCtns(strings[5]);
+                loadIHub.setGw(strings[6]);
+                loadIHub.setFwd(strings[7]);
+                loadIHub.setPoe(strings[8]);
+                ediLoadIHubMapper.insertSelective(loadIHub);
+            }
+            resMap.put("code", 0);
+            resMap.put("message", "success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resMap.put("code", -1);
+            resMap.put("message", e.getMessage());
+        }
+        return resMap;
+    }
+
+    @PostMapping("receiveLMInfoOEM")
+    @ApiOperation(value = "接收LM数据-OEM")
+    public Object receiveLMInfoOEM(@RequestBody LMInfoIHubDTO lmInfoIHubDTO) {
+        Map<String, Object> resMap = Maps.newHashMap();
+        try {
+            String base64 = lmInfoIHubDTO.getBase64();
+            byte[] decode = Base64.getDecoder().decode(base64);
+            String text = FileUtil.getText(new ByteArrayInputStream(decode));
+            String[] splitN = text.split("\n");
+            for (String n : splitN) {
+                String[] strings = n.split(",");
+                EdiLoadOem loadOem = new EdiLoadOem();
+                loadOem.setStatus(0);
+                loadOem.setHawb(strings[0]);
+                loadOem.setLoadingNo(strings[1]);
+                loadOem.setPalletId(strings[2]);
+                loadOem.setPcs(strings[3]);
+                loadOem.setCtns(strings[4]);
+                loadOem.setGw(strings[5]);
+                loadOem.setFwd(strings[6]);
+                loadOem.setPoe(strings[7]);
+                ediLoadOemMapper.insertSelective(loadOem);
+            }
+            resMap.put("code", 0);
+            resMap.put("message", "success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resMap.put("code", -1);
+            resMap.put("message", e.getMessage());
+        }
+        return resMap;
+    }
+
+    @PostMapping("receiveLMInfoICT")
+    @ApiOperation(value = "接收LM数据-ICT")
+    public Object receiveLMInfoICT(@RequestBody LMInfoIHubDTO lmInfoIHubDTO) {
+        Map<String, Object> resMap = Maps.newHashMap();
+        try {
+            String base64 = lmInfoIHubDTO.getBase64();
+            byte[] decode = Base64.getDecoder().decode(base64);
+            String text = FileUtil.getText(new ByteArrayInputStream(decode));
+            String[] splitN = text.split("\n");
+            for (String n : splitN) {
+                String[] strings = n.split(",");
+                EdiLoadIct loadIct = new EdiLoadIct();
+                loadIct.setStatus(0);
+                loadIct.setHawb(strings[1]);
+                loadIct.setLoadingNo(strings[2]);
+                loadIct.setPalletId(strings[3]);
+                loadIct.setPcs(strings[4]);
+                loadIct.setCtns(strings[5]);
+                loadIct.setGw(strings[6]);
+                loadIct.setFwd(strings[7]);
+                loadIct.setPoe(strings[8]);
+                ediLoadIctMapper.insertSelective(loadIct);
+            }
+            resMap.put("code", 0);
+            resMap.put("message", "success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resMap.put("code", -1);
+            resMap.put("message", e.getMessage());
+        }
+        return resMap;
+    }
 }

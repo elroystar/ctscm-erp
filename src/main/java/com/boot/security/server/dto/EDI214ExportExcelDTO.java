@@ -47,7 +47,6 @@ public class EDI214ExportExcelDTO implements Serializable {
     private String excepPackage;
     private String excepQty;
     private String accStatus;
-    private String dispose997;
 
     public String getRegion() {
         return region;
@@ -393,14 +392,6 @@ public class EDI214ExportExcelDTO implements Serializable {
         this.accStatus = accStatus;
     }
 
-    public String getDispose997() {
-        return dispose997;
-    }
-
-    public void setDispose997(String dispose997) {
-        this.dispose997 = dispose997;
-    }
-
     @Override
     public String toString() {
         return "" +
@@ -446,7 +437,6 @@ public class EDI214ExportExcelDTO implements Serializable {
                 "," + excepCode + 
                 "," + excepPackage + 
                 "," + excepQty + 
-                "," + accStatus +
-                "," + dispose997;
+                "," + accStatus;
     }
 }

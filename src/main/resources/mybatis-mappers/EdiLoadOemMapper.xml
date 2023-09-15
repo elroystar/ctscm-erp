@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EdiLoadOemMapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EdiLoadOem">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="ship_date" jdbcType="VARCHAR" property="shipDate" />
+    <result column="plant_no" jdbcType="VARCHAR" property="plantNo" />
+    <result column="hawb" jdbcType="VARCHAR" property="hawb" />
+    <result column="loading_no" jdbcType="VARCHAR" property="loadingNo" />
+    <result column="pallet_id" jdbcType="VARCHAR" property="palletId" />
+    <result column="pcs" jdbcType="VARCHAR" property="pcs" />
+    <result column="ctns" jdbcType="VARCHAR" property="ctns" />
+    <result column="gw" jdbcType="VARCHAR" property="gw" />
+    <result column="fwd" jdbcType="VARCHAR" property="fwd" />
+    <result column="poe" jdbcType="VARCHAR" property="poe" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="fwd_945" jdbcType="VARCHAR" property="fwd945" />
+    <result column="fwd_code_945" jdbcType="VARCHAR" property="fwdCode945" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, status, ship_date, plant_no, hawb, loading_no, pallet_id, pcs, ctns, gw, fwd, 
+    poe, region, fwd_945, fwd_code_945
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_load_oem
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_load_oem
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EdiLoadOem">
+    insert into edi_load_oem (id, status, ship_date, 
+      plant_no, hawb, loading_no, 
+      pallet_id, pcs, ctns, 
+      gw, fwd, poe, region, 
+      fwd_945, fwd_code_945)
+    values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{shipDate,jdbcType=VARCHAR}, 
+      #{plantNo,jdbcType=VARCHAR}, #{hawb,jdbcType=VARCHAR}, #{loadingNo,jdbcType=VARCHAR}, 
+      #{palletId,jdbcType=VARCHAR}, #{pcs,jdbcType=VARCHAR}, #{ctns,jdbcType=VARCHAR}, 
+      #{gw,jdbcType=VARCHAR}, #{fwd,jdbcType=VARCHAR}, #{poe,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, 
+      #{fwd945,jdbcType=VARCHAR}, #{fwdCode945,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EdiLoadOem">
+    insert into edi_load_oem
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="shipDate != null">
+        ship_date,
+      </if>
+      <if test="plantNo != null">
+        plant_no,
+      </if>
+      <if test="hawb != null">
+        hawb,
+      </if>
+      <if test="loadingNo != null">
+        loading_no,
+      </if>
+      <if test="palletId != null">
+        pallet_id,
+      </if>
+      <if test="pcs != null">
+        pcs,
+      </if>
+      <if test="ctns != null">
+        ctns,
+      </if>
+      <if test="gw != null">
+        gw,
+      </if>
+      <if test="fwd != null">
+        fwd,
+      </if>
+      <if test="poe != null">
+        poe,
+      </if>
+      <if test="region != null">
+        region,
+      </if>
+      <if test="fwd945 != null">
+        fwd_945,
+      </if>
+      <if test="fwdCode945 != null">
+        fwd_code_945,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shipDate != null">
+        #{shipDate,jdbcType=VARCHAR},
+      </if>
+      <if test="plantNo != null">
+        #{plantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hawb != null">
+        #{hawb,jdbcType=VARCHAR},
+      </if>
+      <if test="loadingNo != null">
+        #{loadingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="palletId != null">
+        #{palletId,jdbcType=VARCHAR},
+      </if>
+      <if test="pcs != null">
+        #{pcs,jdbcType=VARCHAR},
+      </if>
+      <if test="ctns != null">
+        #{ctns,jdbcType=VARCHAR},
+      </if>
+      <if test="gw != null">
+        #{gw,jdbcType=VARCHAR},
+      </if>
+      <if test="fwd != null">
+        #{fwd,jdbcType=VARCHAR},
+      </if>
+      <if test="poe != null">
+        #{poe,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="fwd945 != null">
+        #{fwd945,jdbcType=VARCHAR},
+      </if>
+      <if test="fwdCode945 != null">
+        #{fwdCode945,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EdiLoadOem">
+    update edi_load_oem
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shipDate != null">
+        ship_date = #{shipDate,jdbcType=VARCHAR},
+      </if>
+      <if test="plantNo != null">
+        plant_no = #{plantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hawb != null">
+        hawb = #{hawb,jdbcType=VARCHAR},
+      </if>
+      <if test="loadingNo != null">
+        loading_no = #{loadingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="palletId != null">
+        pallet_id = #{palletId,jdbcType=VARCHAR},
+      </if>
+      <if test="pcs != null">
+        pcs = #{pcs,jdbcType=VARCHAR},
+      </if>
+      <if test="ctns != null">
+        ctns = #{ctns,jdbcType=VARCHAR},
+      </if>
+      <if test="gw != null">
+        gw = #{gw,jdbcType=VARCHAR},
+      </if>
+      <if test="fwd != null">
+        fwd = #{fwd,jdbcType=VARCHAR},
+      </if>
+      <if test="poe != null">
+        poe = #{poe,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="fwd945 != null">
+        fwd_945 = #{fwd945,jdbcType=VARCHAR},
+      </if>
+      <if test="fwdCode945 != null">
+        fwd_code_945 = #{fwdCode945,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EdiLoadOem">
+    update edi_load_oem
+    set status = #{status,jdbcType=INTEGER},
+      ship_date = #{shipDate,jdbcType=VARCHAR},
+      plant_no = #{plantNo,jdbcType=VARCHAR},
+      hawb = #{hawb,jdbcType=VARCHAR},
+      loading_no = #{loadingNo,jdbcType=VARCHAR},
+      pallet_id = #{palletId,jdbcType=VARCHAR},
+      pcs = #{pcs,jdbcType=VARCHAR},
+      ctns = #{ctns,jdbcType=VARCHAR},
+      gw = #{gw,jdbcType=VARCHAR},
+      fwd = #{fwd,jdbcType=VARCHAR},
+      poe = #{poe,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      fwd_945 = #{fwd945,jdbcType=VARCHAR},
+      fwd_code_945 = #{fwdCode945,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
