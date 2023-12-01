@@ -441,10 +441,15 @@ public class ShipperController {
             } else {
                 excelDTO.setReason("");
             }
-            if (edi945.getSender().equals("HHAZZ-000295A7P")
-                    || edi945.getSender().equals("HHETY-000295AJP")
+            if (edi945.getSender().equals("HHUZZ-000295A7P")
                     || edi945.getSender().equals("HHEZZ-000295A7P")
+                    || edi945.getSender().equals("HHAZZ-000295A7P")
+                    || edi945.getSender().equals("HHETY-000295AJP")
+                    || edi945.getSender().equals("HHEGL-00029584P")
+                    || edi945.getSender().equals("HHAGL-00029584P")
                     || edi945.getSender().equals("HHUTY-000295AJP")
+                    || edi945.getSender().equals("HHETY-000295AJP")
+                    || edi945.getSender().equals("HHATY-000295AJP")
                     || edi945.getSender().equals("ICTJX")) {
                 excelDTO.setDivison("FG");
             } else if (edi945.getSender().equals("HHGL-HUBACP")
