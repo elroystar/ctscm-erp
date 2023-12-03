@@ -359,12 +359,12 @@ public class ShipperController {
         String exportType = request.getParameter("exportType");
         if ("945".equals(exportType)) {
             List<Object[]> data = new ArrayList<>();
-            List<EDI945> edi945List = edi945Mapper.list(params, 0, 9999);
+            List<EDI945> edi945List = edi945Mapper.list(params, 0, 999999);
             export945(response, data, edi945List);
         }
         if ("214".equals(exportType)) {
             List<Object[]> data = new ArrayList<>();
-            List<EDI945> edi945List = edi945Mapper.list(params, 0, 9999);
+            List<EDI945> edi945List = edi945Mapper.list(params, 0, 999999);
             export214(response, shipDate, data, edi945List);
         }
     }
@@ -377,12 +377,12 @@ public class ShipperController {
         String exportType = request.getParameter("exportType");
         if ("945".equals(exportType)) {
             List<Object[]> data = new ArrayList<>();
-            List<EDI945> edi945List = edi945Mapper.listOEM(params, 0, 9999);
+            List<EDI945> edi945List = edi945Mapper.listOEM(params, 0, 999999);
             export945(response, data, edi945List);
         }
         if ("214".equals(exportType)) {
             List<Object[]> data = new ArrayList<>();
-            List<EDI945> edi945List = edi945Mapper.listOEM(params, 0, 9999);
+            List<EDI945> edi945List = edi945Mapper.listOEM(params, 0, 999999);
             export214(response, shipDate, data, edi945List);
         }
     }
@@ -395,12 +395,12 @@ public class ShipperController {
         String exportType = request.getParameter("exportType");
         if ("945".equals(exportType)) {
             List<Object[]> data = new ArrayList<>();
-            List<EDI945> edi945List = edi945Mapper.listICT(params, 0, 9999);
+            List<EDI945> edi945List = edi945Mapper.listICT(params, 0, 999999);
             export945(response, data, edi945List);
         }
         if ("214".equals(exportType)) {
             List<Object[]> data = new ArrayList<>();
-            List<EDI945> edi945List = edi945Mapper.listICT(params, 0, 9999);
+            List<EDI945> edi945List = edi945Mapper.listICT(params, 0, 999999);
             export214(response, shipDate, data, edi945List);
         }
     }
@@ -661,7 +661,7 @@ public class ShipperController {
     @ApiOperation(value = "发送997数据")
     public Integer send997Info(@RequestBody Send997InfoDTO send997Info) {
         Map<String, Object> params = convert(send997Info);
-        List<EDI945> edi945List = edi945Mapper.getSend997Data(params, 0, 9999);
+        List<EDI945> edi945List = edi945Mapper.getSend997Data(params, 0, 999999);
         for (EDI945 edi945 : edi945List) {
             try {
                 FieldIhub997 fieldIhub997 = new FieldIhub997();

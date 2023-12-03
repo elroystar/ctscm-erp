@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EdiLoadOEMMapper">
+  <resultMap id="BaseResultMap" type="com.boot.security.server.model.EdiLoadOEM">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="ho_date" jdbcType="VARCHAR" property="hoDate" />
+    <result column="oem" jdbcType="VARCHAR" property="oem" />
+    <result column="forwarder" jdbcType="VARCHAR" property="forwarder" />
+    <result column="hawb" jdbcType="VARCHAR" property="hawb" />
+    <result column="pallet_id" jdbcType="VARCHAR" property="palletId" />
+    <result column="plts" jdbcType="VARCHAR" property="plts" />
+    <result column="ctns" jdbcType="VARCHAR" property="ctns" />
+    <result column="units" jdbcType="VARCHAR" property="units" />
+    <result column="length/cm" jdbcType="VARCHAR" property="lengthCm" />
+    <result column="width/cm" jdbcType="VARCHAR" property="widthCm" />
+    <result column="heigth/cm" jdbcType="VARCHAR" property="heigthCm" />
+    <result column="weigth/kg" jdbcType="VARCHAR" property="weigthKg" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, status, ho_date, oem, forwarder, hawb, pallet_id, plts, ctns, units, length/cm, 
+    width/cm, heigth/cm, weigth/kg, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from edi_load_oem
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from edi_load_oem
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.boot.security.server.model.EdiLoadOEM">
+    insert into edi_load_oem (id, status, ho_date, 
+      oem, forwarder, hawb, 
+      pallet_id, plts, ctns, 
+      units, length/cm, width/cm, 
+      heigth/cm, weigth/kg, remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{hoDate,jdbcType=VARCHAR}, 
+      #{oem,jdbcType=VARCHAR}, #{forwarder,jdbcType=VARCHAR}, #{hawb,jdbcType=VARCHAR}, 
+      #{palletId,jdbcType=VARCHAR}, #{plts,jdbcType=VARCHAR}, #{ctns,jdbcType=VARCHAR}, 
+      #{units,jdbcType=VARCHAR}, #{lengthCm,jdbcType=VARCHAR}, #{widthCm,jdbcType=VARCHAR}, 
+      #{heigthCm,jdbcType=VARCHAR}, #{weigthKg,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boot.security.server.model.EdiLoadOEM">
+    insert into edi_load_oem
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="hoDate != null">
+        ho_date,
+      </if>
+      <if test="oem != null">
+        oem,
+      </if>
+      <if test="forwarder != null">
+        forwarder,
+      </if>
+      <if test="hawb != null">
+        hawb,
+      </if>
+      <if test="palletId != null">
+        pallet_id,
+      </if>
+      <if test="plts != null">
+        plts,
+      </if>
+      <if test="ctns != null">
+        ctns,
+      </if>
+      <if test="units != null">
+        units,
+      </if>
+      <if test="lengthCm != null">
+        length/cm,
+      </if>
+      <if test="widthCm != null">
+        width/cm,
+      </if>
+      <if test="heigthCm != null">
+        heigth/cm,
+      </if>
+      <if test="weigthKg != null">
+        weigth/kg,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="hoDate != null">
+        #{hoDate,jdbcType=VARCHAR},
+      </if>
+      <if test="oem != null">
+        #{oem,jdbcType=VARCHAR},
+      </if>
+      <if test="forwarder != null">
+        #{forwarder,jdbcType=VARCHAR},
+      </if>
+      <if test="hawb != null">
+        #{hawb,jdbcType=VARCHAR},
+      </if>
+      <if test="palletId != null">
+        #{palletId,jdbcType=VARCHAR},
+      </if>
+      <if test="plts != null">
+        #{plts,jdbcType=VARCHAR},
+      </if>
+      <if test="ctns != null">
+        #{ctns,jdbcType=VARCHAR},
+      </if>
+      <if test="units != null">
+        #{units,jdbcType=VARCHAR},
+      </if>
+      <if test="lengthCm != null">
+        #{lengthCm,jdbcType=VARCHAR},
+      </if>
+      <if test="widthCm != null">
+        #{widthCm,jdbcType=VARCHAR},
+      </if>
+      <if test="heigthCm != null">
+        #{heigthCm,jdbcType=VARCHAR},
+      </if>
+      <if test="weigthKg != null">
+        #{weigthKg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EdiLoadOEM">
+    update edi_load_oem
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="hoDate != null">
+        ho_date = #{hoDate,jdbcType=VARCHAR},
+      </if>
+      <if test="oem != null">
+        oem = #{oem,jdbcType=VARCHAR},
+      </if>
+      <if test="forwarder != null">
+        forwarder = #{forwarder,jdbcType=VARCHAR},
+      </if>
+      <if test="hawb != null">
+        hawb = #{hawb,jdbcType=VARCHAR},
+      </if>
+      <if test="palletId != null">
+        pallet_id = #{palletId,jdbcType=VARCHAR},
+      </if>
+      <if test="plts != null">
+        plts = #{plts,jdbcType=VARCHAR},
+      </if>
+      <if test="ctns != null">
+        ctns = #{ctns,jdbcType=VARCHAR},
+      </if>
+      <if test="units != null">
+        units = #{units,jdbcType=VARCHAR},
+      </if>
+      <if test="lengthCm != null">
+        length/cm = #{lengthCm,jdbcType=VARCHAR},
+      </if>
+      <if test="widthCm != null">
+        width/cm = #{widthCm,jdbcType=VARCHAR},
+      </if>
+      <if test="heigthCm != null">
+        heigth/cm = #{heigthCm,jdbcType=VARCHAR},
+      </if>
+      <if test="weigthKg != null">
+        weigth/kg = #{weigthKg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boot.security.server.model.EdiLoadOEM">
+    update edi_load_oem
+    set status = #{status,jdbcType=INTEGER},
+      ho_date = #{hoDate,jdbcType=VARCHAR},
+      oem = #{oem,jdbcType=VARCHAR},
+      forwarder = #{forwarder,jdbcType=VARCHAR},
+      hawb = #{hawb,jdbcType=VARCHAR},
+      pallet_id = #{palletId,jdbcType=VARCHAR},
+      plts = #{plts,jdbcType=VARCHAR},
+      ctns = #{ctns,jdbcType=VARCHAR},
+      units = #{units,jdbcType=VARCHAR},
+      length/cm = #{lengthCm,jdbcType=VARCHAR},
+      width/cm = #{widthCm,jdbcType=VARCHAR},
+      heigth/cm = #{heigthCm,jdbcType=VARCHAR},
+      weigth/kg = #{weigthKg,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
