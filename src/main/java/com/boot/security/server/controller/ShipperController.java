@@ -1,12 +1,21 @@
 package com.boot.security.server.controller;
 
 import com.boot.security.server.annotation.LogAnnotation;
-import com.boot.security.server.dao.*;
+import com.boot.security.server.dao.DictDao;
+import com.boot.security.server.dao.EDI945Mapper;
+import com.boot.security.server.dao.EdiWzCancelMapper;
+import com.boot.security.server.dao.EdiWzUploadMapper;
+import com.boot.security.server.dao.FieldIhub997Mapper;
 import com.boot.security.server.dto.EDI214ExportExcelDTO;
 import com.boot.security.server.dto.EDI945ExportExcelDTO;
 import com.boot.security.server.dto.EditTruckDTO;
 import com.boot.security.server.dto.Send997InfoDTO;
-import com.boot.security.server.model.*;
+import com.boot.security.server.model.Dict;
+import com.boot.security.server.model.EDI945;
+import com.boot.security.server.model.EdiWzCancel;
+import com.boot.security.server.model.EdiWzUpload;
+import com.boot.security.server.model.FieldIhub997;
+import com.boot.security.server.model.FileInfo;
 import com.boot.security.server.page.table.PageTableHandler;
 import com.boot.security.server.page.table.PageTableHandler.CountHandler;
 import com.boot.security.server.page.table.PageTableHandler.ListHandler;
@@ -15,6 +24,7 @@ import com.boot.security.server.page.table.PageTableResponse;
 import com.boot.security.server.utils.DateUtil;
 import com.boot.security.server.utils.ExcelUtil;
 import com.boot.security.server.utils.FileUtil;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +34,13 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,14 +65,53 @@ public class ShipperController {
     @Autowired
     private DictDao dictDao;
 
-    @Autowired
-    private EdiWzUploadMapper ediWzUploadMapper;
-
-    @Autowired
-    private EdiWzCancelMapper ediWzCancelMapper;
+//    @Autowired
+//    private EdiWzUploadMapper ediWzUploadMapper;
+//
+//    @Autowired
+//    private EdiWzCancelMapper ediWzCancelMapper;
 
     @Autowired
     private FieldIhub997Mapper fieldIhub997Mapper;
+
+    private final static String senderFG = "HHUZZ-000295A7P,HHEZZ-000295A7P,HHAZZ-000295A7P,HHETY-000295AJP,HHEGL-00029584P,HHAGL-00029584P,HHUTY-000295AJP,HHATY-000295AJP,ICTJX";
+    private final static String senderAC = "HHGL-HUBACP,HHZZ-HUBACP,HHTY-HUBACP,ICTJXACP";
+
+    @GetMapping("/updateGPSDevice/{upPlantNumber}/{upGpsDevice}/{upCtTracking}")
+    @ApiOperation(value = "修改GPS车牌号")
+    public void updateGPSDevice(@PathVariable String upPlantNumber,
+                                @PathVariable String upGpsDevice,
+                                @PathVariable String upCtTracking) {
+        try {
+            edi945Mapper.updateGPSDevice(upGpsDevice, upPlantNumber, upCtTracking);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/updateGPSDeviceICT/{upPlantNumber}/{upGpsDevice}/{upCtTracking}")
+    @ApiOperation(value = "修改GPS车牌号")
+    public void updateGPSDeviceICT(@PathVariable String upPlantNumber,
+                                   @PathVariable String upGpsDevice,
+                                   @PathVariable String upCtTracking) {
+        try {
+            edi945Mapper.updateGPSDeviceICT(upGpsDevice, upPlantNumber, upCtTracking);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/updateGPSDeviceOEM/{upPlantNumber}/{upGpsDevice}/{upCtTracking}")
+    @ApiOperation(value = "修改GPS车牌号")
+    public void updateGPSDeviceOEM(@PathVariable String upPlantNumber,
+                                   @PathVariable String upGpsDevice,
+                                   @PathVariable String upCtTracking) {
+        try {
+            edi945Mapper.updateGPSDeviceOEM(upGpsDevice, upPlantNumber, upCtTracking);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @GetMapping("/getGPSInformation/{truckPlantNumber}/{desLon}/{desLat}/{gpsDevice}/{ctTracking}")
     @ApiOperation(value = "获取gps数据")
@@ -170,7 +225,8 @@ public class ShipperController {
 
     private void handleEDITable(EDI945 edi945) {
         // upload表数据写入
-        List<EdiWzUpload> ediWzUploads = ediWzUploadMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+//        List<EdiWzUpload> ediWzUploads = ediWzUploadMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+        List<EdiWzUpload> ediWzUploads = Lists.newArrayList();
         if (ediWzUploads.isEmpty()) {
             EdiWzUpload ediWzUpload = new EdiWzUpload();
             ediWzUpload.setStatus(0);
@@ -178,7 +234,7 @@ public class ShipperController {
             ediWzUpload.setLongitude(edi945.getDesLon());
             ediWzUpload.setLatitude(edi945.getDesLat());
             ediWzUpload.setLocationtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
-            ediWzUploadMapper.insertSelective(ediWzUpload);
+//            ediWzUploadMapper.insertSelective(ediWzUpload);
         } else {
             EdiWzUpload ediWzUpload = ediWzUploads.get(0);
             ediWzUpload.setStatus(0);
@@ -186,24 +242,25 @@ public class ShipperController {
             ediWzUpload.setLongitude(edi945.getDesLon());
             ediWzUpload.setLatitude(edi945.getDesLat());
             ediWzUpload.setLocationtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
-            ediWzUploadMapper.updateByPrimaryKey(ediWzUpload);
+//            ediWzUploadMapper.updateByPrimaryKey(ediWzUpload);
         }
         // 取消数据edi表数据写入
-        List<EdiWzCancel> ediWzCancels = ediWzCancelMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+//        List<EdiWzCancel> ediWzCancels = ediWzCancelMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+        List<EdiWzCancel> ediWzCancels = Lists.newArrayList();
         if (ediWzCancels.isEmpty()) {
             EdiWzCancel ediWzCancel = new EdiWzCancel();
             ediWzCancel.setStatus(0);
             ediWzCancel.setTrackno(edi945.getCtTracking());
             ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
             ediWzCancel.setTrackendtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
-            ediWzCancelMapper.insertSelective(ediWzCancel);
+//            ediWzCancelMapper.insertSelective(ediWzCancel);
         } else {
             EdiWzCancel ediWzCancel = ediWzCancels.get(0);
             ediWzCancel.setStatus(0);
             ediWzCancel.setTrackno(edi945.getCtTracking());
             ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
             ediWzCancel.setTrackendtime(DateUtil.format(new Date(), DateUtil.NORM_DATETIME_PATTERN));
-            ediWzCancelMapper.updateByPrimaryKey(ediWzCancel);
+//            ediWzCancelMapper.updateByPrimaryKey(ediWzCancel);
         }
         edi945.setGpsState(1);
         edi945.setTrackEndTime(new Date());
@@ -441,21 +498,9 @@ public class ShipperController {
             } else {
                 excelDTO.setReason("");
             }
-            if (edi945.getSender().equals("HHUZZ-000295A7P")
-                    || edi945.getSender().equals("HHEZZ-000295A7P")
-                    || edi945.getSender().equals("HHAZZ-000295A7P")
-                    || edi945.getSender().equals("HHETY-000295AJP")
-                    || edi945.getSender().equals("HHEGL-00029584P")
-                    || edi945.getSender().equals("HHAGL-00029584P")
-                    || edi945.getSender().equals("HHUTY-000295AJP")
-                    || edi945.getSender().equals("HHETY-000295AJP")
-                    || edi945.getSender().equals("HHATY-000295AJP")
-                    || edi945.getSender().equals("ICTJX")) {
+            if (senderFG.contains(edi945.getSender())) {
                 excelDTO.setDivison("FG");
-            } else if (edi945.getSender().equals("HHGL-HUBACP")
-                    || edi945.getSender().equals("HHZZ-HUBACP")
-                    || edi945.getSender().equals("HHTY-HUBACP")
-                    || edi945.getSender().equals("ICTJXACP")) {
+            } else if (senderAC.contains(edi945.getSender())) {
                 excelDTO.setDivison("AC");
             } else {
                 excelDTO.setDivison("");
@@ -578,6 +623,7 @@ public class ShipperController {
                 "Actual Date," +
                 "Sender," +
                 "Tracking Number," +
+                "SSCC18," +
                 "PO/DN," +
                 "Shipment Number," +
                 "Waybill," +
@@ -752,21 +798,9 @@ public class ShipperController {
         if (!regionTypeByK.isEmpty()) {
             edi945.setRegion(regionTypeByK.get(0));
         }
-        if (edi945.getSender().equals("HHUZZ-000295A7P")
-                || edi945.getSender().equals("HHEZZ-000295A7P")
-                || edi945.getSender().equals("HHAZZ-000295A7P")
-                || edi945.getSender().equals("HHETY-000295AJP")
-                || edi945.getSender().equals("HHEGL-00029584P")
-                || edi945.getSender().equals("HHAGL-00029584P")
-                || edi945.getSender().equals("HHUTY-000295AJP")
-                || edi945.getSender().equals("HHETY-000295AJP")
-                || edi945.getSender().equals("HHATY-000295AJP")
-                || edi945.getSender().equals("ICTJX")) {
+        if (senderFG.contains(edi945.getSender())) {
             edi945.setSender("FG");
-        } else if (edi945.getSender().equals("HHGL-HUBACP")
-                || edi945.getSender().equals("HHZZ-HUBACP")
-                || edi945.getSender().equals("HHTY-HUBACP")
-                || edi945.getSender().equals("ICTJXACP")) {
+        } else if (senderAC.contains(edi945.getSender())) {
             edi945.setSender("AC");
         }
     }
@@ -775,6 +809,20 @@ public class ShipperController {
         Map<String, Object> params = request.getParams();
         String region = (String) params.get("region");
         putRegion(params, region);
+
+        String sender = (String) params.get("sender");
+        if (StringUtils.equals(sender, "FG")) {
+            String[] split = senderFG.split(",");
+            params.put("sender", split);
+        } else if (StringUtils.equals(sender, "AC")) {
+            String[] split = senderAC.split(",");
+            params.put("sender", split);
+        } else {
+            if (StringUtils.isNotBlank(sender)) {
+                String[] split = sender.split(",");
+                params.put("sender", split);
+            }
+        }
     }
 
     private void putRegion(Map<String, Object> params, String region) {

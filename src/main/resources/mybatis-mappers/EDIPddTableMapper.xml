@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDIPddTableMapper">
+    <resultMap id="BaseResultMap" type="com.boot.security.server.dto.load.EDIPddTable">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="STATUS" jdbcType="INTEGER" property="status"/>
+        <result column="CREATEDTIME" jdbcType="TIMESTAMP" property="createdtime"/>
+        <result column="OEM" jdbcType="VARCHAR" property="oem"/>
+        <result column="ShipDate" jdbcType="TIMESTAMP" property="shipdate"/>
+        <result column="Shipping_Point" jdbcType="VARCHAR" property="shippingPoint"/>
+        <result column="Shipping_Mode" jdbcType="VARCHAR" property="shippingMode"/>
+        <result column="Forwarder" jdbcType="VARCHAR" property="forwarder"/>
+        <result column="HAWB" jdbcType="VARCHAR" property="hawb"/>
+        <result column="MAWB" jdbcType="VARCHAR" property="mawb"/>
+        <result column="Pallets" jdbcType="INTEGER" property="pallets"/>
+        <result column="Pallet_ID_OEM" jdbcType="VARCHAR" property="palletIdOem"/>
+        <result column="Pallet_SSCC18" jdbcType="VARCHAR" property="palletSscc18"/>
+        <result column="Pallet_ID_Trucker" jdbcType="VARCHAR" property="palletIdTrucker"/>
+        <result column="Gross_Weight" jdbcType="DECIMAL" property="grossWeight"/>
+        <result column="Length" jdbcType="DECIMAL" property="length"/>
+        <result column="Width" jdbcType="DECIMAL" property="width"/>
+        <result column="Height" jdbcType="DECIMAL" property="height"/>
+        <result column="AppleDN" jdbcType="VARCHAR" property="appledn"/>
+        <result column="PONo" jdbcType="VARCHAR" property="pono"/>
+        <result column="Shipment_ID" jdbcType="VARCHAR" property="shipmentId"/>
+        <result column="Line_Item" jdbcType="VARCHAR" property="lineItem"/>
+        <result column="Project_Code" jdbcType="VARCHAR" property="projectCode"/>
+        <result column="Product_ID" jdbcType="VARCHAR" property="productId"/>
+        <result column="Line_Item_Quantity" jdbcType="VARCHAR" property="lineItemQuantity"/>
+        <result column="Region" jdbcType="VARCHAR" property="region"/>
+        <result column="POE" jdbcType="VARCHAR" property="poe"/>
+        <result column="Destination" jdbcType="VARCHAR" property="destination"/>
+        <result column="Gateway" jdbcType="VARCHAR" property="gateway"/>
+        <result column="Consolidation_warehouse" jdbcType="VARCHAR" property="consolidationWarehouse"/>
+        <result column="SLAC" jdbcType="INTEGER" property="slac"/>
+        <result column="CBM" jdbcType="DECIMAL" property="cbm"/>
+        <result column="NPI_Flag" jdbcType="VARCHAR" property="npiFlag"/>
+        <result column="Security_Level" jdbcType="VARCHAR" property="securityLevel"/>
+        <result column="Handover" jdbcType="VARCHAR" property="handover"/>
+        <result column="Ship_Type" jdbcType="VARCHAR" property="shipType"/>
+        <result column="Hub_Code" jdbcType="VARCHAR" property="hubCode"/>
+        <result column="GCCN" jdbcType="VARCHAR" property="gccn"/>
+        <result column="Service_Level" jdbcType="VARCHAR" property="serviceLevel"/>
+        <result column="Service_Level_ID" jdbcType="VARCHAR" property="serviceLevelId"/>
+        <result column="Country_Of_Clearance" jdbcType="VARCHAR" property="countryOfClearance"/>
+        <result column="Ship_To_City" jdbcType="VARCHAR" property="shipToCity"/>
+        <result column="Marking_Nbrs" jdbcType="VARCHAR" property="markingNbrs"/>
+        <result column="Payment_Term" jdbcType="VARCHAR" property="paymentTerm"/>
+        <result column="Battery" jdbcType="VARCHAR" property="battery"/>
+        <result column="DG_Declaration" jdbcType="VARCHAR" property="dgDeclaration"/>
+        <result column="Container_No" jdbcType="VARCHAR" property="containerNo"/>
+        <result column="Broker" jdbcType="VARCHAR" property="broker"/>
+        <result column="Truck_No" jdbcType="VARCHAR" property="truckNo"/>
+        <result column="Load_List_No" jdbcType="VARCHAR" property="loadListNo"/>
+        <result column="Sales_No" jdbcType="VARCHAR" property="salesNo"/>
+        <result column="Customs_ID" jdbcType="VARCHAR" property="customsId"/>
+        <result column="CCM" jdbcType="VARCHAR" property="ccm"/>
+        <result column="POD" jdbcType="VARCHAR" property="pod"/>
+        <result column="DPC" jdbcType="VARCHAR" property="dpc"/>
+        <result column="Container_Weight" jdbcType="VARCHAR" property="containerWeight"/>
+        <result column="Manifest" jdbcType="VARCHAR" property="manifest"/>
+        <result column="SVC_No" jdbcType="VARCHAR" property="svcNo"/>
+        <result column="Terminal" jdbcType="VARCHAR" property="terminal"/>
+        <result column="SCAC_FWD" jdbcType="VARCHAR" property="scacFwd"/>
+        <result column="SCAC_Trucker" jdbcType="VARCHAR" property="scacTrucker"/>
+        <result column="SealNr_Truck" jdbcType="VARCHAR" property="sealnrTruck"/>
+        <result column="SealNr_OceanContainer" jdbcType="VARCHAR" property="sealnrOceancontainer"/>
+        <result column="Vessel_IMO" jdbcType="VARCHAR" property="vesselImo"/>
+        <result column="DWT" jdbcType="DECIMAL" property="dwt"/>
+        <result column="Port_to_Port_Distance" jdbcType="DECIMAL" property="portToPortDistance"/>
+        <result column="Vessel_Distance_Traveled" jdbcType="DECIMAL" property="vesselDistanceTraveled"/>
+        <result column="Fast_Boat_Service" jdbcType="VARCHAR" property="fastBoatService"/>
+        <result column="Standard_Ocean_Service" jdbcType="VARCHAR" property="standardOceanService"/>
+        <result column="ICAO_Flight_Code" jdbcType="VARCHAR" property="icaoFlightCode"/>
+        <result column="Aircraft_Type" jdbcType="VARCHAR" property="aircraftType"/>
+        <result column="Aircraft_Name" jdbcType="VARCHAR" property="aircraftName"/>
+        <result column="Flight_Distance" jdbcType="DECIMAL" property="flightDistance"/>
+        <result column="Flight_Time" jdbcType="DECIMAL" property="flightTime"/>
+        <result column="Flight_No" jdbcType="VARCHAR" property="flightNo"/>
+        <result column="GPS_Transmitter_No" jdbcType="VARCHAR" property="gpsTransmitterNo"/>
+        <result column="Driver_Ph_No" jdbcType="VARCHAR" property="driverPhNo"/>
+        <result column="Trailer_No" jdbcType="VARCHAR" property="trailerNo"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID
+        , STATUS, CREATEDTIME, OEM, ShipDate, Shipping_Point, Shipping_Mode, Forwarder,
+    HAWB, MAWB, Pallets, Pallet_ID_OEM, Pallet_SSCC18, Pallet_ID_Trucker, Gross_Weight, 
+    Length, Width, Height, AppleDN, PONo, Shipment_ID, Line_Item, Project_Code, Product_ID, 
+    Line_Item_Quantity, Region, POE, Destination, Gateway, Consolidation_warehouse, SLAC, 
+    CBM, NPI_Flag, Security_Level, Handover, Ship_Type, Hub_Code, GCCN, Service_Level, 
+    Service_Level_ID, Country_Of_Clearance, Ship_To_City, Marking_Nbrs, Payment_Term, 
+    Battery, DG_Declaration, Container_No, Broker, Truck_No, Load_List_No, Sales_No, 
+    Customs_ID, CCM, POD, DPC, Container_Weight, Manifest, SVC_No, Terminal, SCAC_FWD, 
+    SCAC_Trucker, SealNr_Truck, SealNr_OceanContainer, Vessel_IMO, DWT, Port_to_Port_Distance, 
+    Vessel_Distance_Traveled, Fast_Boat_Service, Standard_Ocean_Service, ICAO_Flight_Code, 
+    Aircraft_Type, Aircraft_Name, Flight_Distance, Flight_Time, Flight_No, GPS_Transmitter_No, 
+    Driver_Ph_No, Trailer_No
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pdd_table
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from pdd_table
+        where ID = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.boot.security.server.dto.load.EDIPddTable">
+        insert into pdd_table (ID, STATUS, CREATEDTIME,
+                               OEM, ShipDate, Shipping_Point,
+                               Shipping_Mode, Forwarder, HAWB,
+                               MAWB, Pallets, Pallet_ID_OEM,
+                               Pallet_SSCC18, Pallet_ID_Trucker, Gross_Weight,
+                               Length, Width, Height,
+                               AppleDN, PONo, Shipment_ID,
+                               Line_Item, Project_Code, Product_ID,
+                               Line_Item_Quantity, Region, POE,
+                               Destination, Gateway, Consolidation_warehouse,
+                               SLAC, CBM, NPI_Flag,
+                               Security_Level, Handover, Ship_Type,
+                               Hub_Code, GCCN, Service_Level,
+                               Service_Level_ID, Country_Of_Clearance, Ship_To_City,
+                               Marking_Nbrs, Payment_Term, Battery,
+                               DG_Declaration, Container_No, Broker,
+                               Truck_No, Load_List_No, Sales_No,
+                               Customs_ID, CCM, POD,
+                               DPC, Container_Weight, Manifest,
+                               SVC_No, Terminal, SCAC_FWD,
+                               SCAC_Trucker, SealNr_Truck, SealNr_OceanContainer,
+                               Vessel_IMO, DWT, Port_to_Port_Distance,
+                               Vessel_Distance_Traveled, Fast_Boat_Service,
+                               Standard_Ocean_Service, ICAO_Flight_Code, Aircraft_Type,
+                               Aircraft_Name, Flight_Distance, Flight_Time,
+                               Flight_No, GPS_Transmitter_No, Driver_Ph_No,
+                               Trailer_No)
+        values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createdtime,jdbcType=TIMESTAMP},
+                #{oem,jdbcType=VARCHAR}, #{shipdate,jdbcType=TIMESTAMP}, #{shippingPoint,jdbcType=VARCHAR},
+                #{shippingMode,jdbcType=VARCHAR}, #{forwarder,jdbcType=VARCHAR}, #{hawb,jdbcType=VARCHAR},
+                #{mawb,jdbcType=VARCHAR}, #{pallets,jdbcType=INTEGER}, #{palletIdOem,jdbcType=VARCHAR},
+                #{palletSscc18,jdbcType=VARCHAR}, #{palletIdTrucker,jdbcType=VARCHAR}, #{grossWeight,jdbcType=DECIMAL},
+                #{length,jdbcType=DECIMAL}, #{width,jdbcType=DECIMAL}, #{height,jdbcType=DECIMAL},
+                #{appledn,jdbcType=VARCHAR}, #{pono,jdbcType=VARCHAR}, #{shipmentId,jdbcType=VARCHAR},
+                #{lineItem,jdbcType=VARCHAR}, #{projectCode,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR},
+                #{lineItemQuantity,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, #{poe,jdbcType=VARCHAR},
+                #{destination,jdbcType=VARCHAR}, #{gateway,jdbcType=VARCHAR},
+                #{consolidationWarehouse,jdbcType=VARCHAR},
+                #{slac,jdbcType=INTEGER}, #{cbm,jdbcType=DECIMAL}, #{npiFlag,jdbcType=VARCHAR},
+                #{securityLevel,jdbcType=VARCHAR}, #{handover,jdbcType=VARCHAR}, #{shipType,jdbcType=VARCHAR},
+                #{hubCode,jdbcType=VARCHAR}, #{gccn,jdbcType=VARCHAR}, #{serviceLevel,jdbcType=VARCHAR},
+                #{serviceLevelId,jdbcType=VARCHAR}, #{countryOfClearance,jdbcType=VARCHAR},
+                #{shipToCity,jdbcType=VARCHAR},
+                #{markingNbrs,jdbcType=VARCHAR}, #{paymentTerm,jdbcType=VARCHAR}, #{battery,jdbcType=VARCHAR},
+                #{dgDeclaration,jdbcType=VARCHAR}, #{containerNo,jdbcType=VARCHAR}, #{broker,jdbcType=VARCHAR},
+                #{truckNo,jdbcType=VARCHAR}, #{loadListNo,jdbcType=VARCHAR}, #{salesNo,jdbcType=VARCHAR},
+                #{customsId,jdbcType=VARCHAR}, #{ccm,jdbcType=VARCHAR}, #{pod,jdbcType=VARCHAR},
+                #{dpc,jdbcType=VARCHAR}, #{containerWeight,jdbcType=VARCHAR}, #{manifest,jdbcType=VARCHAR},
+                #{svcNo,jdbcType=VARCHAR}, #{terminal,jdbcType=VARCHAR}, #{scacFwd,jdbcType=VARCHAR},
+                #{scacTrucker,jdbcType=VARCHAR}, #{sealnrTruck,jdbcType=VARCHAR},
+                #{sealnrOceancontainer,jdbcType=VARCHAR},
+                #{vesselImo,jdbcType=VARCHAR}, #{dwt,jdbcType=DECIMAL}, #{portToPortDistance,jdbcType=DECIMAL},
+                #{vesselDistanceTraveled,jdbcType=DECIMAL}, #{fastBoatService,jdbcType=VARCHAR},
+                #{standardOceanService,jdbcType=VARCHAR}, #{icaoFlightCode,jdbcType=VARCHAR},
+                #{aircraftType,jdbcType=VARCHAR},
+                #{aircraftName,jdbcType=VARCHAR}, #{flightDistance,jdbcType=DECIMAL}, #{flightTime,jdbcType=DECIMAL},
+                #{flightNo,jdbcType=VARCHAR}, #{gpsTransmitterNo,jdbcType=VARCHAR}, #{driverPhNo,jdbcType=VARCHAR},
+                #{trailerNo,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.boot.security.server.dto.load.EDIPddTable">
+        insert into pdd_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="createdtime != null">
+                CREATEDTIME,
+            </if>
+            <if test="oem != null">
+                OEM,
+            </if>
+            <if test="shipdate != null">
+                ShipDate,
+            </if>
+            <if test="shippingPoint != null">
+                Shipping_Point,
+            </if>
+            <if test="shippingMode != null">
+                Shipping_Mode,
+            </if>
+            <if test="forwarder != null">
+                Forwarder,
+            </if>
+            <if test="hawb != null">
+                HAWB,
+            </if>
+            <if test="mawb != null">
+                MAWB,
+            </if>
+            <if test="pallets != null">
+                Pallets,
+            </if>
+            <if test="palletIdOem != null">
+                Pallet_ID_OEM,
+            </if>
+            <if test="palletSscc18 != null">
+                Pallet_SSCC18,
+            </if>
+            <if test="palletIdTrucker != null">
+                Pallet_ID_Trucker,
+            </if>
+            <if test="grossWeight != null">
+                Gross_Weight,
+            </if>
+            <if test="length != null">
+                Length,
+            </if>
+            <if test="width != null">
+                Width,
+            </if>
+            <if test="height != null">
+                Height,
+            </if>
+            <if test="appledn != null">
+                AppleDN,
+            </if>
+            <if test="pono != null">
+                PONo,
+            </if>
+            <if test="shipmentId != null">
+                Shipment_ID,
+            </if>
+            <if test="lineItem != null">
+                Line_Item,
+            </if>
+            <if test="projectCode != null">
+                Project_Code,
+            </if>
+            <if test="productId != null">
+                Product_ID,
+            </if>
+            <if test="lineItemQuantity != null">
+                Line_Item_Quantity,
+            </if>
+            <if test="region != null">
+                Region,
+            </if>
+            <if test="poe != null">
+                POE,
+            </if>
+            <if test="destination != null">
+                Destination,
+            </if>
+            <if test="gateway != null">
+                Gateway,
+            </if>
+            <if test="consolidationWarehouse != null">
+                Consolidation_warehouse,
+            </if>
+            <if test="slac != null">
+                SLAC,
+            </if>
+            <if test="cbm != null">
+                CBM,
+            </if>
+            <if test="npiFlag != null">
+                NPI_Flag,
+            </if>
+            <if test="securityLevel != null">
+                Security_Level,
+            </if>
+            <if test="handover != null">
+                Handover,
+            </if>
+            <if test="shipType != null">
+                Ship_Type,
+            </if>
+            <if test="hubCode != null">
+                Hub_Code,
+            </if>
+            <if test="gccn != null">
+                GCCN,
+            </if>
+            <if test="serviceLevel != null">
+                Service_Level,
+            </if>
+            <if test="serviceLevelId != null">
+                Service_Level_ID,
+            </if>
+            <if test="countryOfClearance != null">
+                Country_Of_Clearance,
+            </if>
+            <if test="shipToCity != null">
+                Ship_To_City,
+            </if>
+            <if test="markingNbrs != null">
+                Marking_Nbrs,
+            </if>
+            <if test="paymentTerm != null">
+                Payment_Term,
+            </if>
+            <if test="battery != null">
+                Battery,
+            </if>
+            <if test="dgDeclaration != null">
+                DG_Declaration,
+            </if>
+            <if test="containerNo != null">
+                Container_No,
+            </if>
+            <if test="broker != null">
+                Broker,
+            </if>
+            <if test="truckNo != null">
+                Truck_No,
+            </if>
+            <if test="loadListNo != null">
+                Load_List_No,
+            </if>
+            <if test="salesNo != null">
+                Sales_No,
+            </if>
+            <if test="customsId != null">
+                Customs_ID,
+            </if>
+            <if test="ccm != null">
+                CCM,
+            </if>
+            <if test="pod != null">
+                POD,
+            </if>
+            <if test="dpc != null">
+                DPC,
+            </if>
+            <if test="containerWeight != null">
+                Container_Weight,
+            </if>
+            <if test="manifest != null">
+                Manifest,
+            </if>
+            <if test="svcNo != null">
+                SVC_No,
+            </if>
+            <if test="terminal != null">
+                Terminal,
+            </if>
+            <if test="scacFwd != null">
+                SCAC_FWD,
+            </if>
+            <if test="scacTrucker != null">
+                SCAC_Trucker,
+            </if>
+            <if test="sealnrTruck != null">
+                SealNr_Truck,
+            </if>
+            <if test="sealnrOceancontainer != null">
+                SealNr_OceanContainer,
+            </if>
+            <if test="vesselImo != null">
+                Vessel_IMO,
+            </if>
+            <if test="dwt != null">
+                DWT,
+            </if>
+            <if test="portToPortDistance != null">
+                Port_to_Port_Distance,
+            </if>
+            <if test="vesselDistanceTraveled != null">
+                Vessel_Distance_Traveled,
+            </if>
+            <if test="fastBoatService != null">
+                Fast_Boat_Service,
+            </if>
+            <if test="standardOceanService != null">
+                Standard_Ocean_Service,
+            </if>
+            <if test="icaoFlightCode != null">
+                ICAO_Flight_Code,
+            </if>
+            <if test="aircraftType != null">
+                Aircraft_Type,
+            </if>
+            <if test="aircraftName != null">
+                Aircraft_Name,
+            </if>
+            <if test="flightDistance != null">
+                Flight_Distance,
+            </if>
+            <if test="flightTime != null">
+                Flight_Time,
+            </if>
+            <if test="flightNo != null">
+                Flight_No,
+            </if>
+            <if test="gpsTransmitterNo != null">
+                GPS_Transmitter_No,
+            </if>
+            <if test="driverPhNo != null">
+                Driver_Ph_No,
+            </if>
+            <if test="trailerNo != null">
+                Trailer_No,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createdtime != null">
+                #{createdtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="oem != null">
+                #{oem,jdbcType=VARCHAR},
+            </if>
+            <if test="shipdate != null">
+                #{shipdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shippingPoint != null">
+                #{shippingPoint,jdbcType=VARCHAR},
+            </if>
+            <if test="shippingMode != null">
+                #{shippingMode,jdbcType=VARCHAR},
+            </if>
+            <if test="forwarder != null">
+                #{forwarder,jdbcType=VARCHAR},
+            </if>
+            <if test="hawb != null">
+                #{hawb,jdbcType=VARCHAR},
+            </if>
+            <if test="mawb != null">
+                #{mawb,jdbcType=VARCHAR},
+            </if>
+            <if test="pallets != null">
+                #{pallets,jdbcType=INTEGER},
+            </if>
+            <if test="palletIdOem != null">
+                #{palletIdOem,jdbcType=VARCHAR},
+            </if>
+            <if test="palletSscc18 != null">
+                #{palletSscc18,jdbcType=VARCHAR},
+            </if>
+            <if test="palletIdTrucker != null">
+                #{palletIdTrucker,jdbcType=VARCHAR},
+            </if>
+            <if test="grossWeight != null">
+                #{grossWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="length != null">
+                #{length,jdbcType=DECIMAL},
+            </if>
+            <if test="width != null">
+                #{width,jdbcType=DECIMAL},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=DECIMAL},
+            </if>
+            <if test="appledn != null">
+                #{appledn,jdbcType=VARCHAR},
+            </if>
+            <if test="pono != null">
+                #{pono,jdbcType=VARCHAR},
+            </if>
+            <if test="shipmentId != null">
+                #{shipmentId,jdbcType=VARCHAR},
+            </if>
+            <if test="lineItem != null">
+                #{lineItem,jdbcType=VARCHAR},
+            </if>
+            <if test="projectCode != null">
+                #{projectCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=VARCHAR},
+            </if>
+            <if test="lineItemQuantity != null">
+                #{lineItemQuantity,jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="poe != null">
+                #{poe,jdbcType=VARCHAR},
+            </if>
+            <if test="destination != null">
+                #{destination,jdbcType=VARCHAR},
+            </if>
+            <if test="gateway != null">
+                #{gateway,jdbcType=VARCHAR},
+            </if>
+            <if test="consolidationWarehouse != null">
+                #{consolidationWarehouse,jdbcType=VARCHAR},
+            </if>
+            <if test="slac != null">
+                #{slac,jdbcType=INTEGER},
+            </if>
+            <if test="cbm != null">
+                #{cbm,jdbcType=DECIMAL},
+            </if>
+            <if test="npiFlag != null">
+                #{npiFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="securityLevel != null">
+                #{securityLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="handover != null">
+                #{handover,jdbcType=VARCHAR},
+            </if>
+            <if test="shipType != null">
+                #{shipType,jdbcType=VARCHAR},
+            </if>
+            <if test="hubCode != null">
+                #{hubCode,jdbcType=VARCHAR},
+            </if>
+            <if test="gccn != null">
+                #{gccn,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceLevel != null">
+                #{serviceLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceLevelId != null">
+                #{serviceLevelId,jdbcType=VARCHAR},
+            </if>
+            <if test="countryOfClearance != null">
+                #{countryOfClearance,jdbcType=VARCHAR},
+            </if>
+            <if test="shipToCity != null">
+                #{shipToCity,jdbcType=VARCHAR},
+            </if>
+            <if test="markingNbrs != null">
+                #{markingNbrs,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentTerm != null">
+                #{paymentTerm,jdbcType=VARCHAR},
+            </if>
+            <if test="battery != null">
+                #{battery,jdbcType=VARCHAR},
+            </if>
+            <if test="dgDeclaration != null">
+                #{dgDeclaration,jdbcType=VARCHAR},
+            </if>
+            <if test="containerNo != null">
+                #{containerNo,jdbcType=VARCHAR},
+            </if>
+            <if test="broker != null">
+                #{broker,jdbcType=VARCHAR},
+            </if>
+            <if test="truckNo != null">
+                #{truckNo,jdbcType=VARCHAR},
+            </if>
+            <if test="loadListNo != null">
+                #{loadListNo,jdbcType=VARCHAR},
+            </if>
+            <if test="salesNo != null">
+                #{salesNo,jdbcType=VARCHAR},
+            </if>
+            <if test="customsId != null">
+                #{customsId,jdbcType=VARCHAR},
+            </if>
+            <if test="ccm != null">
+                #{ccm,jdbcType=VARCHAR},
+            </if>
+            <if test="pod != null">
+                #{pod,jdbcType=VARCHAR},
+            </if>
+            <if test="dpc != null">
+                #{dpc,jdbcType=VARCHAR},
+            </if>
+            <if test="containerWeight != null">
+                #{containerWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="manifest != null">
+                #{manifest,jdbcType=VARCHAR},
+            </if>
+            <if test="svcNo != null">
+                #{svcNo,jdbcType=VARCHAR},
+            </if>
+            <if test="terminal != null">
+                #{terminal,jdbcType=VARCHAR},
+            </if>
+            <if test="scacFwd != null">
+                #{scacFwd,jdbcType=VARCHAR},
+            </if>
+            <if test="scacTrucker != null">
+                #{scacTrucker,jdbcType=VARCHAR},
+            </if>
+            <if test="sealnrTruck != null">
+                #{sealnrTruck,jdbcType=VARCHAR},
+            </if>
+            <if test="sealnrOceancontainer != null">
+                #{sealnrOceancontainer,jdbcType=VARCHAR},
+            </if>
+            <if test="vesselImo != null">
+                #{vesselImo,jdbcType=VARCHAR},
+            </if>
+            <if test="dwt != null">
+                #{dwt,jdbcType=DECIMAL},
+            </if>
+            <if test="portToPortDistance != null">
+                #{portToPortDistance,jdbcType=DECIMAL},
+            </if>
+            <if test="vesselDistanceTraveled != null">
+                #{vesselDistanceTraveled,jdbcType=DECIMAL},
+            </if>
+            <if test="fastBoatService != null">
+                #{fastBoatService,jdbcType=VARCHAR},
+            </if>
+            <if test="standardOceanService != null">
+                #{standardOceanService,jdbcType=VARCHAR},
+            </if>
+            <if test="icaoFlightCode != null">
+                #{icaoFlightCode,jdbcType=VARCHAR},
+            </if>
+            <if test="aircraftType != null">
+                #{aircraftType,jdbcType=VARCHAR},
+            </if>
+            <if test="aircraftName != null">
+                #{aircraftName,jdbcType=VARCHAR},
+            </if>
+            <if test="flightDistance != null">
+                #{flightDistance,jdbcType=DECIMAL},
+            </if>
+            <if test="flightTime != null">
+                #{flightTime,jdbcType=DECIMAL},
+            </if>
+            <if test="flightNo != null">
+                #{flightNo,jdbcType=VARCHAR},
+            </if>
+            <if test="gpsTransmitterNo != null">
+                #{gpsTransmitterNo,jdbcType=VARCHAR},
+            </if>
+            <if test="driverPhNo != null">
+                #{driverPhNo,jdbcType=VARCHAR},
+            </if>
+            <if test="trailerNo != null">
+                #{trailerNo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.dto.load.EDIPddTable">
+        update pdd_table
+        <set>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createdtime != null">
+                CREATEDTIME = #{createdtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="oem != null">
+                OEM = #{oem,jdbcType=VARCHAR},
+            </if>
+            <if test="shipdate != null">
+                ShipDate = #{shipdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shippingPoint != null">
+                Shipping_Point = #{shippingPoint,jdbcType=VARCHAR},
+            </if>
+            <if test="shippingMode != null">
+                Shipping_Mode = #{shippingMode,jdbcType=VARCHAR},
+            </if>
+            <if test="forwarder != null">
+                Forwarder = #{forwarder,jdbcType=VARCHAR},
+            </if>
+            <if test="hawb != null">
+                HAWB = #{hawb,jdbcType=VARCHAR},
+            </if>
+            <if test="mawb != null">
+                MAWB = #{mawb,jdbcType=VARCHAR},
+            </if>
+            <if test="pallets != null">
+                Pallets = #{pallets,jdbcType=INTEGER},
+            </if>
+            <if test="palletIdOem != null">
+                Pallet_ID_OEM = #{palletIdOem,jdbcType=VARCHAR},
+            </if>
+            <if test="palletSscc18 != null">
+                Pallet_SSCC18 = #{palletSscc18,jdbcType=VARCHAR},
+            </if>
+            <if test="palletIdTrucker != null">
+                Pallet_ID_Trucker = #{palletIdTrucker,jdbcType=VARCHAR},
+            </if>
+            <if test="grossWeight != null">
+                Gross_Weight = #{grossWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="length != null">
+                Length = #{length,jdbcType=DECIMAL},
+            </if>
+            <if test="width != null">
+                Width = #{width,jdbcType=DECIMAL},
+            </if>
+            <if test="height != null">
+                Height = #{height,jdbcType=DECIMAL},
+            </if>
+            <if test="appledn != null">
+                AppleDN = #{appledn,jdbcType=VARCHAR},
+            </if>
+            <if test="pono != null">
+                PONo = #{pono,jdbcType=VARCHAR},
+            </if>
+            <if test="shipmentId != null">
+                Shipment_ID = #{shipmentId,jdbcType=VARCHAR},
+            </if>
+            <if test="lineItem != null">
+                Line_Item = #{lineItem,jdbcType=VARCHAR},
+            </if>
+            <if test="projectCode != null">
+                Project_Code = #{projectCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                Product_ID = #{productId,jdbcType=VARCHAR},
+            </if>
+            <if test="lineItemQuantity != null">
+                Line_Item_Quantity = #{lineItemQuantity,jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                Region = #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="poe != null">
+                POE = #{poe,jdbcType=VARCHAR},
+            </if>
+            <if test="destination != null">
+                Destination = #{destination,jdbcType=VARCHAR},
+            </if>
+            <if test="gateway != null">
+                Gateway = #{gateway,jdbcType=VARCHAR},
+            </if>
+            <if test="consolidationWarehouse != null">
+                Consolidation_warehouse = #{consolidationWarehouse,jdbcType=VARCHAR},
+            </if>
+            <if test="slac != null">
+                SLAC = #{slac,jdbcType=INTEGER},
+            </if>
+            <if test="cbm != null">
+                CBM = #{cbm,jdbcType=DECIMAL},
+            </if>
+            <if test="npiFlag != null">
+                NPI_Flag = #{npiFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="securityLevel != null">
+                Security_Level = #{securityLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="handover != null">
+                Handover = #{handover,jdbcType=VARCHAR},
+            </if>
+            <if test="shipType != null">
+                Ship_Type = #{shipType,jdbcType=VARCHAR},
+            </if>
+            <if test="hubCode != null">
+                Hub_Code = #{hubCode,jdbcType=VARCHAR},
+            </if>
+            <if test="gccn != null">
+                GCCN = #{gccn,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceLevel != null">
+                Service_Level = #{serviceLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceLevelId != null">
+                Service_Level_ID = #{serviceLevelId,jdbcType=VARCHAR},
+            </if>
+            <if test="countryOfClearance != null">
+                Country_Of_Clearance = #{countryOfClearance,jdbcType=VARCHAR},
+            </if>
+            <if test="shipToCity != null">
+                Ship_To_City = #{shipToCity,jdbcType=VARCHAR},
+            </if>
+            <if test="markingNbrs != null">
+                Marking_Nbrs = #{markingNbrs,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentTerm != null">
+                Payment_Term = #{paymentTerm,jdbcType=VARCHAR},
+            </if>
+            <if test="battery != null">
+                Battery = #{battery,jdbcType=VARCHAR},
+            </if>
+            <if test="dgDeclaration != null">
+                DG_Declaration = #{dgDeclaration,jdbcType=VARCHAR},
+            </if>
+            <if test="containerNo != null">
+                Container_No = #{containerNo,jdbcType=VARCHAR},
+            </if>
+            <if test="broker != null">
+                Broker = #{broker,jdbcType=VARCHAR},
+            </if>
+            <if test="truckNo != null">
+                Truck_No = #{truckNo,jdbcType=VARCHAR},
+            </if>
+            <if test="loadListNo != null">
+                Load_List_No = #{loadListNo,jdbcType=VARCHAR},
+            </if>
+            <if test="salesNo != null">
+                Sales_No = #{salesNo,jdbcType=VARCHAR},
+            </if>
+            <if test="customsId != null">
+                Customs_ID = #{customsId,jdbcType=VARCHAR},
+            </if>
+            <if test="ccm != null">
+                CCM = #{ccm,jdbcType=VARCHAR},
+            </if>
+            <if test="pod != null">
+                POD = #{pod,jdbcType=VARCHAR},
+            </if>
+            <if test="dpc != null">
+                DPC = #{dpc,jdbcType=VARCHAR},
+            </if>
+            <if test="containerWeight != null">
+                Container_Weight = #{containerWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="manifest != null">
+                Manifest = #{manifest,jdbcType=VARCHAR},
+            </if>
+            <if test="svcNo != null">
+                SVC_No = #{svcNo,jdbcType=VARCHAR},
+            </if>
+            <if test="terminal != null">
+                Terminal = #{terminal,jdbcType=VARCHAR},
+            </if>
+            <if test="scacFwd != null">
+                SCAC_FWD = #{scacFwd,jdbcType=VARCHAR},
+            </if>
+            <if test="scacTrucker != null">
+                SCAC_Trucker = #{scacTrucker,jdbcType=VARCHAR},
+            </if>
+            <if test="sealnrTruck != null">
+                SealNr_Truck = #{sealnrTruck,jdbcType=VARCHAR},
+            </if>
+            <if test="sealnrOceancontainer != null">
+                SealNr_OceanContainer = #{sealnrOceancontainer,jdbcType=VARCHAR},
+            </if>
+            <if test="vesselImo != null">
+                Vessel_IMO = #{vesselImo,jdbcType=VARCHAR},
+            </if>
+            <if test="dwt != null">
+                DWT = #{dwt,jdbcType=DECIMAL},
+            </if>
+            <if test="portToPortDistance != null">
+                Port_to_Port_Distance = #{portToPortDistance,jdbcType=DECIMAL},
+            </if>
+            <if test="vesselDistanceTraveled != null">
+                Vessel_Distance_Traveled = #{vesselDistanceTraveled,jdbcType=DECIMAL},
+            </if>
+            <if test="fastBoatService != null">
+                Fast_Boat_Service = #{fastBoatService,jdbcType=VARCHAR},
+            </if>
+            <if test="standardOceanService != null">
+                Standard_Ocean_Service = #{standardOceanService,jdbcType=VARCHAR},
+            </if>
+            <if test="icaoFlightCode != null">
+                ICAO_Flight_Code = #{icaoFlightCode,jdbcType=VARCHAR},
+            </if>
+            <if test="aircraftType != null">
+                Aircraft_Type = #{aircraftType,jdbcType=VARCHAR},
+            </if>
+            <if test="aircraftName != null">
+                Aircraft_Name = #{aircraftName,jdbcType=VARCHAR},
+            </if>
+            <if test="flightDistance != null">
+                Flight_Distance = #{flightDistance,jdbcType=DECIMAL},
+            </if>
+            <if test="flightTime != null">
+                Flight_Time = #{flightTime,jdbcType=DECIMAL},
+            </if>
+            <if test="flightNo != null">
+                Flight_No = #{flightNo,jdbcType=VARCHAR},
+            </if>
+            <if test="gpsTransmitterNo != null">
+                GPS_Transmitter_No = #{gpsTransmitterNo,jdbcType=VARCHAR},
+            </if>
+            <if test="driverPhNo != null">
+                Driver_Ph_No = #{driverPhNo,jdbcType=VARCHAR},
+            </if>
+            <if test="trailerNo != null">
+                Trailer_No = #{trailerNo,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.boot.security.server.dto.load.EDIPddTable">
+        update pdd_table
+        set STATUS                   = #{status,jdbcType=INTEGER},
+            CREATEDTIME              = #{createdtime,jdbcType=TIMESTAMP},
+            OEM                      = #{oem,jdbcType=VARCHAR},
+            ShipDate                 = #{shipdate,jdbcType=TIMESTAMP},
+            Shipping_Point           = #{shippingPoint,jdbcType=VARCHAR},
+            Shipping_Mode            = #{shippingMode,jdbcType=VARCHAR},
+            Forwarder                = #{forwarder,jdbcType=VARCHAR},
+            HAWB                     = #{hawb,jdbcType=VARCHAR},
+            MAWB                     = #{mawb,jdbcType=VARCHAR},
+            Pallets                  = #{pallets,jdbcType=INTEGER},
+            Pallet_ID_OEM            = #{palletIdOem,jdbcType=VARCHAR},
+            Pallet_SSCC18            = #{palletSscc18,jdbcType=VARCHAR},
+            Pallet_ID_Trucker        = #{palletIdTrucker,jdbcType=VARCHAR},
+            Gross_Weight             = #{grossWeight,jdbcType=DECIMAL},
+            Length                   = #{length,jdbcType=DECIMAL},
+            Width                    = #{width,jdbcType=DECIMAL},
+            Height                   = #{height,jdbcType=DECIMAL},
+            AppleDN                  = #{appledn,jdbcType=VARCHAR},
+            PONo                     = #{pono,jdbcType=VARCHAR},
+            Shipment_ID              = #{shipmentId,jdbcType=VARCHAR},
+            Line_Item                = #{lineItem,jdbcType=VARCHAR},
+            Project_Code             = #{projectCode,jdbcType=VARCHAR},
+            Product_ID               = #{productId,jdbcType=VARCHAR},
+            Line_Item_Quantity       = #{lineItemQuantity,jdbcType=VARCHAR},
+            Region                   = #{region,jdbcType=VARCHAR},
+            POE                      = #{poe,jdbcType=VARCHAR},
+            Destination              = #{destination,jdbcType=VARCHAR},
+            Gateway                  = #{gateway,jdbcType=VARCHAR},
+            Consolidation_warehouse  = #{consolidationWarehouse,jdbcType=VARCHAR},
+            SLAC                     = #{slac,jdbcType=INTEGER},
+            CBM                      = #{cbm,jdbcType=DECIMAL},
+            NPI_Flag                 = #{npiFlag,jdbcType=VARCHAR},
+            Security_Level           = #{securityLevel,jdbcType=VARCHAR},
+            Handover                 = #{handover,jdbcType=VARCHAR},
+            Ship_Type                = #{shipType,jdbcType=VARCHAR},
+            Hub_Code                 = #{hubCode,jdbcType=VARCHAR},
+            GCCN                     = #{gccn,jdbcType=VARCHAR},
+            Service_Level            = #{serviceLevel,jdbcType=VARCHAR},
+            Service_Level_ID         = #{serviceLevelId,jdbcType=VARCHAR},
+            Country_Of_Clearance     = #{countryOfClearance,jdbcType=VARCHAR},
+            Ship_To_City             = #{shipToCity,jdbcType=VARCHAR},
+            Marking_Nbrs             = #{markingNbrs,jdbcType=VARCHAR},
+            Payment_Term             = #{paymentTerm,jdbcType=VARCHAR},
+            Battery                  = #{battery,jdbcType=VARCHAR},
+            DG_Declaration           = #{dgDeclaration,jdbcType=VARCHAR},
+            Container_No             = #{containerNo,jdbcType=VARCHAR},
+            Broker                   = #{broker,jdbcType=VARCHAR},
+            Truck_No                 = #{truckNo,jdbcType=VARCHAR},
+            Load_List_No             = #{loadListNo,jdbcType=VARCHAR},
+            Sales_No                 = #{salesNo,jdbcType=VARCHAR},
+            Customs_ID               = #{customsId,jdbcType=VARCHAR},
+            CCM                      = #{ccm,jdbcType=VARCHAR},
+            POD                      = #{pod,jdbcType=VARCHAR},
+            DPC                      = #{dpc,jdbcType=VARCHAR},
+            Container_Weight         = #{containerWeight,jdbcType=VARCHAR},
+            Manifest                 = #{manifest,jdbcType=VARCHAR},
+            SVC_No                   = #{svcNo,jdbcType=VARCHAR},
+            Terminal                 = #{terminal,jdbcType=VARCHAR},
+            SCAC_FWD                 = #{scacFwd,jdbcType=VARCHAR},
+            SCAC_Trucker             = #{scacTrucker,jdbcType=VARCHAR},
+            SealNr_Truck             = #{sealnrTruck,jdbcType=VARCHAR},
+            SealNr_OceanContainer    = #{sealnrOceancontainer,jdbcType=VARCHAR},
+            Vessel_IMO               = #{vesselImo,jdbcType=VARCHAR},
+            DWT                      = #{dwt,jdbcType=DECIMAL},
+            Port_to_Port_Distance    = #{portToPortDistance,jdbcType=DECIMAL},
+            Vessel_Distance_Traveled = #{vesselDistanceTraveled,jdbcType=DECIMAL},
+            Fast_Boat_Service        = #{fastBoatService,jdbcType=VARCHAR},
+            Standard_Ocean_Service   = #{standardOceanService,jdbcType=VARCHAR},
+            ICAO_Flight_Code         = #{icaoFlightCode,jdbcType=VARCHAR},
+            Aircraft_Type            = #{aircraftType,jdbcType=VARCHAR},
+            Aircraft_Name            = #{aircraftName,jdbcType=VARCHAR},
+            Flight_Distance          = #{flightDistance,jdbcType=DECIMAL},
+            Flight_Time              = #{flightTime,jdbcType=DECIMAL},
+            Flight_No                = #{flightNo,jdbcType=VARCHAR},
+            GPS_Transmitter_No       = #{gpsTransmitterNo,jdbcType=VARCHAR},
+            Driver_Ph_No             = #{driverPhNo,jdbcType=VARCHAR},
+            Trailer_No               = #{trailerNo,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

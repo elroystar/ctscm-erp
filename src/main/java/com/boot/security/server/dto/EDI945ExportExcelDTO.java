@@ -12,6 +12,8 @@ public class EDI945ExportExcelDTO implements Serializable {
 
     private String trackingNumber;
 
+    private String cartonNo;
+
     private String dn;
 
     private String shipmentNumber;
@@ -98,6 +100,14 @@ public class EDI945ExportExcelDTO implements Serializable {
 
     public void setTrackingNumber(String trackingNumber) {
         this.trackingNumber = trackingNumber == null ? null : trackingNumber.trim();
+    }
+
+    public String getCartonNo() {
+        return cartonNo;
+    }
+
+    public void setCartonNo(String cartonNo) {
+        this.cartonNo = cartonNo;
     }
 
     public String getDn() {
@@ -251,6 +261,7 @@ public class EDI945ExportExcelDTO implements Serializable {
                 "," + actualDate +
                 "," + sender +
                 "," + trackingNumber +
+                "," + cartonNo +
                 "," + dn +
                 "," + shipmentNumber +
                 "," + waybill +

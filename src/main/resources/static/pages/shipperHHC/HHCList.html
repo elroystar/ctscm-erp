@@ -67,6 +67,9 @@
                                     <button id="send997" class="layui-btn"><i
                                             class="layui-icon">&#xe609;</i>发送997
                                     </button>
+                                    <button id="updateGPSDevice" class="layui-btn"><i
+                                            class="layui-icon">&#xe642;</i>修改GPS车牌号
+                                    </button>
                                 </div>
                             </form>
                         </td>
@@ -87,6 +90,7 @@
                         <th>Actual Date</th>
                         <th>Sender</th>
                         <th>Tracking Number</th>
+                        <th>SSCC18</th>
                         <th>PO/DN</th>
                         <th>Shipment Number</th>
                         <th>Waybill</th>
@@ -249,6 +253,7 @@
                     {"data": "actualDate", "defaultContent": ""},
                     {"data": "sender", "defaultContent": ""},
                     {"data": "trackingNumber", "defaultContent": ""},
+                    {"data": "cartonNo", "defaultContent": ""},
                     {"data": "dn", "defaultContent": ""},
                     {"data": "shipmentNumber", "defaultContent": ""},
                     {"data": "waybill", "defaultContent": ""},
@@ -284,7 +289,7 @@
                     {"data": "gpsUpdating", "defaultContent": ""},
                     {"data": "city", "defaultContent": ""},
                     {"data": "province", "defaultContent": ""},
-                    {"data": "position", "defaultContent": ""},
+                    {"data": "", "defaultContent": ""},
                     {"data": "longitude", "defaultContent": ""},
                     {"data": "latitude", "defaultContent": ""},
                     {"data": "messageid", "defaultContent": ""},
@@ -670,6 +675,68 @@
         $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desCtTracking\" class=\"layui-input\" placeholder=\"ct_tracking\"/>");
         $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desLon\" class=\"layui-input\" placeholder=\"目的地经度\"/>");
         $(".layui-layer-content").append("<br/><input type=\"text\" id= \"desLat\" class=\"layui-input\" placeholder=\"目的地纬度\"/>");
+        $(".layui-layer-content").append("<br/><span style='color: red;'>请仔细核对录入信息</span>");
+
+    });
+
+    $("#updateGPSDevice").click(function () {
+        layer.prompt({
+            title: '请输入信息',
+            formType: 0, //输入框类型，支持0（文本）默认1（密码）2（多行文本）
+            yes: function (index) {
+                let upGpsDevice = $('#upGpsDevice').val();
+                let upPlantNumber = $('#upPlantNumber').val();
+                let upCtTracking = $('#upCtTracking').val();
+                if (upGpsDevice === "") {
+                    layer.tips("请填写车牌号", $('#upGpsDevice'));
+                    return;
+                }
+                if (upPlantNumber === "") {
+                    layer.tips("请填写track_plant_number", $('#upPlantNumber'));
+                    return;
+                }
+                if (upCtTracking === "") {
+                    layer.tips("请填写ct_tracking", $('#upCtTracking'));
+                    return;
+                }
+                $.ajax({
+                    type: 'get',
+                    url: '/shipper/updateGPSDevice/' + upPlantNumber + '/' + upGpsDevice + '/' + upCtTracking,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        layer.close(index);
+                        layer.open({
+                            title: '开始修改GPS信息'
+                            , content: '修改完成'
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        var msg = xhr.responseText;
+                        console.log(msg);
+                        var response = JSON.parse(msg);
+                        var code = response.code;
+                        var message = response.message;
+                        if (code == 400) {
+                            layer.msg(message);
+                        } else if (code == 401) {
+                            localStorage.removeItem("token");
+                            layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                                location.href = '/login.html';
+                            });
+                        } else if (code == 403) {
+                            console.log("未授权:" + message);
+                            layer.msg('未授权');
+                        } else if (code == 500) {
+                            layer.msg('系统错误：' + message);
+                        }
+                    }
+                });
+            }
+        });
+        $(".layui-layer-content").empty();
+        $(".layui-layer-content").append("<input type=\"text\" id= \"upGpsDevice\" class=\"layui-input\" placeholder=\"车牌号\"/>");
+        $(".layui-layer-content").append("<br/><input type=\"text\" id= \"upPlantNumber\" class=\"layui-input\" placeholder=\"truck_plant_number\"/>");
+        $(".layui-layer-content").append("<br/><input type=\"text\" id= \"upCtTracking\" class=\"layui-input\" placeholder=\"ct_tracking\"/>");
         $(".layui-layer-content").append("<br/><span style='color: red;'>请仔细核对录入信息</span>");
 
     });

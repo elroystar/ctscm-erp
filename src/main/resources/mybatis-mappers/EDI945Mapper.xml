@@ -9,6 +9,7 @@
         <result column="actual_date" jdbcType="VARCHAR" property="actualDate"/>
         <result column="sender" jdbcType="VARCHAR" property="sender"/>
         <result column="tracking_number" jdbcType="VARCHAR" property="trackingNumber"/>
+        <result column="carton_no" jdbcType="VARCHAR" property="cartonNo"/>
         <result column="dn" jdbcType="VARCHAR" property="dn"/>
         <result column="shipment_number" jdbcType="VARCHAR" property="shipmentNumber"/>
         <result column="waybill" jdbcType="VARCHAR" property="waybill"/>
@@ -53,7 +54,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         id
-        , status, create_date, ship_date, actual_date, sender, tracking_number, dn, shipment_number,
+        , status, create_date, ship_date, actual_date, sender, tracking_number, carton_no, dn, shipment_number,
     waybill, shipway, fwd, fwd_code, oem, gateway, ctns, units, gw, ship_mode, poe, poe_country, 
     truck_plant_number, driver_name, cellular, ct_tracking, gps_device, gps_updating, city, province, `position`,
     longitude, latitude, messageid, dispose_997, inreceiverid, insenderid, appreceivercode, orisenderid, controlnumber, transationrp,
@@ -83,7 +84,10 @@
                 and truck_plant_number = #{params.truckPlantNumber,jdbcType=VARCHAR}
             </if>
             <if test="params.sender != null and params.sender != ''">
-                and sender = #{params.sender,jdbcType=VARCHAR}
+                and sender IN
+                <foreach collection="params.sender" item="sender" index="index" open="(" close=")" separator=",">
+                    #{sender}
+                </foreach>
             </if>
             <if test="params.shipDate != null and params.shipDate != ''">
                 and ship_date = #{params.shipDate,jdbcType=VARCHAR}
@@ -176,6 +180,12 @@
         and dispose_997 = 0
         order by ship_date desc
         limit #{offset}, #{limit}
+    </select>
+    <select id="getInfoByWaybill" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edi_945
+        where waybill = #{waybill,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
@@ -733,5 +743,23 @@
             transationrp = #{transationrp,jdbcType=VARCHAR},
             fuctionalrp  = #{fuctionalrp,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateGPSDevice">
+        update edi_945_gps
+        set gps_device = #{gpsDevice,jdbcType=VARCHAR}
+        where truck_plant_number = #{trackingNumber,jdbcType=VARCHAR}
+          and ct_tracking = #{ctTracking,jdbcType=VARCHAR}
+    </update>
+    <update id="updateGPSDeviceICT">
+        update edi_945_gps_ict
+        set gps_device = #{gpsDevice,jdbcType=VARCHAR}
+        where truck_plant_number = #{trackingNumber,jdbcType=VARCHAR}
+          and ct_tracking = #{ctTracking,jdbcType=VARCHAR}
+    </update>
+    <update id="updateGPSDeviceOEM">
+        update edi_945_gps_oem
+        set gps_device = #{gpsDevice,jdbcType=VARCHAR}
+        where truck_plant_number = #{trackingNumber,jdbcType=VARCHAR}
+          and ct_tracking = #{ctTracking,jdbcType=VARCHAR}
     </update>
 </mapper>

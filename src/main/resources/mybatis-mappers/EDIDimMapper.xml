@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDIDimMapper">
+    <resultMap id="BaseResultMap" type="com.boot.security.server.dto.load.EDIDim">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="ship_date" jdbcType="TIMESTAMP" property="shipDate"/>
+        <result column="oem" jdbcType="VARCHAR" property="oem"/>
+        <result column="shipping_mode" jdbcType="VARCHAR" property="shippingMode"/>
+        <result column="forwarder" jdbcType="VARCHAR" property="forwarder"/>
+        <result column="hawb" jdbcType="VARCHAR" property="hawb"/>
+        <result column="dn_po_line_number" jdbcType="VARCHAR" property="dnPoLineNumber"/>
+        <result column="sscc18_pallet_id" jdbcType="VARCHAR" property="sscc18PalletId"/>
+        <result column="oem_pallet_id" jdbcType="VARCHAR" property="oemPalletId"/>
+        <result column="trucker_pallet_id" jdbcType="VARCHAR" property="truckerPalletId"/>
+        <result column="product_id" jdbcType="VARCHAR" property="productId"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+        <result column="poe" jdbcType="VARCHAR" property="poe"/>
+        <result column="destination" jdbcType="VARCHAR" property="destination"/>
+        <result column="gateway" jdbcType="VARCHAR" property="gateway"/>
+        <result column="consolidation_w_h" jdbcType="VARCHAR" property="consolidationWH"/>
+        <result column="scac_fwd" jdbcType="VARCHAR" property="scacFwd"/>
+        <result column="scac_truck" jdbcType="VARCHAR" property="scacTruck"/>
+        <result column="seal_nr_ocean_container" jdbcType="VARCHAR" property="sealNrOceanContainer"/>
+        <result column="vessel_imo" jdbcType="VARCHAR" property="vesselImo"/>
+        <result column="dwt" jdbcType="DECIMAL" property="dwt"/>
+        <result column="port_to_port_distance" jdbcType="DECIMAL" property="portToPortDistance"/>
+        <result column="vessel_distance_traveled" jdbcType="DECIMAL" property="vesselDistanceTraveled"/>
+        <result column="fast_standard_ocean" jdbcType="VARCHAR" property="fastStandardOcean"/>
+        <result column="fast_boat_service" jdbcType="VARCHAR" property="fastBoatService"/>
+        <result column="standard_ocean_service" jdbcType="VARCHAR" property="standardOceanService"/>
+        <result column="icao_flight_code" jdbcType="VARCHAR" property="icaoFlightCode"/>
+        <result column="aircraft_type" jdbcType="VARCHAR" property="aircraftType"/>
+        <result column="airline_name" jdbcType="VARCHAR" property="airlineName"/>
+        <result column="flight_distance" jdbcType="DECIMAL" property="flightDistance"/>
+        <result column="gross_weight_kg" jdbcType="DECIMAL" property="grossWeightKg"/>
+        <result column="length_cm" jdbcType="DECIMAL" property="lengthCm"/>
+        <result column="width_cm" jdbcType="DECIMAL" property="widthCm"/>
+        <result column="height_cm" jdbcType="DECIMAL" property="heightCm"/>
+        <result column="weight_oem_data_kg" jdbcType="DECIMAL" property="weightOemDataKg"/>
+        <result column="length_oem_data_cm" jdbcType="DECIMAL" property="lengthOemDataCm"/>
+        <result column="width_oem_data_cm" jdbcType="DECIMAL" property="widthOemDataCm"/>
+        <result column="height_oem_data_cm" jdbcType="DECIMAL" property="heightOemDataCm"/>
+        <result column="weight_discrepancy_percentage" jdbcType="DECIMAL" property="weightDiscrepancyPercentage"/>
+        <result column="length_discrepancy_percentage" jdbcType="DECIMAL" property="lengthDiscrepancyPercentage"/>
+        <result column="width_discrepancy_percentage" jdbcType="DECIMAL" property="widthDiscrepancyPercentage"/>
+        <result column="height_discrepancy_percentage" jdbcType="DECIMAL" property="heightDiscrepancyPercentage"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , status, ship_date, oem, shipping_mode, forwarder, hawb, dn_po_line_number, sscc18_pallet_id,
+    oem_pallet_id, trucker_pallet_id, product_id, region, poe, destination, gateway, 
+    consolidation_w_h, scac_fwd, scac_truck, seal_nr_ocean_container, vessel_imo, dwt, 
+    port_to_port_distance, vessel_distance_traveled, fast_standard_ocean, fast_boat_service, 
+    standard_ocean_service, icao_flight_code, aircraft_type, airline_name, flight_distance, 
+    gross_weight_kg, length_cm, width_cm, height_cm, weight_oem_data_kg, length_oem_data_cm, 
+    width_oem_data_cm, height_oem_data_cm, weight_discrepancy_percentage, length_discrepancy_percentage, 
+    width_discrepancy_percentage, height_discrepancy_percentage, remark
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from edi_dim_ihub
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from edi_dim_ihub
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.boot.security.server.dto.load.EDIDim">
+        insert into edi_dim_ihub (id, status, ship_date,
+                                  oem, shipping_mode, forwarder,
+                                  hawb, dn_po_line_number, sscc18_pallet_id,
+                                  oem_pallet_id, trucker_pallet_id, product_id,
+                                  region, poe, destination,
+                                  gateway, consolidation_w_h, scac_fwd,
+                                  scac_truck, seal_nr_ocean_container, vessel_imo,
+                                  dwt, port_to_port_distance, vessel_distance_traveled,
+                                  fast_standard_ocean, fast_boat_service, standard_ocean_service,
+                                  icao_flight_code, aircraft_type, airline_name,
+                                  flight_distance, gross_weight_kg, length_cm,
+                                  width_cm, height_cm, weight_oem_data_kg,
+                                  length_oem_data_cm, width_oem_data_cm, height_oem_data_cm,
+                                  weight_discrepancy_percentage, length_discrepancy_percentage,
+                                  width_discrepancy_percentage, height_discrepancy_percentage,
+                                  remark)
+        values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{shipDate,jdbcType=TIMESTAMP},
+                #{oem,jdbcType=VARCHAR}, #{shippingMode,jdbcType=VARCHAR}, #{forwarder,jdbcType=VARCHAR},
+                #{hawb,jdbcType=VARCHAR}, #{dnPoLineNumber,jdbcType=VARCHAR}, #{sscc18PalletId,jdbcType=VARCHAR},
+                #{oemPalletId,jdbcType=VARCHAR}, #{truckerPalletId,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR},
+                #{region,jdbcType=VARCHAR}, #{poe,jdbcType=VARCHAR}, #{destination,jdbcType=VARCHAR},
+                #{gateway,jdbcType=VARCHAR}, #{consolidationWH,jdbcType=VARCHAR}, #{scacFwd,jdbcType=VARCHAR},
+                #{scacTruck,jdbcType=VARCHAR}, #{sealNrOceanContainer,jdbcType=VARCHAR}, #{vesselImo,jdbcType=VARCHAR},
+                #{dwt,jdbcType=DECIMAL}, #{portToPortDistance,jdbcType=DECIMAL},
+                #{vesselDistanceTraveled,jdbcType=DECIMAL},
+                #{fastStandardOcean,jdbcType=VARCHAR}, #{fastBoatService,jdbcType=VARCHAR},
+                #{standardOceanService,jdbcType=VARCHAR},
+                #{icaoFlightCode,jdbcType=VARCHAR}, #{aircraftType,jdbcType=VARCHAR}, #{airlineName,jdbcType=VARCHAR},
+                #{flightDistance,jdbcType=DECIMAL}, #{grossWeightKg,jdbcType=DECIMAL}, #{lengthCm,jdbcType=DECIMAL},
+                #{widthCm,jdbcType=DECIMAL}, #{heightCm,jdbcType=DECIMAL}, #{weightOemDataKg,jdbcType=DECIMAL},
+                #{lengthOemDataCm,jdbcType=DECIMAL}, #{widthOemDataCm,jdbcType=DECIMAL},
+                #{heightOemDataCm,jdbcType=DECIMAL},
+                #{weightDiscrepancyPercentage,jdbcType=DECIMAL}, #{lengthDiscrepancyPercentage,jdbcType=DECIMAL},
+                #{widthDiscrepancyPercentage,jdbcType=DECIMAL}, #{heightDiscrepancyPercentage,jdbcType=DECIMAL},
+                #{remark,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.boot.security.server.dto.load.EDIDim">
+        insert into edi_dim_ihub
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="shipDate != null">
+                ship_date,
+            </if>
+            <if test="oem != null">
+                oem,
+            </if>
+            <if test="shippingMode != null">
+                shipping_mode,
+            </if>
+            <if test="forwarder != null">
+                forwarder,
+            </if>
+            <if test="hawb != null">
+                hawb,
+            </if>
+            <if test="dnPoLineNumber != null">
+                dn_po_line_number,
+            </if>
+            <if test="sscc18PalletId != null">
+                sscc18_pallet_id,
+            </if>
+            <if test="oemPalletId != null">
+                oem_pallet_id,
+            </if>
+            <if test="truckerPalletId != null">
+                trucker_pallet_id,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="region != null">
+                region,
+            </if>
+            <if test="poe != null">
+                poe,
+            </if>
+            <if test="destination != null">
+                destination,
+            </if>
+            <if test="gateway != null">
+                gateway,
+            </if>
+            <if test="consolidationWH != null">
+                consolidation_w_h,
+            </if>
+            <if test="scacFwd != null">
+                scac_fwd,
+            </if>
+            <if test="scacTruck != null">
+                scac_truck,
+            </if>
+            <if test="sealNrOceanContainer != null">
+                seal_nr_ocean_container,
+            </if>
+            <if test="vesselImo != null">
+                vessel_imo,
+            </if>
+            <if test="dwt != null">
+                dwt,
+            </if>
+            <if test="portToPortDistance != null">
+                port_to_port_distance,
+            </if>
+            <if test="vesselDistanceTraveled != null">
+                vessel_distance_traveled,
+            </if>
+            <if test="fastStandardOcean != null">
+                fast_standard_ocean,
+            </if>
+            <if test="fastBoatService != null">
+                fast_boat_service,
+            </if>
+            <if test="standardOceanService != null">
+                standard_ocean_service,
+            </if>
+            <if test="icaoFlightCode != null">
+                icao_flight_code,
+            </if>
+            <if test="aircraftType != null">
+                aircraft_type,
+            </if>
+            <if test="airlineName != null">
+                airline_name,
+            </if>
+            <if test="flightDistance != null">
+                flight_distance,
+            </if>
+            <if test="grossWeightKg != null">
+                gross_weight_kg,
+            </if>
+            <if test="lengthCm != null">
+                length_cm,
+            </if>
+            <if test="widthCm != null">
+                width_cm,
+            </if>
+            <if test="heightCm != null">
+                height_cm,
+            </if>
+            <if test="weightOemDataKg != null">
+                weight_oem_data_kg,
+            </if>
+            <if test="lengthOemDataCm != null">
+                length_oem_data_cm,
+            </if>
+            <if test="widthOemDataCm != null">
+                width_oem_data_cm,
+            </if>
+            <if test="heightOemDataCm != null">
+                height_oem_data_cm,
+            </if>
+            <if test="weightDiscrepancyPercentage != null">
+                weight_discrepancy_percentage,
+            </if>
+            <if test="lengthDiscrepancyPercentage != null">
+                length_discrepancy_percentage,
+            </if>
+            <if test="widthDiscrepancyPercentage != null">
+                width_discrepancy_percentage,
+            </if>
+            <if test="heightDiscrepancyPercentage != null">
+                height_discrepancy_percentage,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="shipDate != null">
+                #{shipDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="oem != null">
+                #{oem,jdbcType=VARCHAR},
+            </if>
+            <if test="shippingMode != null">
+                #{shippingMode,jdbcType=VARCHAR},
+            </if>
+            <if test="forwarder != null">
+                #{forwarder,jdbcType=VARCHAR},
+            </if>
+            <if test="hawb != null">
+                #{hawb,jdbcType=VARCHAR},
+            </if>
+            <if test="dnPoLineNumber != null">
+                #{dnPoLineNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="sscc18PalletId != null">
+                #{sscc18PalletId,jdbcType=VARCHAR},
+            </if>
+            <if test="oemPalletId != null">
+                #{oemPalletId,jdbcType=VARCHAR},
+            </if>
+            <if test="truckerPalletId != null">
+                #{truckerPalletId,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="poe != null">
+                #{poe,jdbcType=VARCHAR},
+            </if>
+            <if test="destination != null">
+                #{destination,jdbcType=VARCHAR},
+            </if>
+            <if test="gateway != null">
+                #{gateway,jdbcType=VARCHAR},
+            </if>
+            <if test="consolidationWH != null">
+                #{consolidationWH,jdbcType=VARCHAR},
+            </if>
+            <if test="scacFwd != null">
+                #{scacFwd,jdbcType=VARCHAR},
+            </if>
+            <if test="scacTruck != null">
+                #{scacTruck,jdbcType=VARCHAR},
+            </if>
+            <if test="sealNrOceanContainer != null">
+                #{sealNrOceanContainer,jdbcType=VARCHAR},
+            </if>
+            <if test="vesselImo != null">
+                #{vesselImo,jdbcType=VARCHAR},
+            </if>
+            <if test="dwt != null">
+                #{dwt,jdbcType=DECIMAL},
+            </if>
+            <if test="portToPortDistance != null">
+                #{portToPortDistance,jdbcType=DECIMAL},
+            </if>
+            <if test="vesselDistanceTraveled != null">
+                #{vesselDistanceTraveled,jdbcType=DECIMAL},
+            </if>
+            <if test="fastStandardOcean != null">
+                #{fastStandardOcean,jdbcType=VARCHAR},
+            </if>
+            <if test="fastBoatService != null">
+                #{fastBoatService,jdbcType=VARCHAR},
+            </if>
+            <if test="standardOceanService != null">
+                #{standardOceanService,jdbcType=VARCHAR},
+            </if>
+            <if test="icaoFlightCode != null">
+                #{icaoFlightCode,jdbcType=VARCHAR},
+            </if>
+            <if test="aircraftType != null">
+                #{aircraftType,jdbcType=VARCHAR},
+            </if>
+            <if test="airlineName != null">
+                #{airlineName,jdbcType=VARCHAR},
+            </if>
+            <if test="flightDistance != null">
+                #{flightDistance,jdbcType=DECIMAL},
+            </if>
+            <if test="grossWeightKg != null">
+                #{grossWeightKg,jdbcType=DECIMAL},
+            </if>
+            <if test="lengthCm != null">
+                #{lengthCm,jdbcType=DECIMAL},
+            </if>
+            <if test="widthCm != null">
+                #{widthCm,jdbcType=DECIMAL},
+            </if>
+            <if test="heightCm != null">
+                #{heightCm,jdbcType=DECIMAL},
+            </if>
+            <if test="weightOemDataKg != null">
+                #{weightOemDataKg,jdbcType=DECIMAL},
+            </if>
+            <if test="lengthOemDataCm != null">
+                #{lengthOemDataCm,jdbcType=DECIMAL},
+            </if>
+            <if test="widthOemDataCm != null">
+                #{widthOemDataCm,jdbcType=DECIMAL},
+            </if>
+            <if test="heightOemDataCm != null">
+                #{heightOemDataCm,jdbcType=DECIMAL},
+            </if>
+            <if test="weightDiscrepancyPercentage != null">
+                #{weightDiscrepancyPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="lengthDiscrepancyPercentage != null">
+                #{lengthDiscrepancyPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="widthDiscrepancyPercentage != null">
+                #{widthDiscrepancyPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="heightDiscrepancyPercentage != null">
+                #{heightDiscrepancyPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.dto.load.EDIDim">
+        update edi_dim_ihub
+        <set>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="shipDate != null">
+                ship_date = #{shipDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="oem != null">
+                oem = #{oem,jdbcType=VARCHAR},
+            </if>
+            <if test="shippingMode != null">
+                shipping_mode = #{shippingMode,jdbcType=VARCHAR},
+            </if>
+            <if test="forwarder != null">
+                forwarder = #{forwarder,jdbcType=VARCHAR},
+            </if>
+            <if test="hawb != null">
+                hawb = #{hawb,jdbcType=VARCHAR},
+            </if>
+            <if test="dnPoLineNumber != null">
+                dn_po_line_number = #{dnPoLineNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="sscc18PalletId != null">
+                sscc18_pallet_id = #{sscc18PalletId,jdbcType=VARCHAR},
+            </if>
+            <if test="oemPalletId != null">
+                oem_pallet_id = #{oemPalletId,jdbcType=VARCHAR},
+            </if>
+            <if test="truckerPalletId != null">
+                trucker_pallet_id = #{truckerPalletId,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId,jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                region = #{region,jdbcType=VARCHAR},
+            </if>
+            <if test="poe != null">
+                poe = #{poe,jdbcType=VARCHAR},
+            </if>
+            <if test="destination != null">
+                destination = #{destination,jdbcType=VARCHAR},
+            </if>
+            <if test="gateway != null">
+                gateway = #{gateway,jdbcType=VARCHAR},
+            </if>
+            <if test="consolidationWH != null">
+                consolidation_w_h = #{consolidationWH,jdbcType=VARCHAR},
+            </if>
+            <if test="scacFwd != null">
+                scac_fwd = #{scacFwd,jdbcType=VARCHAR},
+            </if>
+            <if test="scacTruck != null">
+                scac_truck = #{scacTruck,jdbcType=VARCHAR},
+            </if>
+            <if test="sealNrOceanContainer != null">
+                seal_nr_ocean_container = #{sealNrOceanContainer,jdbcType=VARCHAR},
+            </if>
+            <if test="vesselImo != null">
+                vessel_imo = #{vesselImo,jdbcType=VARCHAR},
+            </if>
+            <if test="dwt != null">
+                dwt = #{dwt,jdbcType=DECIMAL},
+            </if>
+            <if test="portToPortDistance != null">
+                port_to_port_distance = #{portToPortDistance,jdbcType=DECIMAL},
+            </if>
+            <if test="vesselDistanceTraveled != null">
+                vessel_distance_traveled = #{vesselDistanceTraveled,jdbcType=DECIMAL},
+            </if>
+            <if test="fastStandardOcean != null">
+                fast_standard_ocean = #{fastStandardOcean,jdbcType=VARCHAR},
+            </if>
+            <if test="fastBoatService != null">
+                fast_boat_service = #{fastBoatService,jdbcType=VARCHAR},
+            </if>
+            <if test="standardOceanService != null">
+                standard_ocean_service = #{standardOceanService,jdbcType=VARCHAR},
+            </if>
+            <if test="icaoFlightCode != null">
+                icao_flight_code = #{icaoFlightCode,jdbcType=VARCHAR},
+            </if>
+            <if test="aircraftType != null">
+                aircraft_type = #{aircraftType,jdbcType=VARCHAR},
+            </if>
+            <if test="airlineName != null">
+                airline_name = #{airlineName,jdbcType=VARCHAR},
+            </if>
+            <if test="flightDistance != null">
+                flight_distance = #{flightDistance,jdbcType=DECIMAL},
+            </if>
+            <if test="grossWeightKg != null">
+                gross_weight_kg = #{grossWeightKg,jdbcType=DECIMAL},
+            </if>
+            <if test="lengthCm != null">
+                length_cm = #{lengthCm,jdbcType=DECIMAL},
+            </if>
+            <if test="widthCm != null">
+                width_cm = #{widthCm,jdbcType=DECIMAL},
+            </if>
+            <if test="heightCm != null">
+                height_cm = #{heightCm,jdbcType=DECIMAL},
+            </if>
+            <if test="weightOemDataKg != null">
+                weight_oem_data_kg = #{weightOemDataKg,jdbcType=DECIMAL},
+            </if>
+            <if test="lengthOemDataCm != null">
+                length_oem_data_cm = #{lengthOemDataCm,jdbcType=DECIMAL},
+            </if>
+            <if test="widthOemDataCm != null">
+                width_oem_data_cm = #{widthOemDataCm,jdbcType=DECIMAL},
+            </if>
+            <if test="heightOemDataCm != null">
+                height_oem_data_cm = #{heightOemDataCm,jdbcType=DECIMAL},
+            </if>
+            <if test="weightDiscrepancyPercentage != null">
+                weight_discrepancy_percentage = #{weightDiscrepancyPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="lengthDiscrepancyPercentage != null">
+                length_discrepancy_percentage = #{lengthDiscrepancyPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="widthDiscrepancyPercentage != null">
+                width_discrepancy_percentage = #{widthDiscrepancyPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="heightDiscrepancyPercentage != null">
+                height_discrepancy_percentage = #{heightDiscrepancyPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.boot.security.server.dto.load.EDIDim">
+        update edi_dim_ihub
+        set status                        = #{status,jdbcType=INTEGER},
+            ship_date                     = #{shipDate,jdbcType=TIMESTAMP},
+            oem                           = #{oem,jdbcType=VARCHAR},
+            shipping_mode                 = #{shippingMode,jdbcType=VARCHAR},
+            forwarder                     = #{forwarder,jdbcType=VARCHAR},
+            hawb                          = #{hawb,jdbcType=VARCHAR},
+            dn_po_line_number             = #{dnPoLineNumber,jdbcType=VARCHAR},
+            sscc18_pallet_id              = #{sscc18PalletId,jdbcType=VARCHAR},
+            oem_pallet_id                 = #{oemPalletId,jdbcType=VARCHAR},
+            trucker_pallet_id             = #{truckerPalletId,jdbcType=VARCHAR},
+            product_id                    = #{productId,jdbcType=VARCHAR},
+            region                        = #{region,jdbcType=VARCHAR},
+            poe                           = #{poe,jdbcType=VARCHAR},
+            destination                   = #{destination,jdbcType=VARCHAR},
+            gateway                       = #{gateway,jdbcType=VARCHAR},
+            consolidation_w_h             = #{consolidationWH,jdbcType=VARCHAR},
+            scac_fwd                      = #{scacFwd,jdbcType=VARCHAR},
+            scac_truck                    = #{scacTruck,jdbcType=VARCHAR},
+            seal_nr_ocean_container       = #{sealNrOceanContainer,jdbcType=VARCHAR},
+            vessel_imo                    = #{vesselImo,jdbcType=VARCHAR},
+            dwt                           = #{dwt,jdbcType=DECIMAL},
+            port_to_port_distance         = #{portToPortDistance,jdbcType=DECIMAL},
+            vessel_distance_traveled      = #{vesselDistanceTraveled,jdbcType=DECIMAL},
+            fast_standard_ocean           = #{fastStandardOcean,jdbcType=VARCHAR},
+            fast_boat_service             = #{fastBoatService,jdbcType=VARCHAR},
+            standard_ocean_service        = #{standardOceanService,jdbcType=VARCHAR},
+            icao_flight_code              = #{icaoFlightCode,jdbcType=VARCHAR},
+            aircraft_type                 = #{aircraftType,jdbcType=VARCHAR},
+            airline_name                  = #{airlineName,jdbcType=VARCHAR},
+            flight_distance               = #{flightDistance,jdbcType=DECIMAL},
+            gross_weight_kg               = #{grossWeightKg,jdbcType=DECIMAL},
+            length_cm                     = #{lengthCm,jdbcType=DECIMAL},
+            width_cm                      = #{widthCm,jdbcType=DECIMAL},
+            height_cm                     = #{heightCm,jdbcType=DECIMAL},
+            weight_oem_data_kg            = #{weightOemDataKg,jdbcType=DECIMAL},
+            length_oem_data_cm            = #{lengthOemDataCm,jdbcType=DECIMAL},
+            width_oem_data_cm             = #{widthOemDataCm,jdbcType=DECIMAL},
+            height_oem_data_cm            = #{heightOemDataCm,jdbcType=DECIMAL},
+            weight_discrepancy_percentage = #{weightDiscrepancyPercentage,jdbcType=DECIMAL},
+            length_discrepancy_percentage = #{lengthDiscrepancyPercentage,jdbcType=DECIMAL},
+            width_discrepancy_percentage  = #{widthDiscrepancyPercentage,jdbcType=DECIMAL},
+            height_discrepancy_percentage = #{heightDiscrepancyPercentage,jdbcType=DECIMAL},
+            remark                        = #{remark,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -17,6 +17,8 @@ public class EDI945 {
 
     private String trackingNumber;
 
+    private String cartonNo;
+
     private String dn;
 
     private String shipmentNumber;
@@ -150,6 +152,14 @@ public class EDI945 {
 
     public void setTrackingNumber(String trackingNumber) {
         this.trackingNumber = trackingNumber == null ? null : trackingNumber.trim();
+    }
+
+    public String getCartonNo() {
+        return cartonNo;
+    }
+
+    public void setCartonNo(String cartonNo) {
+        this.cartonNo = cartonNo;
     }
 
     public String getDn() {

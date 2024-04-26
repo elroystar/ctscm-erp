@@ -7,6 +7,7 @@ import com.boot.security.server.dto.gps.TransTimeManageV2;
 import com.boot.security.server.model.*;
 import com.boot.security.server.service.GPSService;
 import com.boot.security.server.utils.DateUtil;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,20 +33,20 @@ public class GPSTask {
     @Autowired
     private EDI945Mapper edi945Mapper;
 
-    @Autowired
-    private EdiWzDeviceMapper ediWzDeviceMapper;
-
-    @Autowired
-    private EdiWzUploadMapper ediWzUploadMapper;
-
-    @Autowired
-    private EdiWzRegisterMapper ediWzRegisterMapper;
-
-    @Autowired
-    private EdiWzTrackMapper ediWzTrackMapper;
-
-    @Autowired
-    private EdiWzCancelMapper ediWzCancelMapper;
+//    @Autowired
+//    private EdiWzDeviceMapper ediWzDeviceMapper;
+//
+//    @Autowired
+//    private EdiWzUploadMapper ediWzUploadMapper;
+//
+//    @Autowired
+//    private EdiWzRegisterMapper ediWzRegisterMapper;
+//
+//    @Autowired
+//    private EdiWzTrackMapper ediWzTrackMapper;
+//
+//    @Autowired
+//    private EdiWzCancelMapper ediWzCancelMapper;
 
     @Scheduled(cron = "0 */1 * * * ? ")
     public void getTruckPlantNumberGPS() {
@@ -154,13 +155,14 @@ public class GPSTask {
             ediWzCancel.setTrackno(edi945.getCtTracking());
             ediWzCancel.setDeviceid(edi945.getTruckPlantNumber());
             ediWzCancel.setTrackendtime(DateUtil.format(edi945.getTrackEndTime(), DateUtil.NORM_DATETIME_PATTERN));
-            ediWzCancelMapper.insertSelective(ediWzCancel);
+//            ediWzCancelMapper.insertSelective(ediWzCancel);
         }
     }
 
     private void insertEDIInfo(EDI945 edi945) {
         // upload表数据写入
-        List<EdiWzUpload> ediWzUploads = ediWzUploadMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+//        List<EdiWzUpload> ediWzUploads = ediWzUploadMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+        List<EdiWzUpload> ediWzUploads = Lists.newArrayList();
         if (ediWzUploads.isEmpty()) {
             EdiWzUpload ediWzUpload = new EdiWzUpload();
             ediWzUpload.setStatus(0);
@@ -168,7 +170,7 @@ public class GPSTask {
             ediWzUpload.setLongitude(edi945.getLongitude());
             ediWzUpload.setLatitude(edi945.getLatitude());
             ediWzUpload.setLocationtime(edi945.getGpsUpdating());
-            ediWzUploadMapper.insertSelective(ediWzUpload);
+//            ediWzUploadMapper.insertSelective(ediWzUpload);
         } else {
             EdiWzUpload ediWzUpload = ediWzUploads.get(0);
             ediWzUpload.setStatus(0);
@@ -176,18 +178,19 @@ public class GPSTask {
             ediWzUpload.setLongitude(edi945.getLongitude());
             ediWzUpload.setLatitude(edi945.getLatitude());
             ediWzUpload.setLocationtime(edi945.getGpsUpdating());
-            ediWzUploadMapper.updateByPrimaryKey(ediWzUpload);
+//            ediWzUploadMapper.updateByPrimaryKey(ediWzUpload);
         }
         // 轨迹数据edi表数据写入
-        List<EdiWzTrack> ediWzTracks = ediWzTrackMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+//        List<EdiWzTrack> ediWzTracks = ediWzTrackMapper.selectBykPlantNumber(edi945.getTruckPlantNumber());
+        List<EdiWzTrack> ediWzTracks = Lists.newArrayList();
         if (ediWzTracks.isEmpty()) {
             EdiWzTrack ediWzTrack = new EdiWzTrack();
             getEdiWzTrack(edi945, ediWzTrack);
-            ediWzTrackMapper.insertSelective(ediWzTrack);
+//            ediWzTrackMapper.insertSelective(ediWzTrack);
         } else {
             EdiWzTrack ediWzTrack = ediWzTracks.get(0);
             getEdiWzTrack(edi945, ediWzTrack);
-            ediWzTrackMapper.updateByPrimaryKey(ediWzTrack);
+//            ediWzTrackMapper.updateByPrimaryKey(ediWzTrack);
         }
     }
 
@@ -211,7 +214,7 @@ public class GPSTask {
             ediWzDevice.setDeviceid(edi945.getTruckPlantNumber());
             ediWzDevice.setDevicetype(edi945.getDeviceType());
             ediWzDevice.setSource(edi945.getSource());
-            ediWzDeviceMapper.insertSelective(ediWzDevice);
+//            ediWzDeviceMapper.insertSelective(ediWzDevice);
             EdiWzRegister ediWzRegister = new EdiWzRegister();
             ediWzRegister.setStatus(0);
             ediWzRegister.setDeviceid(edi945.getTruckPlantNumber());
@@ -219,7 +222,7 @@ public class GPSTask {
             ediWzRegister.setCompanycode(edi945.getCompanyCode());
             ediWzRegister.setOrderno(edi945.getCtTracking());
             ediWzRegister.setTrackno(edi945.getCtTracking());
-            ediWzRegisterMapper.insertSelective(ediWzRegister);
+//            ediWzRegisterMapper.insertSelective(ediWzRegister);
         }
     }
 }

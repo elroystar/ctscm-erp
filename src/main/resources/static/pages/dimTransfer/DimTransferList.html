@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/select.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <header style="height: 100%">
+            <div align="left">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <form class="form-inline" onsubmit="return false">
+                                <div class="form-group">
+                                    Ship date:：
+                                    <input id="shipDate" type="text" class="form-control" placeholder="Ship date">
+                                    <button id="searchBt" class="layui-btn layui-btn-sm"><i
+                                            class="layui-icon">&#xe615;</i>搜索
+                                    </button>
+                                    <hr class="layui-border-green">
+                                    <button id="get945Info" class="layui-btn"><i
+                                            class="layui-icon">&#xe63d;</i>获取945数据
+                                    </button>
+                                    <button id="exportExcel" class="layui-btn"><i
+                                            class="layui-icon">&#xe601;</i>导出
+                                    </button>
+                                    <button id="importLoad" class="layui-btn"><i
+                                            class="layui-icon">&#xe67c;</i>导入
+                                    </button>
+                                    <button id="sendPdd" class="layui-btn"><i
+                                            class="layui-icon">&#xe609;</i>发送pdd
+                                    </button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </header>
+
+        <div>
+            <div class="widget-body no-padding">
+                <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                    <thead>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <th>id</th>
+                        <th>OEM</th>
+                        <th>Ship Date</th>
+                        <th>Shipping Point</th>
+                        <th>Shipping Mode</th>
+                        <th>Forwarder</th>
+                        <th>Forwarder Pdd</th>
+                        <th>HAWB/BOL</th>
+                        <th>MAWB/MBOL</th>
+                        <th>Pallet ID OEM</th>
+                        <th>Pallet SSCC18</th>
+                        <th>Pallet ID Trucker</th>
+                        <th>Gross Weight</th>
+                        <th>Gross Weight Pdd</th>
+                        <th>Length</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                        <th>Region</th>
+                        <th>POE</th>
+                        <th>Destination</th>
+                        <th>Gateway</th>
+                        <th>Consolidation warehouse</th>
+                        <th>NPI Flag</th>
+                        <th>Security Level</th>
+                        <th>Handover</th>
+                        <th>Ship Type</th>
+                        <th>Hub Code</th>
+                        <th>GCCN</th>
+                        <th>Country Of Clearance</th>
+                        <th>Ship To City</th>
+                        <th>Container No</th>
+                        <th>Truck No_ExOEM</th>
+                        <th>Truck No_ExTrucker</th>
+                        <th>Truck No_BorderExchange</th>
+                        <th>ELock_ExOEM</th>
+                        <th>ELock_ExTrucker</th>
+                        <th>POD</th>
+                        <th>Terminal</th>
+                        <th>SCAC_FWD</th>
+                        <th>SCAC_Trucker</th>
+                        <th>Vessel IMO</th>
+                        <th>DWT</th>
+                        <th>Port to Port Distance</th>
+                        <th>Vessel Distance Traveled</th>
+                        <th>Fast Boat Service</th>
+                        <th>Standard Ocean Service</th>
+                        <th>ICAO Flight Code</th>
+                        <th>Aircraft Type</th>
+                        <th>Aircraft Name</th>
+                        <th>Flight Distance</th>
+                        <th>Flight Time</th>
+                        <th>Flight No</th>
+                        <th>GPS Transmitter No</th>
+                        <th>Driver Ph No</th>
+                        <th>Trailer No</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="form-horizontal" id="form" method="post" action="/dimTransfer/exportLoad" onsubmit="return false"
+      enctype="multipart/form-data">
+    <br/>
+    <input id="shipDateForm" name="shipDateForm" hidden="true">
+
+    <input id="token" name="token" hidden="true">
+</form>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.select.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript">
+
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        upload.render({
+            elem: '#importLoad' //绑定元素
+            , accept: 'file' //允许上传的文件类型
+            , url: '/dimTransfer/importLoad' //上传接口
+            , before: function () {
+                //开始加载效果
+                layui.use('layer', function () {
+                    layui.layer.load();
+                    $(".layui-layer-shade").css('background', '#000000')
+                    $(".layui-layer-shade").css('opacity', '0.2')
+                    $(".layui-layer-shade").click(function (event) {
+                        event.stopPropagation();
+                    })
+                })
+            }
+            , done: function (res, index, upload) {
+                layer.msg("上传成功");
+                //上传成功结束加载效果
+                layui.use('layer', function () {
+                    layui.layer.closeAll();
+                    setTimeout(function () {
+                        layui.layer.closeAll();
+                    }, 1000);
+                });
+                example.ajax.reload();
+            }
+        });
+    });
+
+    $("#exportExcel").click(function () {
+        var shipDate = $('#shipDate').val();
+        if (shipDate.length == 0) {
+            layer.open({
+                title: '提示',
+                content: '请先输入至少一个条件'
+            });
+        } else {
+            $("#shipDateForm").val(shipDate);
+            $("#token").val(localStorage.getItem("token"));
+            $("#form").attr("onsubmit", "return true");
+            $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
+            $("#form").attr("onsubmit", "return false");
+        }
+    });
+
+    $("#get945Info").click(function () {
+        layer.prompt({
+            title: '请输入信息',
+            formType: 0, //输入框类型，支持0（文本）默认1（密码）2（多行文本）
+            yes: function (index) {
+                let hawb = $('#getHawb').val();
+                if (hawb === "") {
+                    layer.tips("请填写HAWB/BOL", $('#hawb'));
+                    return;
+                }
+                $.ajax({
+                    type: 'get',
+                    url: '/dimTransfer/get945Info/' + hawb,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        layer.close(index);
+                        layer.open({
+                            title: '开始获取GPS信息'
+                            , content: '获取中'
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        var msg = xhr.responseText;
+                        console.log(msg);
+                        var response = JSON.parse(msg);
+                        var code = response.code;
+                        var message = response.message;
+                        if (code == 400) {
+                            layer.msg(message);
+                        } else if (code == 401) {
+                            localStorage.removeItem("token");
+                            layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                                location.href = '/login.html';
+                            });
+                        } else if (code == 403) {
+                            console.log("未授权:" + message);
+                            layer.msg('未授权');
+                        } else if (code == 500) {
+                            layer.msg('系统错误：' + message);
+                        }
+                    }
+                });
+            }
+        });
+        $(".layui-layer-content").empty();
+        $(".layui-layer-content").append("<input type=\"text\" id= \"getHawb\" class=\"layui-input\" placeholder=\"HAWB/BOL\"/>");
+        $(".layui-layer-content").append("<br/><span style='color: red;'>请仔细核对录入信息</span>");
+
+    });
+
+    $("#sendPdd").click(function () {
+        var shipDate = $('#shipDate').val();
+        if (shipDate.length == 0) {
+            layer.open({
+                title: '提示',
+                content: '请先输入至少一个条件'
+            });
+        } else {
+            $.ajax({
+                type: 'post',
+                data: JSON.stringify({
+                    shipDate: $('#shipDate').val()
+                }),
+                dataType: 'json',
+                url: '/dimTransfer/sendPdd',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    layer.open({
+                        title: '发送pdd信息'
+                        , content: '发送成功'
+                    });
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    var msg = xhr.responseText;
+                    console.log(msg);
+                    var response = JSON.parse(msg);
+                    var code = response.code;
+                    var message = response.message;
+                    if (code == 400) {
+                        layer.msg(message);
+                    } else if (code == 401) {
+                        localStorage.removeItem("token");
+                        layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                            location.href = '/login.html';
+                        });
+                    } else if (code == 403) {
+                        console.log("未授权:" + message);
+                        layer.msg('未授权');
+                    } else if (code == 500) {
+                        layer.msg('系统错误：' + message);
+                    }
+                }
+            });
+        }
+    });
+
+    var example;
+
+    showDictNameSelect("region", "region", true);
+
+    function init() {
+        example =
+            $('#dt-table').DataTable({
+                "searching": false,
+                "processing": false,
+                "serverSide": true,
+                "ordering": false,
+                "language": {
+                    "url": "/js/plugin/datatables/Chinese.lang"
+                },
+                "ajax": {
+                    "url": "/dimTransfer/list",
+                    "type": "get",
+                    "data": function (d) {
+                        d.shipDate = $('#shipDate').val();
+                    },
+                    "error": function (xhr, textStatus, errorThrown) {
+                        var msg = xhr.responseText;
+                        console.log(msg);
+                        var response = JSON.parse(msg);
+                        var code = response.code;
+                        var message = response.message;
+                        if (code == 400) {
+                            layer.msg(message);
+                        } else if (code == 401) {
+                            localStorage.removeItem("token");
+                            layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                                location.href = '/login.html';
+                            });
+                        } else if (code == 403) {
+                            console.log("未授权:" + message);
+                            layer.msg('未授权');
+                        } else if (code == 500) {
+                            layer.msg('系统错误：' + message);
+                        }
+                    }
+                },
+                "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
+                "columns": [
+                    {"data": "id", "defaultContent": "", "visible": false},
+                    {"data": "oem", "defaultContent": ""},
+                    {"data": "shipDate", "defaultContent": ""},
+                    {"data": "shippingPoint", "defaultContent": ""},
+                    {"data": "shippingMode", "defaultContent": ""},
+                    {"data": "forwarder", "defaultContent": ""},
+                    {"data": "forwarderPdd", "defaultContent": ""},
+                    {"data": "hawb", "defaultContent": ""},
+                    {"data": "mawb", "defaultContent": ""},
+                    {"data": "palletId", "defaultContent": ""},
+                    {"data": "palletSscc18", "defaultContent": ""},
+                    {"data": "palletIdTrucker", "defaultContent": ""},
+                    {"data": "grossWeight", "defaultContent": ""},
+                    {"data": "grossWeightPdd", "defaultContent": ""},
+                    {"data": "lengthCm", "defaultContent": ""},
+                    {"data": "widthCm", "defaultContent": ""},
+                    {"data": "heightCm", "defaultContent": ""},
+                    {"data": "region", "defaultContent": ""},
+                    {"data": "poe", "defaultContent": ""},
+                    {"data": "destination", "defaultContent": ""},
+                    {"data": "gateway", "defaultContent": ""},
+                    {"data": "consolidationWarehouse", "defaultContent": ""},
+                    {"data": "npiFlag", "defaultContent": ""},
+                    {"data": "securityLevel", "defaultContent": ""},
+                    {"data": "handover", "defaultContent": ""},
+                    {"data": "shipType", "defaultContent": ""},
+                    {"data": "hubCode", "defaultContent": ""},
+                    {"data": "gccn", "defaultContent": ""},
+                    {"data": "countryOfClearance", "defaultContent": ""},
+                    {"data": "shipToCity", "defaultContent": ""},
+                    {"data": "containerNo", "defaultContent": ""},
+                    {"data": "truckNoExoem", "defaultContent": ""},
+                    {"data": "truckNoExtrucker", "defaultContent": ""},
+                    {"data": "truckNoBorderexchange", "defaultContent": ""},
+                    {"data": "elockExoem", "defaultContent": ""},
+                    {"data": "elockExtrucker", "defaultContent": ""},
+                    {"data": "pod", "defaultContent": ""},
+                    {"data": "terminal", "defaultContent": ""},
+                    {"data": "scacFwd", "defaultContent": ""},
+                    {"data": "scacTrucker", "defaultContent": ""},
+                    {"data": "vesselImo", "defaultContent": ""},
+                    {"data": "dwt", "defaultContent": ""},
+                    {"data": "portToPortDistance", "defaultContent": ""},
+                    {"data": "vesselDistanceTraveled", "defaultContent": ""},
+                    {"data": "fastBoatService", "defaultContent": ""},
+                    {"data": "standardOceanService", "defaultContent": ""},
+                    {"data": "icaoFlightCode", "defaultContent": ""},
+                    {"data": "aircraftType", "defaultContent": ""},
+                    {"data": "airlineName", "defaultContent": ""},
+                    {"data": "flightDistance", "defaultContent": ""},
+                    {"data": "flightTime", "defaultContent": ""},
+                    {"data": "flightNo", "defaultContent": ""},
+                    {"data": "gpsTransmitterNo", "defaultContent": ""},
+                    {"data": "driverPhNo", "defaultContent": ""},
+                    {"data": "trailerNo", "defaultContent": ""},
+                ],
+                "select": {
+                    style: 'multi'
+                },
+            });
+    }
+
+    $("#searchBt").click(function () {
+        example.ajax.reload();
+    });
+
+    init();
+</script>

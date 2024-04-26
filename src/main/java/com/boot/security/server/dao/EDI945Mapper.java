@@ -77,4 +77,12 @@ public interface EDI945Mapper {
                                 @Param("limit") Integer limit);
 
     void updateDispose997(EDI945 edi945);
+
+    void updateGPSDevice(@Param("gpsDevice") String upGpsDevice, @Param("trackingNumber") String upPlantNumber, @Param("ctTracking") String upCtTracking);
+
+    void updateGPSDeviceICT(@Param("gpsDevice") String upGpsDevice, @Param("trackingNumber") String upPlantNumber, @Param("ctTracking") String upCtTracking);
+
+    void updateGPSDeviceOEM(@Param("gpsDevice") String upGpsDevice, @Param("trackingNumber") String upPlantNumber, @Param("ctTracking") String upCtTracking);
+
+    List<EDI945> getInfoByWaybill(@Param("waybill") String hawb);
 }

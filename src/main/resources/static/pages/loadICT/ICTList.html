@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/select.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <header style="height: 100%">
+            <div align="left">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <form class="form-inline" onsubmit="return false">
+                                <div class="form-group">
+                                    Ship date:：
+                                    <input id="shipDate" type="text" class="form-control" placeholder="Ship date">
+                                    HO Date：
+                                    <button id="searchBt" class="layui-btn layui-btn-sm"><i
+                                            class="layui-icon">&#xe615;</i>搜索
+                                    </button>
+                                    <hr class="layui-border-green">
+                                    <button id="exportExcel" class="layui-btn"><i
+                                            class="layui-icon">&#xe601;</i>导出
+                                    </button>
+                                    <button id="importLoad" class="layui-btn"><i
+                                            class="layui-icon">&#xe67c;</i>导入
+                                    </button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </header>
+
+        <div>
+            <div class="widget-body no-padding">
+                <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                    <thead>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <th>id</th>
+                        <th>Ship date</th>
+                        <th>OEM</th>
+                        <th>Shipping Mode</th>
+                        <th>Forwarder</th>
+                        <th>HAWB</th>
+                        <th>SSCC18 Pallet ID</th>
+                        <th>OEM Pallet ID</th>
+                        <th>Trucker Pallet ID</th>
+                        <th>Region</th>
+                        <th>POE</th>
+                        <th>Destination</th>
+                        <th>Gateway</th>
+                        <th>Consolidation W/H</th>
+                        <th>Gross weight (kg)</th>
+                        <th>Length (cm)</th>
+                        <th>Width (cm)</th>
+                        <th>Height (cm)</th>
+                        <th>Weight - OEM Data (kg)</th>
+                        <th>Length - OEM Data (cm)</th>
+                        <th>Width - OEM Data (cm)</th>
+                        <th>Height - OEM Data (cm)</th>
+                        <th>Weight - Discrepancy (%)</th>
+                        <th>Length - Discrepancy (%)</th>
+                        <th>Width - Discrepancy (%)</th>
+                        <th>Height - Discrepancy (%)</th>
+                        <th>Remark</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="form-horizontal" id="form" method="post" action="/load/exportLoadICT" onsubmit="return false"
+      enctype="multipart/form-data">
+    <br/>
+    <input id="shipDateForm" name="shipDateForm" hidden="true">
+
+    <input id="token" name="token" hidden="true">
+</form>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.select.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript">
+
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        upload.render({
+            elem: '#importLoad' //绑定元素
+            , accept: 'file' //允许上传的文件类型
+            , url: '/load/importLoadICT' //上传接口
+            , before: function () {
+                //开始加载效果
+                layui.use('layer', function () {
+                    layui.layer.load();
+                    $(".layui-layer-shade").css('background', '#000000')
+                    $(".layui-layer-shade").css('opacity', '0.2')
+                    $(".layui-layer-shade").click(function (event) {
+                        event.stopPropagation();
+                    })
+                })
+            }
+            , done: function (res, index, upload) {
+                layer.msg("上传成功");
+                //上传成功结束加载效果
+                layui.use('layer', function () {
+                    layui.layer.closeAll();
+                    setTimeout(function () {
+                        layui.layer.closeAll();
+                    }, 1000);
+                });
+                example.ajax.reload();
+            }
+        });
+    });
+
+    $("#exportExcel").click(function () {
+        var shipDate = $('#shipDate').val();
+        if (shipDate.length == 0) {
+            layer.open({
+                title: '提示',
+                content: '请先输入至少一个条件'
+            });
+        } else {
+            $("#shipDateForm").val(shipDate);
+            $("#token").val(localStorage.getItem("token"));
+            $("#form").attr("onsubmit", "return true");
+            $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
+            $("#form").attr("onsubmit", "return false");
+        }
+    });
+
+    var example;
+
+    showDictNameSelect("region", "region", true);
+
+    function init() {
+        example =
+            $('#dt-table').DataTable({
+                "searching": false,
+                "processing": false,
+                "serverSide": true,
+                "ordering": false,
+                "language": {
+                    "url": "/js/plugin/datatables/Chinese.lang"
+                },
+                "ajax": {
+                    "url": "/load/listLoadICT",
+                    "type": "get",
+                    "data": function (d) {
+                        d.shipDate = $('#shipDate').val();
+                    },
+                    "error": function (xhr, textStatus, errorThrown) {
+                        var msg = xhr.responseText;
+                        console.log(msg);
+                        var response = JSON.parse(msg);
+                        var code = response.code;
+                        var message = response.message;
+                        if (code == 400) {
+                            layer.msg(message);
+                        } else if (code == 401) {
+                            localStorage.removeItem("token");
+                            layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                                location.href = '/login.html';
+                            });
+                        } else if (code == 403) {
+                            console.log("未授权:" + message);
+                            layer.msg('未授权');
+                        } else if (code == 500) {
+                            layer.msg('系统错误：' + message);
+                        }
+                    }
+                },
+                "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
+                "columns": [
+                    {"data": "id", "defaultContent": "", "visible": false},
+                    {"data": "shipDate", "defaultContent": ""},
+                    {"data": "oem", "defaultContent": ""},
+                    {"data": "shippingMode", "defaultContent": ""},
+                    {"data": "forwarder", "defaultContent": ""},
+                    {"data": "hawb", "defaultContent": ""},
+                    {"data": "sscc18PalletId", "defaultContent": ""},
+                    {"data": "oemPalletId", "defaultContent": ""},
+                    {"data": "truckerPalletId", "defaultContent": ""},
+                    {"data": "region", "defaultContent": ""},
+                    {"data": "poe", "defaultContent": ""},
+                    {"data": "destination", "defaultContent": ""},
+                    {"data": "gateway", "defaultContent": ""},
+                    {"data": "consolidationWH", "defaultContent": ""},
+                    {"data": "grossWeightKg", "defaultContent": ""},
+                    {"data": "lengthCm", "defaultContent": ""},
+                    {"data": "widthCm", "defaultContent": ""},
+                    {"data": "heightCm", "defaultContent": ""},
+                    {"data": "weightOemDataKg", "defaultContent": ""},
+                    {"data": "lengthOemDataCm", "defaultContent": ""},
+                    {"data": "widthOemDataCm", "defaultContent": ""},
+                    {"data": "heightOemDataCm", "defaultContent": ""},
+                    {"data": "weightDiscrepancyPercentage", "defaultContent": ""},
+                    {"data": "lengthDiscrepancyPercentage", "defaultContent": ""},
+                    {"data": "widthDiscrepancyPercentage", "defaultContent": ""},
+                    {"data": "heightDiscrepancyPercentage", "defaultContent": ""},
+                    {"data": "remark", "defaultContent": ""},
+                ],
+                "select": {
+                    style: 'multi'
+                },
+            });
+    }
+
+    $("#searchBt").click(function () {
+        example.ajax.reload();
+    });
+
+    init();
+</script>
