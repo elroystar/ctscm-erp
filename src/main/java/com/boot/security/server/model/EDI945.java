@@ -98,6 +98,8 @@ public class EDI945 {
 
     private Date trackEndTime;
 
+    private String tcCode;
+
     public Integer getId() {
         return id;
     }
@@ -504,5 +506,13 @@ public class EDI945 {
 
     public void setFuctionalrp(String fuctionalrp) {
         this.fuctionalrp = fuctionalrp;
+    }
+
+    public String getTcCode() {
+        return tcCode;
+    }
+
+    public void setTcCode(String tcCode) {
+        this.tcCode = tcCode;
     }
 }

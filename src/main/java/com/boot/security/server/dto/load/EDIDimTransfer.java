@@ -12,7 +12,7 @@ public class EDIDimTransfer {
 
     private String oem;
 
-    private Date shipdate;
+    private String shipdate;
 
     private String shippingPoint;
 
@@ -202,11 +202,11 @@ public class EDIDimTransfer {
         this.oem = oem == null ? null : oem.trim();
     }
 
-    public Date getShipdate() {
+    public String getShipdate() {
         return shipdate;
     }
 
-    public void setShipdate(Date shipdate) {
+    public void setShipdate(String shipdate) {
         this.shipdate = shipdate;
     }
 

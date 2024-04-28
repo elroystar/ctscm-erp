@@ -1,17 +1,14 @@
 package com.boot.security.server.controller;
 
 import com.boot.security.server.annotation.LogAnnotation;
+import com.boot.security.server.dao.DictDao;
 import com.boot.security.server.dao.DimTransferMapper;
 import com.boot.security.server.dao.EDI945Mapper;
 import com.boot.security.server.dao.EDIDimTransferMapper;
-import com.boot.security.server.dao.EDIPddTableMapper;
-import com.boot.security.server.dto.Send997InfoDTO;
 import com.boot.security.server.dto.load.DimTransfer;
 import com.boot.security.server.dto.load.EDIDimTransfer;
-import com.boot.security.server.dto.load.EDIPddTable;
 import com.boot.security.server.dto.load.SendPddInfoDTO;
 import com.boot.security.server.model.EDI945;
-import com.boot.security.server.model.FieldIhub997;
 import com.boot.security.server.model.FileInfo;
 import com.boot.security.server.page.table.PageTableHandler;
 import com.boot.security.server.page.table.PageTableHandler.CountHandler;
@@ -30,12 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +55,9 @@ public class DimTransferController {
     @Autowired
     private EDIDimTransferMapper ediDimTransferMapper;
 
+    @Autowired
+    private DictDao dictDao;
+
     @PostMapping("sendPdd")
     @ApiOperation(value = "发送pdd数据")
     public Integer sendPdd(@RequestBody SendPddInfoDTO pddInfoDTO) {
@@ -77,6 +72,8 @@ public class DimTransferController {
                 ediDimTransfer.setWidth(dimTransfer.getWidthCm());
                 ediDimTransfer.setHeight(dimTransfer.getHeightCm());
                 ediDimTransfer.setLength(dimTransfer.getLengthCm());
+                ediDimTransfer.setShipdate(dimTransfer.getShipDate());
+                ediDimTransfer.setPalletIdOem(dimTransfer.getPalletId());
                 ediDimTransfer.setStatus(0);
                 ediDimTransferMapper.insertSelective(ediDimTransfer);
                 // 推送完毕后标记为已推送
@@ -106,7 +103,10 @@ public class DimTransferController {
                     dimTransfer.setShippingMode(edi945.getShipMode());
                     dimTransfer.setForwarderPdd(edi945.getFwd());
                     dimTransfer.setPalletSscc18(edi945.getCartonNo());
-                    dimTransfer.setRegion(edi945.getRegion());
+                    List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
+                    if (!regionTypeByK.isEmpty()) {
+                        dimTransfer.setRegion(regionTypeByK.get(0));
+                    }
                     dimTransfer.setPoe(edi945.getPoe());
                     dimTransfer.setDestination(edi945.getPoeCountry());
                     String consolidationWarehouse = "";
@@ -115,19 +115,19 @@ public class DimTransferController {
                     dimTransfer.setGateway(gateway);
                     if (StringUtils.equals(gateway, "CGO")) {
                         consolidationWarehouse = "CTSCM ZZ WH";
-                        terminal = "Zhengzhou";
+                        terminal = "ZHENGZHOU";
                     } else if (StringUtils.equals(gateway, "HKG")) {
                         consolidationWarehouse = "CTSCM HK WH";
-                        terminal = "Hongkong";
+                        terminal = "HONGKONG";
                     } else if (StringUtils.equals(gateway, "PVG")) {
                         consolidationWarehouse = "CTSCM SH WH";
-                        terminal = "Shanghai";
+                        terminal = "SHANGHAI";
                     } else if (StringUtils.equals(gateway, "SHA")) {
                         consolidationWarehouse = "CTSCM SH WH";
-                        terminal = "Shanghai";
+                        terminal = "SHANGHAI";
                     } else if (StringUtils.equals(gateway, "SZX")) {
-                        consolidationWarehouse = "Shenzhen";
-                        terminal = "Shenzhen";
+                        consolidationWarehouse = "SHENZHEN";
+                        terminal = "SHENZHEN";
                     } else {
                         consolidationWarehouse = "";
                         terminal = "";
@@ -137,7 +137,7 @@ public class DimTransferController {
                     dimTransfer.setShipType(edi945.getShipway());
                     dimTransfer.setShipToCity(edi945.getPoe());
                     dimTransfer.setScacFwd(edi945.getFwdCode());
-                    dimTransfer.setScacTrucker(edi945.getTrackingNumber());
+                    dimTransfer.setScacTrucker(edi945.getTcCode());
                     dimTransfer.setStatus(1);
                     dimTransferMapper.updateByPrimaryKeySelective(dimTransfer);
                 }
@@ -159,46 +159,48 @@ public class DimTransferController {
         for (int r = 1; r < rows; r++) {
             XSSFRow xssfRow = sheet.getRow(r);  //获取sheet的第一行
             try {
-                String hawb = ExcelUtil.getCellValue(xssfRow.getCell(5));
-                String palletIdOem = ExcelUtil.getCellValue(xssfRow.getCell(7));
+                String hawb = ExcelUtil.getCellValue(xssfRow.getCell(2));
+                String palletIdOem = ExcelUtil.getCellValue(xssfRow.getCell(4));
                 List<DimTransfer> dimTransfers = dimTransferMapper.selectByHawbAndPalletId(hawb, palletIdOem);
                 if (!dimTransfers.isEmpty() && dimTransfers.size() == 1) {
                     DimTransfer dimTransfer = dimTransfers.get(0);
-                    String palletIdTrucker = ExcelUtil.getCellValue(xssfRow.getCell(9));
-                    String grossWeight = ExcelUtil.getCellValue(xssfRow.getCell(10));
-                    String length = ExcelUtil.getCellValue(xssfRow.getCell(11));
-                    String width = ExcelUtil.getCellValue(xssfRow.getCell(12));
-                    String height = ExcelUtil.getCellValue(xssfRow.getCell(13));
-                    String nPIFlag = ExcelUtil.getCellValue(xssfRow.getCell(19));
-                    String securityLevel = ExcelUtil.getCellValue(xssfRow.getCell(20));
-                    String handover = ExcelUtil.getCellValue(xssfRow.getCell(21));
-                    String containerNo = ExcelUtil.getCellValue(xssfRow.getCell(27));
-                    String truckNoExOEM = ExcelUtil.getCellValue(xssfRow.getCell(28));
-                    String truckNoExTrucker = ExcelUtil.getCellValue(xssfRow.getCell(29));
-                    String truckNoBorderExchange = ExcelUtil.getCellValue(xssfRow.getCell(30));
-                    String eLockExOEM = ExcelUtil.getCellValue(xssfRow.getCell(31));
-                    String eLockExTrucker = ExcelUtil.getCellValue(xssfRow.getCell(32));
-                    String vesselIMO = ExcelUtil.getCellValue(xssfRow.getCell(37));
-                    String dwt = ExcelUtil.getCellValue(xssfRow.getCell(38));
-                    String porttoPortDistance = ExcelUtil.getCellValue(xssfRow.getCell(39));
-                    String vesselDistanceTraveled = ExcelUtil.getCellValue(xssfRow.getCell(40));
-                    String fastBoatService = ExcelUtil.getCellValue(xssfRow.getCell(41));
-                    String standardOceanService = ExcelUtil.getCellValue(xssfRow.getCell(42));
-                    String iCAOFlightCode = ExcelUtil.getCellValue(xssfRow.getCell(43));
-                    String aircraftType = ExcelUtil.getCellValue(xssfRow.getCell(44));
-                    String aircraftName = ExcelUtil.getCellValue(xssfRow.getCell(45));
-                    String flightDistance = ExcelUtil.getCellValue(xssfRow.getCell(46));
-                    String flightTime = ExcelUtil.getCellValue(xssfRow.getCell(47));
-                    String flightNo = ExcelUtil.getCellValue(xssfRow.getCell(48));
-                    String gPSTransmitterNo = ExcelUtil.getCellValue(xssfRow.getCell(49));
-                    String driverPhNo = ExcelUtil.getCellValue(xssfRow.getCell(50));
-                    String trailerNo = ExcelUtil.getCellValue(xssfRow.getCell(51));
+                    String shippingPoint = ExcelUtil.getCellValue(xssfRow.getCell(1));
+                    String palletIdTrucker = ExcelUtil.getCellValue(xssfRow.getCell(5));
+                    String grossWeight = ExcelUtil.getCellValue(xssfRow.getCell(6));
+                    String length = ExcelUtil.getCellValue(xssfRow.getCell(7));
+                    String width = ExcelUtil.getCellValue(xssfRow.getCell(8));
+                    String height = ExcelUtil.getCellValue(xssfRow.getCell(9));
+                    String nPIFlag = ExcelUtil.getCellValue(xssfRow.getCell(10));
+                    String securityLevel = ExcelUtil.getCellValue(xssfRow.getCell(11));
+                    String handover = ExcelUtil.getCellValue(xssfRow.getCell(12));
+                    String containerNo = ExcelUtil.getCellValue(xssfRow.getCell(16));
+                    String truckNoExOEM = ExcelUtil.getCellValue(xssfRow.getCell(17));
+                    String truckNoExTrucker = ExcelUtil.getCellValue(xssfRow.getCell(18));
+                    String truckNoBorderExchange = ExcelUtil.getCellValue(xssfRow.getCell(19));
+                    String eLockExOEM = ExcelUtil.getCellValue(xssfRow.getCell(20));
+                    String eLockExTrucker = ExcelUtil.getCellValue(xssfRow.getCell(21));
+                    String vesselIMO = ExcelUtil.getCellValue(xssfRow.getCell(23));
+                    String dwt = ExcelUtil.getCellValue(xssfRow.getCell(24));
+                    String porttoPortDistance = ExcelUtil.getCellValue(xssfRow.getCell(25));
+                    String vesselDistanceTraveled = ExcelUtil.getCellValue(xssfRow.getCell(26));
+                    String fastBoatService = ExcelUtil.getCellValue(xssfRow.getCell(27));
+                    String standardOceanService = ExcelUtil.getCellValue(xssfRow.getCell(28));
+                    String iCAOFlightCode = ExcelUtil.getCellValue(xssfRow.getCell(29));
+                    String aircraftType = ExcelUtil.getCellValue(xssfRow.getCell(30));
+                    String aircraftName = ExcelUtil.getCellValue(xssfRow.getCell(31));
+                    String flightDistance = ExcelUtil.getCellValue(xssfRow.getCell(32));
+                    String flightTime = ExcelUtil.getCellValue(xssfRow.getCell(33));
+                    String flightNo = ExcelUtil.getCellValue(xssfRow.getCell(34));
+                    String gPSTransmitterNo = ExcelUtil.getCellValue(xssfRow.getCell(35));
+                    String driverPhNo = ExcelUtil.getCellValue(xssfRow.getCell(36));
+                    String trailerNo = ExcelUtil.getCellValue(xssfRow.getCell(37));
 
+                    dimTransfer.setShippingPoint(shippingPoint);
                     dimTransfer.setPalletIdTrucker(palletIdTrucker);
-                    dimTransfer.setGrossWeightPdd(new BigDecimal(grossWeight));
-                    dimTransfer.setLengthCm(new BigDecimal(length));
-                    dimTransfer.setWidthCm(new BigDecimal(width));
-                    dimTransfer.setHeightCm(new BigDecimal(height));
+                    dimTransfer.setGrossWeightPdd(parseBigDecimal(grossWeight));
+                    dimTransfer.setLengthCm(parseBigDecimal(length));
+                    dimTransfer.setWidthCm(parseBigDecimal(width));
+                    dimTransfer.setHeightCm(parseBigDecimal(height));
                     dimTransfer.setNpiFlag(nPIFlag);
                     dimTransfer.setSecurityLevel(securityLevel);
                     dimTransfer.setHandover(handover);
@@ -209,16 +211,16 @@ public class DimTransferController {
                     dimTransfer.setElockExoem(eLockExOEM);
                     dimTransfer.setElockExtrucker(eLockExTrucker);
                     dimTransfer.setVesselImo(vesselIMO);
-                    dimTransfer.setDwt(new BigDecimal(dwt));
-                    dimTransfer.setPortToPortDistance(new BigDecimal(porttoPortDistance));
-                    dimTransfer.setVesselDistanceTraveled(new BigDecimal(vesselDistanceTraveled));
+                    dimTransfer.setDwt(parseBigDecimal(dwt));
+                    dimTransfer.setPortToPortDistance(parseBigDecimal(porttoPortDistance));
+                    dimTransfer.setVesselDistanceTraveled(parseBigDecimal(vesselDistanceTraveled));
                     dimTransfer.setFastBoatService(fastBoatService);
                     dimTransfer.setStandardOceanService(standardOceanService);
                     dimTransfer.setIcaoFlightCode(iCAOFlightCode);
                     dimTransfer.setAircraftType(aircraftType);
                     dimTransfer.setAirlineName(aircraftName);
-                    dimTransfer.setFlightDistance(new BigDecimal(flightDistance));
-                    dimTransfer.setFlightTime(new BigDecimal(flightTime));
+                    dimTransfer.setFlightDistance(parseBigDecimal(flightDistance));
+                    dimTransfer.setFlightTime(parseBigDecimal(flightTime));
                     dimTransfer.setFlightNo(flightNo);
                     dimTransfer.setGpsTransmitterNo(gPSTransmitterNo);
                     dimTransfer.setDriverPhNo(driverPhNo);
@@ -255,7 +257,6 @@ public class DimTransferController {
                 "Shipping Point," +
                 "Shipping Mode," +
                 "Forwarder," +
-                "Forwarder Pdd," +
                 "HAWB/BOL," +
                 "MAWB/MBOL," +
                 "Pallet ID OEM," +
@@ -358,5 +359,13 @@ public class DimTransferController {
             }
         }
         return map;
+    }
+
+    private BigDecimal parseBigDecimal(String input) {
+        try {
+            return new BigDecimal(input);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

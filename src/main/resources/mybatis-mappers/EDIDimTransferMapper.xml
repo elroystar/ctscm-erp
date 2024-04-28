@@ -6,7 +6,7 @@
         <result column="STATUS" jdbcType="INTEGER" property="status"/>
         <result column="CREATEDTIME" jdbcType="TIMESTAMP" property="createdtime"/>
         <result column="OEM" jdbcType="VARCHAR" property="oem"/>
-        <result column="ShipDate" jdbcType="TIMESTAMP" property="shipdate"/>
+        <result column="ShipDate" jdbcType="VARCHAR" property="shipdate"/>
         <result column="Shipping_Point" jdbcType="VARCHAR" property="shippingPoint"/>
         <result column="Shipping_Mode" jdbcType="VARCHAR" property="shippingMode"/>
         <result column="Forwarder" jdbcType="VARCHAR" property="forwarder"/>
@@ -143,7 +143,7 @@
                                   Flight_No, GPS_Transmitter_No, Driver_Ph_No,
                                   Trailer_No)
         values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createdtime,jdbcType=TIMESTAMP},
-                #{oem,jdbcType=VARCHAR}, #{shipdate,jdbcType=TIMESTAMP}, #{shippingPoint,jdbcType=VARCHAR},
+                #{oem,jdbcType=VARCHAR}, #{shipdate,jdbcType=VARCHAR}, #{shippingPoint,jdbcType=VARCHAR},
                 #{shippingMode,jdbcType=VARCHAR}, #{forwarder,jdbcType=VARCHAR}, #{hawb,jdbcType=VARCHAR},
                 #{mawb,jdbcType=VARCHAR}, #{pallets,jdbcType=VARCHAR}, #{palletIdOem,jdbcType=VARCHAR},
                 #{palletSscc18,jdbcType=VARCHAR}, #{palletIdTrucker,jdbcType=VARCHAR}, #{grossWeight,jdbcType=DECIMAL},
@@ -443,7 +443,7 @@
                 #{oem,jdbcType=VARCHAR},
             </if>
             <if test="shipdate != null">
-                #{shipdate,jdbcType=TIMESTAMP},
+                #{shipdate,jdbcType=VARCHAR},
             </if>
             <if test="shippingPoint != null">
                 #{shippingPoint,jdbcType=VARCHAR},
@@ -694,7 +694,7 @@
                 OEM = #{oem,jdbcType=VARCHAR},
             </if>
             <if test="shipdate != null">
-                ShipDate = #{shipdate,jdbcType=TIMESTAMP},
+                ShipDate = #{shipdate,jdbcType=VARCHAR},
             </if>
             <if test="shippingPoint != null">
                 Shipping_Point = #{shippingPoint,jdbcType=VARCHAR},
@@ -938,7 +938,7 @@
         set STATUS                   = #{status,jdbcType=INTEGER},
             CREATEDTIME              = #{createdtime,jdbcType=TIMESTAMP},
             OEM                      = #{oem,jdbcType=VARCHAR},
-            ShipDate                 = #{shipdate,jdbcType=TIMESTAMP},
+            ShipDate                 = #{shipdate,jdbcType=VARCHAR},
             Shipping_Point           = #{shippingPoint,jdbcType=VARCHAR},
             Shipping_Mode            = #{shippingMode,jdbcType=VARCHAR},
             Forwarder                = #{forwarder,jdbcType=VARCHAR},

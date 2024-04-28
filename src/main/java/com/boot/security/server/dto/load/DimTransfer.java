@@ -147,7 +147,7 @@ public class DimTransfer {
     }
 
     public void setOem(String oem) {
-        this.oem = oem == null ? null : oem.trim();
+        this.oem = oem;
     }
 
     public String getShipDate() {
@@ -163,7 +163,7 @@ public class DimTransfer {
     }
 
     public void setShippingPoint(String shippingPoint) {
-        this.shippingPoint = shippingPoint == null ? null : shippingPoint.trim();
+        this.shippingPoint = shippingPoint;
     }
 
     public String getShippingMode() {
@@ -171,7 +171,7 @@ public class DimTransfer {
     }
 
     public void setShippingMode(String shippingMode) {
-        this.shippingMode = shippingMode == null ? null : shippingMode.trim();
+        this.shippingMode = shippingMode;
     }
 
     public String getForwarder() {
@@ -179,7 +179,7 @@ public class DimTransfer {
     }
 
     public void setForwarder(String forwarder) {
-        this.forwarder = forwarder == null ? null : forwarder.trim();
+        this.forwarder = forwarder;
     }
 
     public String getForwarderPdd() {
@@ -195,7 +195,7 @@ public class DimTransfer {
     }
 
     public void setHawb(String hawb) {
-        this.hawb = hawb == null ? null : hawb.trim();
+        this.hawb = hawb;
     }
 
     public String getMawb() {
@@ -203,7 +203,7 @@ public class DimTransfer {
     }
 
     public void setMawb(String mawb) {
-        this.mawb = mawb == null ? null : mawb.trim();
+        this.mawb = mawb;
     }
 
     public String getPalletId() {
@@ -211,7 +211,7 @@ public class DimTransfer {
     }
 
     public void setPalletId(String palletId) {
-        this.palletId = palletId == null ? null : palletId.trim();
+        this.palletId = palletId;
     }
 
     public String getPalletSscc18() {
@@ -219,7 +219,7 @@ public class DimTransfer {
     }
 
     public void setPalletSscc18(String palletSscc18) {
-        this.palletSscc18 = palletSscc18 == null ? null : palletSscc18.trim();
+        this.palletSscc18 = palletSscc18;
     }
 
     public String getPalletIdTrucker() {
@@ -227,7 +227,7 @@ public class DimTransfer {
     }
 
     public void setPalletIdTrucker(String palletIdTrucker) {
-        this.palletIdTrucker = palletIdTrucker == null ? null : palletIdTrucker.trim();
+        this.palletIdTrucker = palletIdTrucker;
     }
 
     public BigDecimal getGrossWeight() {
@@ -275,7 +275,7 @@ public class DimTransfer {
     }
 
     public void setRegion(String region) {
-        this.region = region == null ? null : region.trim();
+        this.region = region;
     }
 
     public String getPoe() {
@@ -283,7 +283,7 @@ public class DimTransfer {
     }
 
     public void setPoe(String poe) {
-        this.poe = poe == null ? null : poe.trim();
+        this.poe = poe;
     }
 
     public String getDestination() {
@@ -291,7 +291,7 @@ public class DimTransfer {
     }
 
     public void setDestination(String destination) {
-        this.destination = destination == null ? null : destination.trim();
+        this.destination = destination;
     }
 
     public String getGateway() {
@@ -299,7 +299,7 @@ public class DimTransfer {
     }
 
     public void setGateway(String gateway) {
-        this.gateway = gateway == null ? null : gateway.trim();
+        this.gateway = gateway;
     }
 
     public String getConsolidationWarehouse() {
@@ -307,7 +307,7 @@ public class DimTransfer {
     }
 
     public void setConsolidationWarehouse(String consolidationWarehouse) {
-        this.consolidationWarehouse = consolidationWarehouse == null ? null : consolidationWarehouse.trim();
+        this.consolidationWarehouse = consolidationWarehouse;
     }
 
     public String getNpiFlag() {
@@ -315,7 +315,7 @@ public class DimTransfer {
     }
 
     public void setNpiFlag(String npiFlag) {
-        this.npiFlag = npiFlag == null ? null : npiFlag.trim();
+        this.npiFlag = npiFlag;
     }
 
     public String getSecurityLevel() {
@@ -323,7 +323,7 @@ public class DimTransfer {
     }
 
     public void setSecurityLevel(String securityLevel) {
-        this.securityLevel = securityLevel == null ? null : securityLevel.trim();
+        this.securityLevel = securityLevel;
     }
 
     public String getHandover() {
@@ -331,7 +331,7 @@ public class DimTransfer {
     }
 
     public void setHandover(String handover) {
-        this.handover = handover == null ? null : handover.trim();
+        this.handover = handover;
     }
 
     public String getShipType() {
@@ -339,7 +339,7 @@ public class DimTransfer {
     }
 
     public void setShipType(String shipType) {
-        this.shipType = shipType == null ? null : shipType.trim();
+        this.shipType = shipType;
     }
 
     public String getHubCode() {
@@ -347,7 +347,7 @@ public class DimTransfer {
     }
 
     public void setHubCode(String hubCode) {
-        this.hubCode = hubCode == null ? null : hubCode.trim();
+        this.hubCode = hubCode;
     }
 
     public String getGccn() {
@@ -355,7 +355,7 @@ public class DimTransfer {
     }
 
     public void setGccn(String gccn) {
-        this.gccn = gccn == null ? null : gccn.trim();
+        this.gccn = gccn;
     }
 
     public String getCountryOfClearance() {
@@ -363,7 +363,7 @@ public class DimTransfer {
     }
 
     public void setCountryOfClearance(String countryOfClearance) {
-        this.countryOfClearance = countryOfClearance == null ? null : countryOfClearance.trim();
+        this.countryOfClearance = countryOfClearance;
     }
 
     public String getShipToCity() {
@@ -371,7 +371,7 @@ public class DimTransfer {
     }
 
     public void setShipToCity(String shipToCity) {
-        this.shipToCity = shipToCity == null ? null : shipToCity.trim();
+        this.shipToCity = shipToCity;
     }
 
     public String getContainerNo() {
@@ -379,7 +379,7 @@ public class DimTransfer {
     }
 
     public void setContainerNo(String containerNo) {
-        this.containerNo = containerNo == null ? null : containerNo.trim();
+        this.containerNo = containerNo;
     }
 
     public String getTruckNoExoem() {
@@ -387,7 +387,7 @@ public class DimTransfer {
     }
 
     public void setTruckNoExoem(String truckNoExoem) {
-        this.truckNoExoem = truckNoExoem == null ? null : truckNoExoem.trim();
+        this.truckNoExoem = truckNoExoem;
     }
 
     public String getTruckNoExtrucker() {
@@ -395,7 +395,7 @@ public class DimTransfer {
     }
 
     public void setTruckNoExtrucker(String truckNoExtrucker) {
-        this.truckNoExtrucker = truckNoExtrucker == null ? null : truckNoExtrucker.trim();
+        this.truckNoExtrucker = truckNoExtrucker;
     }
 
     public String getTruckNoBorderexchange() {
@@ -403,7 +403,7 @@ public class DimTransfer {
     }
 
     public void setTruckNoBorderexchange(String truckNoBorderexchange) {
-        this.truckNoBorderexchange = truckNoBorderexchange == null ? null : truckNoBorderexchange.trim();
+        this.truckNoBorderexchange = truckNoBorderexchange;
     }
 
     public String getElockExoem() {
@@ -411,7 +411,7 @@ public class DimTransfer {
     }
 
     public void setElockExoem(String elockExoem) {
-        this.elockExoem = elockExoem == null ? null : elockExoem.trim();
+        this.elockExoem = elockExoem;
     }
 
     public String getElockExtrucker() {
@@ -419,7 +419,7 @@ public class DimTransfer {
     }
 
     public void setElockExtrucker(String elockExtrucker) {
-        this.elockExtrucker = elockExtrucker == null ? null : elockExtrucker.trim();
+        this.elockExtrucker = elockExtrucker;
     }
 
     public String getPod() {
@@ -427,7 +427,7 @@ public class DimTransfer {
     }
 
     public void setPod(String pod) {
-        this.pod = pod == null ? null : pod.trim();
+        this.pod = pod;
     }
 
     public String getTerminal() {
@@ -435,7 +435,7 @@ public class DimTransfer {
     }
 
     public void setTerminal(String terminal) {
-        this.terminal = terminal == null ? null : terminal.trim();
+        this.terminal = terminal;
     }
 
     public String getScacFwd() {
@@ -443,7 +443,7 @@ public class DimTransfer {
     }
 
     public void setScacFwd(String scacFwd) {
-        this.scacFwd = scacFwd == null ? null : scacFwd.trim();
+        this.scacFwd = scacFwd;
     }
 
     public String getScacTrucker() {
@@ -451,7 +451,7 @@ public class DimTransfer {
     }
 
     public void setScacTrucker(String scacTrucker) {
-        this.scacTrucker = scacTrucker == null ? null : scacTrucker.trim();
+        this.scacTrucker = scacTrucker;
     }
 
     public String getVesselImo() {
@@ -459,7 +459,7 @@ public class DimTransfer {
     }
 
     public void setVesselImo(String vesselImo) {
-        this.vesselImo = vesselImo == null ? null : vesselImo.trim();
+        this.vesselImo = vesselImo;
     }
 
     public BigDecimal getDwt() {
@@ -491,7 +491,7 @@ public class DimTransfer {
     }
 
     public void setFastBoatService(String fastBoatService) {
-        this.fastBoatService = fastBoatService == null ? null : fastBoatService.trim();
+        this.fastBoatService = fastBoatService;
     }
 
     public String getStandardOceanService() {
@@ -499,7 +499,7 @@ public class DimTransfer {
     }
 
     public void setStandardOceanService(String standardOceanService) {
-        this.standardOceanService = standardOceanService == null ? null : standardOceanService.trim();
+        this.standardOceanService = standardOceanService;
     }
 
     public String getIcaoFlightCode() {
@@ -507,7 +507,7 @@ public class DimTransfer {
     }
 
     public void setIcaoFlightCode(String icaoFlightCode) {
-        this.icaoFlightCode = icaoFlightCode == null ? null : icaoFlightCode.trim();
+        this.icaoFlightCode = icaoFlightCode;
     }
 
     public String getAircraftType() {
@@ -515,7 +515,7 @@ public class DimTransfer {
     }
 
     public void setAircraftType(String aircraftType) {
-        this.aircraftType = aircraftType == null ? null : aircraftType.trim();
+        this.aircraftType = aircraftType;
     }
 
     public String getAirlineName() {
@@ -523,7 +523,7 @@ public class DimTransfer {
     }
 
     public void setAirlineName(String airlineName) {
-        this.airlineName = airlineName == null ? null : airlineName.trim();
+        this.airlineName = airlineName;
     }
 
     public BigDecimal getFlightDistance() {
@@ -547,7 +547,7 @@ public class DimTransfer {
     }
 
     public void setFlightNo(String flightNo) {
-        this.flightNo = flightNo == null ? null : flightNo.trim();
+        this.flightNo = flightNo;
     }
 
     public String getGpsTransmitterNo() {
@@ -555,7 +555,7 @@ public class DimTransfer {
     }
 
     public void setGpsTransmitterNo(String gpsTransmitterNo) {
-        this.gpsTransmitterNo = gpsTransmitterNo == null ? null : gpsTransmitterNo.trim();
+        this.gpsTransmitterNo = gpsTransmitterNo;
     }
 
     public String getDriverPhNo() {
@@ -563,7 +563,7 @@ public class DimTransfer {
     }
 
     public void setDriverPhNo(String driverPhNo) {
-        this.driverPhNo = driverPhNo == null ? null : driverPhNo.trim();
+        this.driverPhNo = driverPhNo;
     }
 
     public String getTrailerNo() {
@@ -571,7 +571,7 @@ public class DimTransfer {
     }
 
     public void setTrailerNo(String trailerNo) {
-        this.trailerNo = trailerNo == null ? null : trailerNo.trim();
+        this.trailerNo = trailerNo;
     }
 
     @Override
@@ -580,7 +580,6 @@ public class DimTransfer {
                 "," + shipDate +
                 "," + shippingPoint +
                 "," + shippingMode +
-                "," + forwarder +
                 "," + forwarderPdd +
                 "," + hawb +
                 "," + mawb +
