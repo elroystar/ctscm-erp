@@ -20,6 +20,8 @@
                                 <div class="form-group">
                                     Ship date:：
                                     <input id="shipDate" type="text" class="form-control" placeholder="Ship date">
+                                    hawb:：
+                                    <input id="hawb" type="text" class="form-control" placeholder="hawb">
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
@@ -52,6 +54,7 @@
                     </tr>
                     <tr>
                         <th>id</th>
+                        <th>License Plate Number</th>
                         <th>OEM</th>
                         <th>Ship Date</th>
                         <th>Shipping Point</th>
@@ -87,24 +90,25 @@
                         <th>ELock_ExOEM</th>
                         <th>ELock_ExTrucker</th>
                         <th>POD</th>
-                        <th>Terminal</th>
+                        <th>Terminal/Ocean Port</th>
                         <th>SCAC_FWD</th>
                         <th>SCAC_Trucker</th>
                         <th>Vessel IMO</th>
                         <th>DWT</th>
                         <th>Port to Port Distance</th>
                         <th>Vessel Distance Traveled</th>
-                        <th>Fast Boat Service</th>
-                        <th>Standard Ocean Service</th>
+                        <th>Fast Boat Service/Standard Ocean Service</th>
+                        <!--                        <th>Standard Ocean Service</th>-->
                         <th>ICAO Flight Code</th>
                         <th>Aircraft Type</th>
                         <th>Aircraft Name</th>
                         <th>Flight Distance</th>
                         <th>Flight Time</th>
                         <th>Flight No</th>
-                        <th>GPS Transmitter No</th>
+                        <!--                        <th>GPS Transmitter No</th>-->
                         <th>Driver Ph No</th>
                         <th>Trailer No</th>
+                        <th>Pdd Status</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -118,6 +122,7 @@
       enctype="multipart/form-data">
     <br/>
     <input id="shipDateForm" name="shipDateForm" hidden="true">
+    <input id="hawbForm" name="hawbForm" hidden="true">
 
     <input id="token" name="token" hidden="true">
 </form>
@@ -167,13 +172,15 @@
 
     $("#exportExcel").click(function () {
         var shipDate = $('#shipDate').val();
-        if (shipDate.length == 0) {
+        var hawb = $('#hawb').val();
+        if (shipDate.length == 0 && hawb.length == 0) {
             layer.open({
                 title: '提示',
                 content: '请先输入至少一个条件'
             });
         } else {
             $("#shipDateForm").val(shipDate);
+            $("#shawbForm").val(hawb);
             $("#token").val(localStorage.getItem("token"));
             $("#form").attr("onsubmit", "return true");
             $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
@@ -233,7 +240,8 @@
 
     $("#sendPdd").click(function () {
         var shipDate = $('#shipDate').val();
-        if (shipDate.length == 0) {
+        var hawb = $('#hawb').val();
+        if (shipDate.length == 0 && hawb.length == 0) {
             layer.open({
                 title: '提示',
                 content: '请先输入至少一个条件'
@@ -242,7 +250,8 @@
             $.ajax({
                 type: 'post',
                 data: JSON.stringify({
-                    shipDate: $('#shipDate').val()
+                    shipDate: $('#shipDate').val(),
+                    hawb: $('#hawb').val()
                 }),
                 dataType: 'json',
                 url: '/dimTransfer/sendPdd',
@@ -296,6 +305,7 @@
                     "type": "get",
                     "data": function (d) {
                         d.shipDate = $('#shipDate').val();
+                        d.hawb = $('#hawb').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;
@@ -321,6 +331,7 @@
                 "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
                 "columns": [
                     {"data": "id", "defaultContent": "", "visible": false},
+                    {"data": "licencePlateNumber", "defaultContent": ""},
                     {"data": "oem", "defaultContent": ""},
                     {"data": "shipDate", "defaultContent": ""},
                     {"data": "shippingPoint", "defaultContent": ""},
@@ -364,16 +375,26 @@
                     {"data": "portToPortDistance", "defaultContent": ""},
                     {"data": "vesselDistanceTraveled", "defaultContent": ""},
                     {"data": "fastBoatService", "defaultContent": ""},
-                    {"data": "standardOceanService", "defaultContent": ""},
+                    // {"data": "standardOceanService", "defaultContent": ""},
                     {"data": "icaoFlightCode", "defaultContent": ""},
                     {"data": "aircraftType", "defaultContent": ""},
                     {"data": "airlineName", "defaultContent": ""},
                     {"data": "flightDistance", "defaultContent": ""},
                     {"data": "flightTime", "defaultContent": ""},
                     {"data": "flightNo", "defaultContent": ""},
-                    {"data": "gpsTransmitterNo", "defaultContent": ""},
+                    // {"data": "gpsTransmitterNo", "defaultContent": ""},
                     {"data": "driverPhNo", "defaultContent": ""},
                     {"data": "trailerNo", "defaultContent": ""},
+                    {
+                        "data": "status", "defaultContent": "", render: function (data, type, row) {
+                            // 根据特定的条件将某些值替换成其他的值
+                            if (data === 2) {
+                                return '已发送';
+                            } else {
+                                return '未发送';
+                            }
+                        }
+                    },
                 ],
                 "select": {
                     style: 'multi'

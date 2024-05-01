@@ -110,30 +110,29 @@ public class DimTransferController {
                     dimTransfer.setPoe(edi945.getPoe());
                     dimTransfer.setDestination(edi945.getPoeCountry());
                     String consolidationWarehouse = "";
-                    String terminal = "";
                     String gateway = edi945.getGateway();
                     dimTransfer.setGateway(gateway);
                     if (StringUtils.equals(gateway, "CGO")) {
                         consolidationWarehouse = "CTSCM ZZ WH";
-                        terminal = "ZHENGZHOU";
+//                        terminal = "ZHENGZHOU";
                     } else if (StringUtils.equals(gateway, "HKG")) {
                         consolidationWarehouse = "CTSCM HK WH";
-                        terminal = "HONGKONG";
+//                        terminal = "HONGKONG";
                     } else if (StringUtils.equals(gateway, "PVG")) {
                         consolidationWarehouse = "CTSCM SH WH";
-                        terminal = "SHANGHAI";
+//                        terminal = "SHANGHAI";
                     } else if (StringUtils.equals(gateway, "SHA")) {
                         consolidationWarehouse = "CTSCM SH WH";
-                        terminal = "SHANGHAI";
+//                        terminal = "SHANGHAI";
                     } else if (StringUtils.equals(gateway, "SZX")) {
                         consolidationWarehouse = "SHENZHEN";
-                        terminal = "SHENZHEN";
+//                        terminal = "SHENZHEN";
                     } else {
                         consolidationWarehouse = "";
-                        terminal = "";
+//                        terminal = "";
                     }
                     dimTransfer.setConsolidationWarehouse(consolidationWarehouse);
-                    dimTransfer.setTerminal(terminal);
+                    dimTransfer.setTerminal(gateway);
                     dimTransfer.setShipType(edi945.getShipway());
                     dimTransfer.setShipToCity(edi945.getPoe());
                     dimTransfer.setScacFwd(edi945.getFwdCode());
@@ -238,11 +237,13 @@ public class DimTransferController {
     }
 
     @PostMapping("exportLoad")
-    @ApiOperation(value = "导出ICT Load数据")
+    @ApiOperation(value = "导出Load数据")
     public void exportLoad(HttpServletRequest request, HttpServletResponse response) {
         String shipDateForm = request.getParameter("shipDateForm");
+        String hawbForm = request.getParameter("hawbForm");
         Map<String, Object> params = Maps.newHashMap();
         params.put("shipDate", shipDateForm);
+        params.put("hawb", hawbForm);
         List<DimTransfer> ediLoads = dimTransferMapper.list(params, 0, 999999);
         exportLoad(response, ediLoads);
     }
@@ -287,22 +288,22 @@ public class DimTransferController {
                 "ELock_ExOEM," +
                 "ELock_ExTrucker," +
                 "POD," +
-                "Terminal," +
+                "Terminal/Ocean Port," +
                 "SCAC_FWD," +
                 "SCAC_Trucker," +
                 "Vessel IMO," +
                 "DWT," +
                 "Port to Port Distance," +
                 "Vessel Distance Traveled," +
-                "Fast Boat Service," +
-                "Standard Ocean Service," +
+                "Fast Boat Service/Standard Ocean Service," +
+//                "Standard Ocean Service," +
                 "ICAO Flight Code," +
                 "Aircraft Type," +
                 "Aircraft Name," +
                 "Flight Distance," +
                 "Flight Time," +
                 "Flight No," +
-                "GPS Transmitter No," +
+//                "GPS Transmitter No," +
                 "Driver Ph No," +
                 "Trailer No";
         String[] headers = headerStr.split(",");
@@ -310,9 +311,57 @@ public class DimTransferController {
         ExcelUtil.excelExport2(fileName, null, headers, data, response);
     }
 
+    @PostMapping("exportLoadManifest")
+    @ApiOperation(value = "导出LoadManifest数据")
+    public void exportLoadManifest(HttpServletRequest request, HttpServletResponse response) {
+        String createdTimeForm = request.getParameter("createdTimeForm");
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("createdTime", createdTimeForm);
+        List<DimTransfer> ediLoads = dimTransferMapper.list(params, 0, 999999);
+        exportLoadManifest(response, ediLoads);
+    }
+
+    private void exportLoadManifest(HttpServletResponse response, List<DimTransfer> ediLoads) {
+        List<Object[]> data = new ArrayList<>();
+        for (DimTransfer ediLoad : ediLoads) {
+            data.add(ediLoad.toLoadManifestString().split(","));
+        }
+        String headerStr = "Created Time," +
+                "Line No," +
+                "Loading No," +
+                "Pallet ID," +
+                "Number Of Boxes," +
+                "Quantity," +
+                "Gross Weight," +
+                "Destination," +
+                "HAWB," +
+                "Repeat Weight," +
+                "Licence Plate Number";
+        String[] headers = headerStr.split(",");
+        String fileName = MessageFormat.format("{0}-{1}", "LOAD MANIFEST", DateUtil.format(new Date(), DateUtil.NORM_DATE_TIME_PATTERN_TWO));
+        ExcelUtil.excelExport2(fileName, null, headers, data, response);
+    }
+
     @GetMapping("list")
     @ApiOperation(value = "load管理列表")
     public PageTableResponse list(PageTableRequest request) {
+        return new PageTableHandler(new CountHandler() {
+            @Override
+            public int count(PageTableRequest request) {
+                return dimTransferMapper.count(request.getParams());
+            }
+        }, new ListHandler() {
+            @Override
+            public List<DimTransfer> list(PageTableRequest request) {
+                List<DimTransfer> ediLoads = dimTransferMapper.list(request.getParams(), request.getOffset(), request.getLimit());
+                return ediLoads;
+            }
+        }).handle(request);
+    }
+
+    @GetMapping("listLoad")
+    @ApiOperation(value = "loadList管理列表")
+    public PageTableResponse listLoad(PageTableRequest request) {
         return new PageTableHandler(new CountHandler() {
             @Override
             public int count(PageTableRequest request) {

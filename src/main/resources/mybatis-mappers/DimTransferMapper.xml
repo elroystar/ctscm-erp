@@ -4,7 +4,12 @@
     <resultMap id="BaseResultMap" type="com.boot.security.server.dto.load.DimTransfer">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="created_time" jdbcType="VARCHAR" property="createdTime"/>
+        <result column="line_no" jdbcType="VARCHAR" property="lineNo"/>
+        <result column="loading_no" jdbcType="VARCHAR" property="loadingNo"/>
+        <result column="number_of_boxes" jdbcType="VARCHAR" property="numberOfBoxes"/>
+        <result column="quantity" jdbcType="VARCHAR" property="quantity"/>
+        <result column="repeat_weight" jdbcType="VARCHAR" property="repeatWeight"/>
         <result column="oem" jdbcType="VARCHAR" property="oem"/>
         <result column="ship_date" jdbcType="VARCHAR" property="shipDate"/>
         <result column="shipping_point" jdbcType="VARCHAR" property="shippingPoint"/>
@@ -62,7 +67,8 @@
     </resultMap>
     <sql id="Base_Column_List">
         id
-        , status, created_time, oem, ship_date, shipping_point, shipping_mode, forwarder, forwarder_pdd,
+        , status, created_time, licence_plate_number, line_no, loading_no, number_of_boxes, quantity, repeat_weight,
+    oem, ship_date, shipping_point, shipping_mode, forwarder, forwarder_pdd,
     hawb, mawb, pallet_id, pallet_sscc18, pallet_id_trucker, gross_weight, gross_weight_pdd, length_cm,
     width_cm, height_cm, region, poe, destination, gateway, consolidation_warehouse, 
     npi_flag, security_level, handover, ship_type, hub_code, gccn, country_of_clearance, 
@@ -76,6 +82,12 @@
         <where>
             <if test="params.shipDate != null and params.shipDate != ''">
                 and ship_date = #{params.shipDate,jdbcType=VARCHAR}
+            </if>
+            <if test="params.hawb != null and params.hawb != ''">
+                and hawb = #{params.hawb,jdbcType=VARCHAR}
+            </if>
+            <if test="params.createdTime != null and params.createdTime != ''">
+                and created_time = #{params.createdTime,jdbcType=VARCHAR}
             </if>
         </where>
     </sql>
@@ -525,7 +537,7 @@
                 status = #{status,jdbcType=INTEGER},
             </if>
             <if test="createdTime != null">
-                created_time = #{createdTime,jdbcType=TIMESTAMP},
+                created_time = #{createdTime,jdbcType=VARCHAR},
             </if>
             <if test="oem != null">
                 oem = #{oem,jdbcType=VARCHAR},
@@ -695,7 +707,7 @@
     <update id="updateByPrimaryKey" parameterType="com.boot.security.server.dto.load.DimTransfer">
         update loading_manifest
         set status                   = #{status,jdbcType=INTEGER},
-            created_time             = #{createdTime,jdbcType=TIMESTAMP},
+            created_time             = #{createdTime,jdbcType=VARCHAR},
             oem                      = #{oem,jdbcType=VARCHAR},
             ship_date                = #{shipDate,jdbcType=VARCHAR},
             shipping_point           = #{shippingPoint,jdbcType=VARCHAR},

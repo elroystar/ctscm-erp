@@ -8,7 +8,7 @@ public class EDIDimTransfer {
 
     private Integer status;
 
-    private Date createdtime;
+    private String createdtime;
 
     private String oem;
 
@@ -186,11 +186,11 @@ public class EDIDimTransfer {
         this.status = status;
     }
 
-    public Date getCreatedtime() {
+    public String getCreatedtime() {
         return createdtime;
     }
 
-    public void setCreatedtime(Date createdtime) {
+    public void setCreatedtime(String createdtime) {
         this.createdtime = createdtime;
     }
 

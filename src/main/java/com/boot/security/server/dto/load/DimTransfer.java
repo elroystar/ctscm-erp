@@ -8,7 +8,19 @@ public class DimTransfer {
 
     private Integer status;
 
-    private Date createdTime;
+    private String createdTime;
+
+    private String licencePlateNumber;
+
+    private String lineNo;
+
+    private String loadingNo;
+
+    private BigDecimal numberOfBoxes;
+
+    private BigDecimal quantity;
+
+    private String repeatWeight;
 
     private String oem;
 
@@ -134,12 +146,60 @@ public class DimTransfer {
         this.status = status;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getLicencePlateNumber() {
+        return licencePlateNumber;
+    }
+
+    public void setLicencePlateNumber(String licencePlateNumber) {
+        this.licencePlateNumber = licencePlateNumber;
+    }
+
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
+
+    public String getLoadingNo() {
+        return loadingNo;
+    }
+
+    public void setLoadingNo(String loadingNo) {
+        this.loadingNo = loadingNo;
+    }
+
+    public BigDecimal getNumberOfBoxes() {
+        return numberOfBoxes;
+    }
+
+    public void setNumberOfBoxes(BigDecimal numberOfBoxes) {
+        this.numberOfBoxes = numberOfBoxes;
+    }
+
+    public BigDecimal getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(BigDecimal quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getRepeatWeight() {
+        return repeatWeight;
+    }
+
+    public void setRepeatWeight(String repeatWeight) {
+        this.repeatWeight = repeatWeight;
     }
 
     public String getOem() {
@@ -619,15 +679,29 @@ public class DimTransfer {
                 "," + portToPortDistance +
                 "," + vesselDistanceTraveled +
                 "," + fastBoatService +
-                "," + standardOceanService +
+//                "," + standardOceanService +
                 "," + icaoFlightCode +
                 "," + aircraftType +
                 "," + airlineName +
                 "," + flightDistance +
                 "," + flightTime +
                 "," + flightNo +
-                "," + gpsTransmitterNo +
+//                "," + gpsTransmitterNo +
                 "," + driverPhNo +
                 "," + trailerNo;
+    }
+
+    public String toLoadManifestString() {
+        return createdTime +
+                "," + lineNo +
+                "," + loadingNo +
+                "," + palletId +
+                "," + numberOfBoxes +
+                "," + quantity +
+                "," + grossWeight +
+                "," + destination +
+                "," + hawb +
+                "," + repeatWeight +
+                "," + licencePlateNumber;
     }
 }

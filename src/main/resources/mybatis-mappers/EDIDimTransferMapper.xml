@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.boot.security.server.dto.load.EDIDimTransfer">
         <id column="ID" jdbcType="INTEGER" property="id"/>
         <result column="STATUS" jdbcType="INTEGER" property="status"/>
-        <result column="CREATEDTIME" jdbcType="TIMESTAMP" property="createdtime"/>
+        <result column="CREATEDTIME" jdbcType="VARCHAR" property="createdtime"/>
         <result column="OEM" jdbcType="VARCHAR" property="oem"/>
         <result column="ShipDate" jdbcType="VARCHAR" property="shipdate"/>
         <result column="Shipping_Point" jdbcType="VARCHAR" property="shippingPoint"/>
@@ -142,7 +142,7 @@
                                   Aircraft_Name, Flight_Distance, Flight_Time,
                                   Flight_No, GPS_Transmitter_No, Driver_Ph_No,
                                   Trailer_No)
-        values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createdtime,jdbcType=TIMESTAMP},
+        values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createdtime,jdbcType=VARCHAR},
                 #{oem,jdbcType=VARCHAR}, #{shipdate,jdbcType=VARCHAR}, #{shippingPoint,jdbcType=VARCHAR},
                 #{shippingMode,jdbcType=VARCHAR}, #{forwarder,jdbcType=VARCHAR}, #{hawb,jdbcType=VARCHAR},
                 #{mawb,jdbcType=VARCHAR}, #{pallets,jdbcType=VARCHAR}, #{palletIdOem,jdbcType=VARCHAR},
@@ -437,7 +437,7 @@
                 #{status,jdbcType=INTEGER},
             </if>
             <if test="createdtime != null">
-                #{createdtime,jdbcType=TIMESTAMP},
+                #{createdtime,jdbcType=VARCHAR},
             </if>
             <if test="oem != null">
                 #{oem,jdbcType=VARCHAR},
@@ -688,7 +688,7 @@
                 STATUS = #{status,jdbcType=INTEGER},
             </if>
             <if test="createdtime != null">
-                CREATEDTIME = #{createdtime,jdbcType=TIMESTAMP},
+                CREATEDTIME = #{createdtime,jdbcType=VARCHAR},
             </if>
             <if test="oem != null">
                 OEM = #{oem,jdbcType=VARCHAR},
@@ -936,7 +936,7 @@
     <update id="updateByPrimaryKey" parameterType="com.boot.security.server.dto.load.EDIDimTransfer">
         update dim_transfer
         set STATUS                   = #{status,jdbcType=INTEGER},
-            CREATEDTIME              = #{createdtime,jdbcType=TIMESTAMP},
+            CREATEDTIME              = #{createdtime,jdbcType=VARCHAR},
             OEM                      = #{oem,jdbcType=VARCHAR},
             ShipDate                 = #{shipdate,jdbcType=VARCHAR},
             Shipping_Point           = #{shippingPoint,jdbcType=VARCHAR},
