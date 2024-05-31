@@ -22,6 +22,8 @@
                                     <input id="shipDate" type="text" class="form-control" placeholder="Ship date">
                                     hawb:：
                                     <input id="hawb" type="text" class="form-control" placeholder="hawb">
+                                    Licence Plate Number:：
+                                    <input id="licencePlateNumber" type="text" class="form-control" placeholder="Licence Plate Number">
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
@@ -108,6 +110,7 @@
                         <!--                        <th>GPS Transmitter No</th>-->
                         <th>Driver Ph No</th>
                         <th>Trailer No</th>
+                        <th>Site</th>
                         <th>Pdd Status</th>
                     </tr>
                     </thead>
@@ -123,6 +126,7 @@
     <br/>
     <input id="shipDateForm" name="shipDateForm" hidden="true">
     <input id="hawbForm" name="hawbForm" hidden="true">
+    <input id="licencePlateNumberForm" name="licencePlateNumberForm" hidden="true">
 
     <input id="token" name="token" hidden="true">
 </form>
@@ -173,14 +177,16 @@
     $("#exportExcel").click(function () {
         var shipDate = $('#shipDate').val();
         var hawb = $('#hawb').val();
-        if (shipDate.length == 0 && hawb.length == 0) {
+        var licencePlateNumber = $('#licencePlateNumber').val();
+        if (shipDate.length == 0 && hawb.length == 0  && licencePlateNumber.length == 0) {
             layer.open({
                 title: '提示',
                 content: '请先输入至少一个条件'
             });
         } else {
             $("#shipDateForm").val(shipDate);
-            $("#shawbForm").val(hawb);
+            $("#hawbForm").val(hawb);
+            $("#licencePlateNumberForm").val(licencePlateNumber);
             $("#token").val(localStorage.getItem("token"));
             $("#form").attr("onsubmit", "return true");
             $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
@@ -251,7 +257,8 @@
                 type: 'post',
                 data: JSON.stringify({
                     shipDate: $('#shipDate').val(),
-                    hawb: $('#hawb').val()
+                    hawb: $('#hawb').val(),
+                    licencePlateNumber: $('#licencePlateNumber').val()
                 }),
                 dataType: 'json',
                 url: '/dimTransfer/sendPdd',
@@ -306,6 +313,7 @@
                     "data": function (d) {
                         d.shipDate = $('#shipDate').val();
                         d.hawb = $('#hawb').val();
+                        d.licencePlateNumber = $('#licencePlateNumber').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;
@@ -385,6 +393,7 @@
                     // {"data": "gpsTransmitterNo", "defaultContent": ""},
                     {"data": "driverPhNo", "defaultContent": ""},
                     {"data": "trailerNo", "defaultContent": ""},
+                    {"data": "site", "defaultContent": ""},
                     {
                         "data": "status", "defaultContent": "", render: function (data, type, row) {
                             // 根据特定的条件将某些值替换成其他的值

@@ -130,6 +130,8 @@ public class DimTransfer {
 
     private String trailerNo;
 
+    private String site;
+
     public Integer getId() {
         return id;
     }
@@ -634,74 +636,82 @@ public class DimTransfer {
         this.trailerNo = trailerNo;
     }
 
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
     @Override
     public String toString() {
-        return oem +
-                "," + shipDate +
-                "," + shippingPoint +
-                "," + shippingMode +
-                "," + forwarderPdd +
-                "," + hawb +
-                "," + mawb +
-                "," + palletId +
-                "," + palletSscc18 +
-                "," + palletIdTrucker +
-                "," + grossWeight +
-                "," + grossWeightPdd +
-                "," + lengthCm +
-                "," + widthCm +
-                "," + heightCm +
-                "," + region +
-                "," + poe +
-                "," + destination +
-                "," + gateway +
-                "," + consolidationWarehouse +
-                "," + npiFlag +
-                "," + securityLevel +
-                "," + handover +
-                "," + shipType +
-                "," + hubCode +
-                "," + gccn +
-                "," + countryOfClearance +
-                "," + shipToCity +
-                "," + containerNo +
-                "," + truckNoExoem +
-                "," + truckNoExtrucker +
-                "," + truckNoBorderexchange +
-                "," + elockExoem +
-                "," + elockExtrucker +
-                "," + pod +
-                "," + terminal +
-                "," + scacFwd +
-                "," + scacTrucker +
-                "," + vesselImo +
-                "," + dwt +
-                "," + portToPortDistance +
-                "," + vesselDistanceTraveled +
-                "," + fastBoatService +
-//                "," + standardOceanService +
-                "," + icaoFlightCode +
-                "," + aircraftType +
-                "," + airlineName +
-                "," + flightDistance +
-                "," + flightTime +
-                "," + flightNo +
-//                "," + gpsTransmitterNo +
-                "," + driverPhNo +
-                "," + trailerNo;
+        return (oem != null ? oem : "") +
+                "#" + (shipDate != null ? shipDate : "") +
+                "#" + (shippingPoint != null ? shippingPoint : "") +
+                "#" + (shippingMode != null ? shippingMode : "") +
+                "#" + (forwarderPdd != null ? forwarderPdd : "") +
+                "#" + (hawb != null ? hawb : "") +
+                "#" + (mawb != null ? mawb : "") +
+                "#" + (palletId != null ? palletId : "") +
+                "#" + (palletSscc18 != null ? palletSscc18 : "") +
+                "#" + (palletIdTrucker != null ? palletIdTrucker : "") +
+                "#" + (grossWeight != null ? grossWeight : "") +
+                "#" + (grossWeightPdd != null ? grossWeightPdd : "") +
+                "#" + (lengthCm != null ? lengthCm : "") +
+                "#" + (widthCm != null ? widthCm : "") +
+                "#" + (heightCm != null ? heightCm : "") +
+                "#" + (region != null ? region : "") +
+                "#" + (poe != null ? poe : "") +
+                "#" + (destination != null ? destination : "") +
+                "#" + (gateway != null ? gateway : "") +
+                "#" + (consolidationWarehouse != null ? consolidationWarehouse : "") +
+                "#" + (npiFlag != null ? npiFlag : "") +
+                "#" + (securityLevel != null ? securityLevel : "") +
+                "#" + (handover != null ? handover : "") +
+                "#" + (shipType != null ? shipType : "") +
+                "#" + (hubCode != null ? hubCode : "") +
+                "#" + (gccn != null ? gccn : "") +
+                "#" + (countryOfClearance != null ? countryOfClearance : "") +
+                "#" + (shipToCity != null ? shipToCity : "") +
+                "#" + (containerNo != null ? containerNo : "") +
+                "#" + (truckNoExoem != null ? truckNoExoem : "") +
+                "#" + (truckNoExtrucker != null ? truckNoExtrucker : "") +
+                "#" + (truckNoBorderexchange != null ? truckNoBorderexchange : "") +
+                "#" + (elockExoem != null ? elockExoem : "") +
+                "#" + (elockExtrucker != null ? elockExtrucker : "") +
+                "#" + (pod != null ? pod : "") +
+                "#" + (terminal != null ? terminal : "") +
+                "#" + (scacFwd != null ? scacFwd : "") +
+                "#" + (scacTrucker != null ? scacTrucker : "") +
+                "#" + (vesselImo != null ? vesselImo : "") +
+                "#" + (dwt != null ? dwt : "") +
+                "#" + (portToPortDistance != null ? portToPortDistance : "") +
+                "#" + (vesselDistanceTraveled != null ? vesselDistanceTraveled : "") +
+                "#" + (fastBoatService != null ? fastBoatService : "") +
+//            "#" + (standardOceanService != null ? standardOceanService : "") +
+                "#" + (icaoFlightCode != null ? icaoFlightCode : "") +
+                "#" + (aircraftType != null ? aircraftType : "") +
+                "#" + (airlineName != null ? airlineName : "") +
+                "#" + (flightDistance != null ? flightDistance : "") +
+                "#" + (flightTime != null ? flightTime : "") +
+                "#" + (flightNo != null ? flightNo : "") +
+//            "#" + (gpsTransmitterNo != null ? gpsTransmitterNo : "") +
+                "#" + (driverPhNo != null ? driverPhNo : "") +
+                "#" + (trailerNo != null ? trailerNo : "") +
+                "#" + (site != null ? site : "");
     }
 
     public String toLoadManifestString() {
-        return createdTime +
-                "," + lineNo +
-                "," + loadingNo +
-                "," + palletId +
-                "," + numberOfBoxes +
-                "," + quantity +
-                "," + grossWeight +
-                "," + destination +
-                "," + hawb +
-                "," + repeatWeight +
-                "," + licencePlateNumber;
+        return (createdTime != null ? createdTime : "") +
+                "," + (loadingNo != null ? loadingNo : "") +
+                "," + (palletId != null ? palletId : "") +
+                "," + (numberOfBoxes != null ? numberOfBoxes : "") +
+                "," + (quantity != null ? quantity : "") +
+                "," + (grossWeight != null ? grossWeight : "") +
+                "," + (forwarder != null ? forwarder : "") +
+                "," + (destination != null ? destination : "") +
+                "," + (hawb != null ? hawb : "") +
+                "," + (licencePlateNumber != null ? licencePlateNumber : "");
     }
 }

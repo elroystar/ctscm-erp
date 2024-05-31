@@ -6,6 +6,8 @@ public class SendPddInfoDTO {
 
     private String hawb;
 
+    private String licencePlateNumber;
+
     public String getShipDate() {
         return shipDate;
     }
@@ -20,5 +22,13 @@ public class SendPddInfoDTO {
 
     public void setHawb(String hawb) {
         this.hawb = hawb;
+    }
+
+    public String getLicencePlateNumber() {
+        return licencePlateNumber;
+    }
+
+    public void setLicencePlateNumber(String licencePlateNumber) {
+        this.licencePlateNumber = licencePlateNumber;
     }
 }

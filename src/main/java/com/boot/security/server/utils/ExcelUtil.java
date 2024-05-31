@@ -16,6 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.util.ObjectUtils;
 
 /**
  * excel工具类
@@ -210,7 +211,7 @@ public class ExcelUtil {
 
                     for (int i = 0; i < length; i++) {
                         cell = row.createCell(i);
-                        cell.setCellValue(data[i] == null ? "" : data[i].toString());
+                        cell.setCellValue(ObjectUtils.isEmpty(data[i]) ? "" : data[i].toString());
                     }
                 }
             }

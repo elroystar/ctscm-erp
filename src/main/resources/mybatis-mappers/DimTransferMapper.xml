@@ -64,6 +64,7 @@
         <result column="gps_transmitter_no" jdbcType="VARCHAR" property="gpsTransmitterNo"/>
         <result column="driver_ph_no" jdbcType="VARCHAR" property="driverPhNo"/>
         <result column="trailer_no" jdbcType="VARCHAR" property="trailerNo"/>
+        <result column="site" jdbcType="VARCHAR" property="site"/>
     </resultMap>
     <sql id="Base_Column_List">
         id
@@ -76,7 +77,7 @@
     elock_exoem, elock_extrucker, pod, terminal, scac_fwd, scac_trucker, vessel_imo, 
     dwt, port_to_port_distance, vessel_distance_traveled, fast_boat_service, standard_ocean_service, 
     icao_flight_code, aircraft_type, airline_name, flight_distance, flight_time, flight_no, 
-    gps_transmitter_no, driver_ph_no, trailer_no
+    gps_transmitter_no, driver_ph_no, trailer_no, site
     </sql>
     <sql id="where">
         <where>
@@ -88,6 +89,9 @@
             </if>
             <if test="params.createdTime != null and params.createdTime != ''">
                 and created_time = #{params.createdTime,jdbcType=VARCHAR}
+            </if>
+            <if test="params.licencePlateNumber != null and params.licencePlateNumber != ''">
+                and licence_plate_number = #{params.licencePlateNumber,jdbcType=VARCHAR}
             </if>
         </where>
     </sql>
@@ -106,7 +110,7 @@
         <include refid="Base_Column_List"/>
         from loading_manifest
         <include refid="where"/>
-        order by ship_date desc
+        order by created_time desc
         limit #{offset}, #{limit}
     </select>
     <select id="selectByHawb" resultMap="BaseResultMap">
@@ -156,7 +160,7 @@
                                       fast_boat_service, standard_ocean_service,
                                       icao_flight_code, aircraft_type, airline_name,
                                       flight_distance, flight_time, flight_no,
-                                      gps_transmitter_no, driver_ph_no, trailer_no)
+                                      gps_transmitter_no, driver_ph_no, trailer_no, site)
         values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP},
                 #{oem,jdbcType=VARCHAR}, #{shipDate,jdbcType=VARCHAR}, #{shippingPoint,jdbcType=VARCHAR},
                 #{shippingMode,jdbcType=VARCHAR}, #{forwarder,jdbcType=VARCHAR}, #{forwarderPdd,jdbcType=VARCHAR},
@@ -179,7 +183,8 @@
                 #{fastBoatService,jdbcType=VARCHAR}, #{standardOceanService,jdbcType=VARCHAR},
                 #{icaoFlightCode,jdbcType=VARCHAR}, #{aircraftType,jdbcType=VARCHAR}, #{airlineName,jdbcType=VARCHAR},
                 #{flightDistance,jdbcType=DECIMAL}, #{flightTime,jdbcType=DECIMAL}, #{flightNo,jdbcType=VARCHAR},
-                #{gpsTransmitterNo,jdbcType=VARCHAR}, #{driverPhNo,jdbcType=VARCHAR}, #{trailerNo,jdbcType=VARCHAR})
+                #{gpsTransmitterNo,jdbcType=VARCHAR}, #{driverPhNo,jdbcType=VARCHAR}, #{trailerNo,jdbcType=VARCHAR},
+                #{site,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.boot.security.server.dto.load.DimTransfer">
         insert into loading_manifest
@@ -355,6 +360,9 @@
             <if test="trailerNo != null">
                 trailer_no,
             </if>
+            <if test="site != null">
+                site,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -527,6 +535,9 @@
             </if>
             <if test="trailerNo != null">
                 #{trailerNo,jdbcType=VARCHAR},
+            </if>
+            <if test="site != null">
+                #{site,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -701,6 +712,9 @@
             <if test="trailerNo != null">
                 trailer_no = #{trailerNo,jdbcType=VARCHAR},
             </if>
+            <if test="site != null">
+                site = #{site,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -761,7 +775,8 @@
             flight_no                = #{flightNo,jdbcType=VARCHAR},
             gps_transmitter_no       = #{gpsTransmitterNo,jdbcType=VARCHAR},
             driver_ph_no             = #{driverPhNo,jdbcType=VARCHAR},
-            trailer_no               = #{trailerNo,jdbcType=VARCHAR}
+            trailer_no               = #{trailerNo,jdbcType=VARCHAR},
+            site                     = #{site,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

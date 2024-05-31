@@ -21,7 +21,6 @@ import com.boot.security.server.utils.FileUtil;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -93,52 +92,38 @@ public class DimTransferController {
     @ApiOperation(value = "获取945数据")
     public void get945Info(@PathVariable String hawb) {
         try {
-            List<EDI945> infoByWaybill = edi945Mapper.getInfoByWaybill(hawb);
-            if (!infoByWaybill.isEmpty() && infoByWaybill.size() > 0) {
-                EDI945 edi945 = infoByWaybill.get(0);
-                List<DimTransfer> dimTransfers = dimTransferMapper.selectByHawb(hawb);
-                for (DimTransfer dimTransfer : dimTransfers) {
-                    dimTransfer.setOem(edi945.getOem());
-                    dimTransfer.setShipDate(edi945.getShipDate());
-                    dimTransfer.setShippingMode(edi945.getShipMode());
-                    dimTransfer.setForwarderPdd(edi945.getFwd());
-                    dimTransfer.setPalletSscc18(edi945.getCartonNo());
-                    List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
-                    if (!regionTypeByK.isEmpty()) {
-                        dimTransfer.setRegion(regionTypeByK.get(0));
+            String[] split = hawb.split(",");
+            for (String s : split) {
+                try {
+                    List<EDI945> infoByWaybill = edi945Mapper.getInfoByWaybill(s);
+                    if (!infoByWaybill.isEmpty() && infoByWaybill.size() > 0) {
+                        EDI945 edi945 = infoByWaybill.get(0);
+                        List<DimTransfer> dimTransfers = dimTransferMapper.selectByHawb(s);
+                        for (DimTransfer dimTransfer : dimTransfers) {
+                            dimTransfer.setShipDate(edi945.getShipDate());
+                            dimTransfer.setShippingMode(edi945.getShipMode());
+                            dimTransfer.setForwarderPdd(edi945.getFwd());
+                            dimTransfer.setPalletSscc18(edi945.getCartonNo());
+                            List<String> regionTypeByK = dictDao.getRegionTypeByK(edi945.getPoeCountry());
+                            if (!regionTypeByK.isEmpty()) {
+                                dimTransfer.setRegion(regionTypeByK.get(0));
+                            }
+                            dimTransfer.setPoe(edi945.getPoe());
+                            dimTransfer.setDestination(edi945.getPoeCountry());
+                            String gateway = edi945.getGateway();
+                            dimTransfer.setTerminal(gateway);
+                            dimTransfer.setShipType(edi945.getShipway());
+                            dimTransfer.setCountryOfClearance(edi945.getPoe());
+                            dimTransfer.setShipToCity(edi945.getStCity());
+                            dimTransfer.setScacFwd(edi945.getFwdCode());
+                            dimTransfer.setScacTrucker(edi945.getTcCode());
+                            dimTransfer.setShippingPoint(edi945.getOem());
+                            dimTransfer.setStatus(1);
+                            dimTransferMapper.updateByPrimaryKeySelective(dimTransfer);
+                        }
                     }
-                    dimTransfer.setPoe(edi945.getPoe());
-                    dimTransfer.setDestination(edi945.getPoeCountry());
-                    String consolidationWarehouse = "";
-                    String gateway = edi945.getGateway();
-                    dimTransfer.setGateway(gateway);
-                    if (StringUtils.equals(gateway, "CGO")) {
-                        consolidationWarehouse = "CTSCM ZZ WH";
-//                        terminal = "ZHENGZHOU";
-                    } else if (StringUtils.equals(gateway, "HKG")) {
-                        consolidationWarehouse = "CTSCM HK WH";
-//                        terminal = "HONGKONG";
-                    } else if (StringUtils.equals(gateway, "PVG")) {
-                        consolidationWarehouse = "CTSCM SH WH";
-//                        terminal = "SHANGHAI";
-                    } else if (StringUtils.equals(gateway, "SHA")) {
-                        consolidationWarehouse = "CTSCM SH WH";
-//                        terminal = "SHANGHAI";
-                    } else if (StringUtils.equals(gateway, "SZX")) {
-                        consolidationWarehouse = "SHENZHEN";
-//                        terminal = "SHENZHEN";
-                    } else {
-                        consolidationWarehouse = "";
-//                        terminal = "";
-                    }
-                    dimTransfer.setConsolidationWarehouse(consolidationWarehouse);
-                    dimTransfer.setTerminal(gateway);
-                    dimTransfer.setShipType(edi945.getShipway());
-                    dimTransfer.setShipToCity(edi945.getPoe());
-                    dimTransfer.setScacFwd(edi945.getFwdCode());
-                    dimTransfer.setScacTrucker(edi945.getTcCode());
-                    dimTransfer.setStatus(1);
-                    dimTransferMapper.updateByPrimaryKeySelective(dimTransfer);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {
@@ -163,52 +148,66 @@ public class DimTransferController {
                 List<DimTransfer> dimTransfers = dimTransferMapper.selectByHawbAndPalletId(hawb, palletIdOem);
                 if (!dimTransfers.isEmpty() && dimTransfers.size() == 1) {
                     DimTransfer dimTransfer = dimTransfers.get(0);
-                    String shippingPoint = ExcelUtil.getCellValue(xssfRow.getCell(1));
+                    String oem = ExcelUtil.getCellValue(xssfRow.getCell(0));
+                    String shipDate = ExcelUtil.getCellValue(xssfRow.getCell(1));
                     String palletIdTrucker = ExcelUtil.getCellValue(xssfRow.getCell(5));
                     String grossWeight = ExcelUtil.getCellValue(xssfRow.getCell(6));
                     String length = ExcelUtil.getCellValue(xssfRow.getCell(7));
                     String width = ExcelUtil.getCellValue(xssfRow.getCell(8));
                     String height = ExcelUtil.getCellValue(xssfRow.getCell(9));
-                    String nPIFlag = ExcelUtil.getCellValue(xssfRow.getCell(10));
-                    String securityLevel = ExcelUtil.getCellValue(xssfRow.getCell(11));
-                    String handover = ExcelUtil.getCellValue(xssfRow.getCell(12));
-                    String containerNo = ExcelUtil.getCellValue(xssfRow.getCell(16));
-                    String truckNoExOEM = ExcelUtil.getCellValue(xssfRow.getCell(17));
-                    String truckNoExTrucker = ExcelUtil.getCellValue(xssfRow.getCell(18));
-                    String truckNoBorderExchange = ExcelUtil.getCellValue(xssfRow.getCell(19));
-                    String eLockExOEM = ExcelUtil.getCellValue(xssfRow.getCell(20));
-                    String eLockExTrucker = ExcelUtil.getCellValue(xssfRow.getCell(21));
-                    String vesselIMO = ExcelUtil.getCellValue(xssfRow.getCell(23));
-                    String dwt = ExcelUtil.getCellValue(xssfRow.getCell(24));
-                    String porttoPortDistance = ExcelUtil.getCellValue(xssfRow.getCell(25));
-                    String vesselDistanceTraveled = ExcelUtil.getCellValue(xssfRow.getCell(26));
-                    String fastBoatService = ExcelUtil.getCellValue(xssfRow.getCell(27));
-                    String standardOceanService = ExcelUtil.getCellValue(xssfRow.getCell(28));
-                    String iCAOFlightCode = ExcelUtil.getCellValue(xssfRow.getCell(29));
-                    String aircraftType = ExcelUtil.getCellValue(xssfRow.getCell(30));
-                    String aircraftName = ExcelUtil.getCellValue(xssfRow.getCell(31));
-                    String flightDistance = ExcelUtil.getCellValue(xssfRow.getCell(32));
-                    String flightTime = ExcelUtil.getCellValue(xssfRow.getCell(33));
-                    String flightNo = ExcelUtil.getCellValue(xssfRow.getCell(34));
-                    String gPSTransmitterNo = ExcelUtil.getCellValue(xssfRow.getCell(35));
-                    String driverPhNo = ExcelUtil.getCellValue(xssfRow.getCell(36));
-                    String trailerNo = ExcelUtil.getCellValue(xssfRow.getCell(37));
+                    String gateway = ExcelUtil.getCellValue(xssfRow.getCell(10));
+                    String consolidationWarehouse = ExcelUtil.getCellValue(xssfRow.getCell(11));
+                    String nPIFlag = ExcelUtil.getCellValue(xssfRow.getCell(12));
+                    String securityLevel = ExcelUtil.getCellValue(xssfRow.getCell(13));
+                    String handover = ExcelUtil.getCellValue(xssfRow.getCell(14));
+                    String hubCode = ExcelUtil.getCellValue(xssfRow.getCell(15));
+                    String gccn = ExcelUtil.getCellValue(xssfRow.getCell(16));
+                    String containerNo = ExcelUtil.getCellValue(xssfRow.getCell(17));
+                    String truckNoExOEM = ExcelUtil.getCellValue(xssfRow.getCell(18));
+                    String truckNoExTrucker = ExcelUtil.getCellValue(xssfRow.getCell(19));
+                    String truckNoBorderExchange = ExcelUtil.getCellValue(xssfRow.getCell(20));
+                    String eLockExOEM = ExcelUtil.getCellValue(xssfRow.getCell(21));
+                    String eLockExTrucker = ExcelUtil.getCellValue(xssfRow.getCell(22));
+                    String pod = ExcelUtil.getCellValue(xssfRow.getCell(23));
+                    String terminal = ExcelUtil.getCellValue(xssfRow.getCell(24));
+                    String vesselIMO = ExcelUtil.getCellValue(xssfRow.getCell(25));
+                    String dwt = ExcelUtil.getCellValue(xssfRow.getCell(26));
+                    String porttoPortDistance = ExcelUtil.getCellValue(xssfRow.getCell(27));
+                    String vesselDistanceTraveled = ExcelUtil.getCellValue(xssfRow.getCell(28));
+                    String fastBoatService = ExcelUtil.getCellValue(xssfRow.getCell(29));
+                    String standardOceanService = ExcelUtil.getCellValue(xssfRow.getCell(30));
+                    String iCAOFlightCode = ExcelUtil.getCellValue(xssfRow.getCell(31));
+                    String aircraftType = ExcelUtil.getCellValue(xssfRow.getCell(32));
+                    String aircraftName = ExcelUtil.getCellValue(xssfRow.getCell(33));
+                    String flightDistance = ExcelUtil.getCellValue(xssfRow.getCell(34));
+                    String flightTime = ExcelUtil.getCellValue(xssfRow.getCell(35));
+                    String flightNo = ExcelUtil.getCellValue(xssfRow.getCell(36));
+                    String driverPhNo = ExcelUtil.getCellValue(xssfRow.getCell(37));
+                    String trailerNo = ExcelUtil.getCellValue(xssfRow.getCell(38));
+                    String site = ExcelUtil.getCellValue(xssfRow.getCell(39));
 
-                    dimTransfer.setShippingPoint(shippingPoint);
+                    dimTransfer.setOem(oem);
+                    dimTransfer.setShipDate(shipDate);
                     dimTransfer.setPalletIdTrucker(palletIdTrucker);
                     dimTransfer.setGrossWeightPdd(parseBigDecimal(grossWeight));
                     dimTransfer.setLengthCm(parseBigDecimal(length));
                     dimTransfer.setWidthCm(parseBigDecimal(width));
                     dimTransfer.setHeightCm(parseBigDecimal(height));
+                    dimTransfer.setGateway(gateway);
+                    dimTransfer.setConsolidationWarehouse(consolidationWarehouse);
                     dimTransfer.setNpiFlag(nPIFlag);
                     dimTransfer.setSecurityLevel(securityLevel);
                     dimTransfer.setHandover(handover);
+                    dimTransfer.setHubCode(hubCode);
+                    dimTransfer.setGccn(gccn);
                     dimTransfer.setContainerNo(containerNo);
                     dimTransfer.setTruckNoExoem(truckNoExOEM);
                     dimTransfer.setTruckNoExtrucker(truckNoExTrucker);
                     dimTransfer.setTruckNoBorderexchange(truckNoBorderExchange);
                     dimTransfer.setElockExoem(eLockExOEM);
                     dimTransfer.setElockExtrucker(eLockExTrucker);
+                    dimTransfer.setPod(pod);
+                    dimTransfer.setTerminal(terminal);
                     dimTransfer.setVesselImo(vesselIMO);
                     dimTransfer.setDwt(parseBigDecimal(dwt));
                     dimTransfer.setPortToPortDistance(parseBigDecimal(porttoPortDistance));
@@ -221,9 +220,10 @@ public class DimTransferController {
                     dimTransfer.setFlightDistance(parseBigDecimal(flightDistance));
                     dimTransfer.setFlightTime(parseBigDecimal(flightTime));
                     dimTransfer.setFlightNo(flightNo);
-                    dimTransfer.setGpsTransmitterNo(gPSTransmitterNo);
                     dimTransfer.setDriverPhNo(driverPhNo);
                     dimTransfer.setTrailerNo(trailerNo);
+
+                    dimTransfer.setSite(site);
 
                     dimTransferMapper.updateByPrimaryKeySelective(dimTransfer);
                 }
@@ -241,9 +241,11 @@ public class DimTransferController {
     public void exportLoad(HttpServletRequest request, HttpServletResponse response) {
         String shipDateForm = request.getParameter("shipDateForm");
         String hawbForm = request.getParameter("hawbForm");
+        String licencePlateNumberForm = request.getParameter("licencePlateNumberForm");
         Map<String, Object> params = Maps.newHashMap();
         params.put("shipDate", shipDateForm);
         params.put("hawb", hawbForm);
+        params.put("licencePlateNumber", licencePlateNumberForm);
         List<DimTransfer> ediLoads = dimTransferMapper.list(params, 0, 999999);
         exportLoad(response, ediLoads);
     }
@@ -251,7 +253,7 @@ public class DimTransferController {
     private void exportLoad(HttpServletResponse response, List<DimTransfer> ediLoads) {
         List<Object[]> data = new ArrayList<>();
         for (DimTransfer ediLoad : ediLoads) {
-            data.add(ediLoad.toString().split(","));
+            data.add(ediLoad.toString().split("#"));
         }
         String headerStr = "OEM," +
                 "Ship Date," +
@@ -305,7 +307,8 @@ public class DimTransferController {
                 "Flight No," +
 //                "GPS Transmitter No," +
                 "Driver Ph No," +
-                "Trailer No";
+                "Trailer No," +
+                "Site";
         String[] headers = headerStr.split(",");
         String fileName = MessageFormat.format("{0}-{1}", "EDI LOAD", DateUtil.format(new Date(), DateUtil.NORM_DATE_TIME_PATTERN_TWO));
         ExcelUtil.excelExport2(fileName, null, headers, data, response);
@@ -315,8 +318,10 @@ public class DimTransferController {
     @ApiOperation(value = "导出LoadManifest数据")
     public void exportLoadManifest(HttpServletRequest request, HttpServletResponse response) {
         String createdTimeForm = request.getParameter("createdTimeForm");
+        String licencePlateNumberForm = request.getParameter("licencePlateNumberForm");
         Map<String, Object> params = Maps.newHashMap();
         params.put("createdTime", createdTimeForm);
+        params.put("licencePlateNumber", licencePlateNumberForm);
         List<DimTransfer> ediLoads = dimTransferMapper.list(params, 0, 999999);
         exportLoadManifest(response, ediLoads);
     }
@@ -327,15 +332,14 @@ public class DimTransferController {
             data.add(ediLoad.toLoadManifestString().split(","));
         }
         String headerStr = "Created Time," +
-                "Line No," +
                 "Loading No," +
                 "Pallet ID," +
-                "Number Of Boxes," +
+                "Cartons," +
                 "Quantity," +
                 "Gross Weight," +
+                "Forwarder," +
                 "Destination," +
                 "HAWB," +
-                "Repeat Weight," +
                 "Licence Plate Number";
         String[] headers = headerStr.split(",");
         String fileName = MessageFormat.format("{0}-{1}", "LOAD MANIFEST", DateUtil.format(new Date(), DateUtil.NORM_DATE_TIME_PATTERN_TWO));

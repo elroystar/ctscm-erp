@@ -52,6 +52,7 @@
         <result column="location_time" jdbcType="TIMESTAMP" property="locationTime"/>
         <result column="track_end_time" jdbcType="TIMESTAMP" property="trackEndTime"/>
         <result column="tccode" jdbcType="VARCHAR" property="tcCode"/>
+        <result column="stcity" jdbcType="VARCHAR" property="stCity"/>
     </resultMap>
     <sql id="Base_Column_List">
         id
@@ -59,7 +60,7 @@
     waybill, shipway, fwd, fwd_code, oem, gateway, ctns, units, gw, ship_mode, poe, poe_country, 
     truck_plant_number, driver_name, cellular, ct_tracking, gps_device, gps_updating, city, province, `position`,
     longitude, latitude, messageid, dispose_997, inreceiverid, insenderid, appreceivercode, orisenderid, controlnumber, transationrp,
-    fuctionalrp,tccode
+    fuctionalrp,tccode,stcity
     </sql>
     <sql id="where">
         <where>

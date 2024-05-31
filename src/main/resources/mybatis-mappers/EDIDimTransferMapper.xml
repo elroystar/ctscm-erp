@@ -85,6 +85,7 @@
         <result column="GPS_Transmitter_No" jdbcType="VARCHAR" property="gpsTransmitterNo"/>
         <result column="Driver_Ph_No" jdbcType="VARCHAR" property="driverPhNo"/>
         <result column="Trailer_No" jdbcType="VARCHAR" property="trailerNo"/>
+        <result column="site" jdbcType="VARCHAR" property="site"/>
     </resultMap>
     <sql id="Base_Column_List">
         ID
@@ -99,7 +100,7 @@
     CCM, POD, DPC, Container_Weight, Manifest, SVC_No, Terminal, SCAC_FWD, SCAC_Trucker, 
     SealNr_Truck, SealNr_OceanContainer, Vessel_IMO, DWT, Port_to_Port_Distance, Vessel_Distance_Traveled, 
     Fast_Boat_Service, Standard_Ocean_Service, ICAO_Flight_Code, Aircraft_Type, Aircraft_Name, 
-    Flight_Distance, Flight_Time, Flight_No, GPS_Transmitter_No, Driver_Ph_No, Trailer_No
+    Flight_Distance, Flight_Time, Flight_No, GPS_Transmitter_No, Driver_Ph_No, Trailer_No, site
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -141,7 +142,7 @@
                                   Standard_Ocean_Service, ICAO_Flight_Code, Aircraft_Type,
                                   Aircraft_Name, Flight_Distance, Flight_Time,
                                   Flight_No, GPS_Transmitter_No, Driver_Ph_No,
-                                  Trailer_No)
+                                  Trailer_No, site)
         values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createdtime,jdbcType=VARCHAR},
                 #{oem,jdbcType=VARCHAR}, #{shipdate,jdbcType=VARCHAR}, #{shippingPoint,jdbcType=VARCHAR},
                 #{shippingMode,jdbcType=VARCHAR}, #{forwarder,jdbcType=VARCHAR}, #{hawb,jdbcType=VARCHAR},
@@ -174,7 +175,7 @@
                 #{aircraftType,jdbcType=VARCHAR},
                 #{aircraftName,jdbcType=VARCHAR}, #{flightDistance,jdbcType=DECIMAL}, #{flightTime,jdbcType=DECIMAL},
                 #{flightNo,jdbcType=VARCHAR}, #{gpsTransmitterNo,jdbcType=VARCHAR}, #{driverPhNo,jdbcType=VARCHAR},
-                #{trailerNo,jdbcType=VARCHAR})
+                #{trailerNo,jdbcType=VARCHAR}, #{site,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.boot.security.server.dto.load.EDIDimTransfer">
         insert into dim_transfer
@@ -428,6 +429,9 @@
             <if test="trailerNo != null">
                 Trailer_No,
             </if>
+            <if test="site != null">
+                site,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -678,6 +682,9 @@
             </if>
             <if test="trailerNo != null">
                 #{trailerNo,jdbcType=VARCHAR},
+            </if>
+            <if test="site != null">
+                #{site,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -930,6 +937,9 @@
             <if test="trailerNo != null">
                 Trailer_No = #{trailerNo,jdbcType=VARCHAR},
             </if>
+            <if test="site != null">
+                site = #{site,jdbcType=VARCHAR},
+            </if>
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
@@ -1016,7 +1026,8 @@
             Flight_No                = #{flightNo,jdbcType=VARCHAR},
             GPS_Transmitter_No       = #{gpsTransmitterNo,jdbcType=VARCHAR},
             Driver_Ph_No             = #{driverPhNo,jdbcType=VARCHAR},
-            Trailer_No               = #{trailerNo,jdbcType=VARCHAR}
+            Trailer_No               = #{trailerNo,jdbcType=VARCHAR},
+            site                     = #{site,jdbcType=VARCHAR}
         where ID = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

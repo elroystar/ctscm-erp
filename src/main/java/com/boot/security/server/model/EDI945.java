@@ -100,6 +100,8 @@ public class EDI945 {
 
     private String tcCode;
 
+    private String stCity;
+
     public Integer getId() {
         return id;
     }
@@ -514,5 +516,13 @@ public class EDI945 {
 
     public void setTcCode(String tcCode) {
         this.tcCode = tcCode;
+    }
+
+    public String getStCity() {
+        return stCity;
+    }
+
+    public void setStCity(String stCity) {
+        this.stCity = stCity;
     }
 }

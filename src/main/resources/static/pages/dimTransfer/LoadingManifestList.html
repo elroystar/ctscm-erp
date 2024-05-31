@@ -20,6 +20,8 @@
                                 <div class="form-group">
                                     Created Time:：
                                     <input id="createdTime" type="text" class="form-control" placeholder="Create Time">
+                                    Licence Plate Number:：
+                                    <input id="licencePlateNumber" type="text" class="form-control" placeholder="Licence Plate Number">
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
@@ -44,15 +46,14 @@
                     <tr>
                         <th>id</th>
                         <th>Created Time</th>
-                        <th>Line No</th>
                         <th>Loading No</th>
                         <th>Pallet ID</th>
-                        <th>Number Of Boxes</th>
+                        <th>Cartons</th>
                         <th>Quantity</th>
                         <th>Gross Weight</th>
+                        <th>Forwarder</th>
                         <th>Destination</th>
                         <th>HAWB</th>
-                        <th>Repeat Weight</th>
                         <th>Licence Plate Number</th>
                     </tr>
                     </thead>
@@ -67,6 +68,7 @@
       enctype="multipart/form-data">
     <br/>
     <input id="createdTimeForm" name="createdTimeForm" hidden="true">
+    <input id="licencePlateNumberForm" name="licencePlateNumberForm" hidden="true">
 
     <input id="token" name="token" hidden="true">
 </form>
@@ -116,13 +118,15 @@
 
     $("#exportExcel").click(function () {
         var createdTime = $('#createdTime').val();
-        if (createdTime.length == 0) {
+        var licencePlateNumber = $('#licencePlateNumber').val();
+        if (createdTime.length == 0 && licencePlateNumber.length == 0) {
             layer.open({
                 title: '提示',
                 content: '请先输入至少一个条件'
             });
         } else {
             $("#createdTimeForm").val(createdTime);
+            $("#licencePlateNumberForm").val(licencePlateNumber);
             $("#token").val(localStorage.getItem("token"));
             $("#form").attr("onsubmit", "return true");
             $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
@@ -149,6 +153,7 @@
                     "type": "get",
                     "data": function (d) {
                         d.createdTime = $('#createdTime').val();
+                        d.licencePlateNumber = $('#licencePlateNumber').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;
@@ -175,15 +180,14 @@
                 "columns": [
                     {"data": "id", "defaultContent": "", "visible": false},
                     {"data": "createdTime", "defaultContent": ""},
-                    {"data": "lineNo", "defaultContent": ""},
                     {"data": "loadingNo", "defaultContent": ""},
                     {"data": "palletId", "defaultContent": ""},
                     {"data": "numberOfBoxes", "defaultContent": ""},
                     {"data": "quantity", "defaultContent": ""},
                     {"data": "grossWeight", "defaultContent": ""},
+                    {"data": "forwarder", "defaultContent": ""},
                     {"data": "destination", "defaultContent": ""},
                     {"data": "hawb", "defaultContent": ""},
-                    {"data": "repeatWeight", "defaultContent": ""},
                     {"data": "licencePlateNumber", "defaultContent": ""},
                 ],
                 "select": {

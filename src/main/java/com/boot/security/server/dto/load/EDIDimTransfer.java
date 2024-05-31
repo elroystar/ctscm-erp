@@ -170,6 +170,8 @@ public class EDIDimTransfer {
 
     private String trailerNo;
 
+    private String site;
+
     public Integer getId() {
         return id;
     }
@@ -832,5 +834,13 @@ public class EDIDimTransfer {
 
     public void setTrailerNo(String trailerNo) {
         this.trailerNo = trailerNo == null ? null : trailerNo.trim();
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
     }
 }
