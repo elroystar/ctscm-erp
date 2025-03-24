@@ -8,6 +8,12 @@ public class SendPddInfoDTO {
 
     private String licencePlateNumber;
 
+    private String oem;
+
+    private String gateway;
+
+    private Integer status;
+
     public String getShipDate() {
         return shipDate;
     }
@@ -30,5 +36,29 @@ public class SendPddInfoDTO {
 
     public void setLicencePlateNumber(String licencePlateNumber) {
         this.licencePlateNumber = licencePlateNumber;
+    }
+
+    public String getOem() {
+        return oem;
+    }
+
+    public void setOem(String oem) {
+        this.oem = oem;
+    }
+
+    public String getGateway() {
+        return gateway;
+    }
+
+    public void setGateway(String gateway) {
+        this.gateway = gateway;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

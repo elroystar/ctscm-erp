@@ -93,6 +93,15 @@
             <if test="params.licencePlateNumber != null and params.licencePlateNumber != ''">
                 and licence_plate_number = #{params.licencePlateNumber,jdbcType=VARCHAR}
             </if>
+            <if test="params.oem != null and params.oem != ''">
+                and oem = #{params.oem,jdbcType=VARCHAR}
+            </if>
+            <if test="params.gateway != null and params.gateway != ''">
+                and gateway = #{params.gateway,jdbcType=VARCHAR}
+            </if>
+            <if test="params.status != null">
+                and status = #{params.status,jdbcType=INTEGER}
+            </if>
         </where>
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">

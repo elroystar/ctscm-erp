@@ -699,7 +699,8 @@ public class DimTransfer {
 //            "#" + (gpsTransmitterNo != null ? gpsTransmitterNo : "") +
                 "#" + (driverPhNo != null ? driverPhNo : "") +
                 "#" + (trailerNo != null ? trailerNo : "") +
-                "#" + (site != null ? site : "");
+                "#" + (site != null ? site : "") +
+                "#" + (status != null && status == 2 ? "已发送" : "未发送");
     }
 
     public String toLoadManifestString() {

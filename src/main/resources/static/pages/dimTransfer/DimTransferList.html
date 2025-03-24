@@ -18,12 +18,23 @@
                         <td>
                             <form class="form-inline" onsubmit="return false">
                                 <div class="form-group">
-                                    Ship date:：
+                                    Ship date:
                                     <input id="shipDate" type="text" class="form-control" placeholder="Ship date">
-                                    hawb:：
+                                    hawb:
                                     <input id="hawb" type="text" class="form-control" placeholder="hawb">
-                                    Licence Plate Number:：
+                                    Licence Plate Number:
                                     <input id="licencePlateNumber" type="text" class="form-control" placeholder="Licence Plate Number">
+                                    OEM:
+                                    <input id="oem" type="text" class="form-control" placeholder="OEM">
+                                    Gateway:
+                                    <input id="gateway" type="text" class="form-control" placeholder="Gateway">
+                                    Pdd Status：
+                                    <select id="pddStatus" class="form-control input-sm">
+                                        <option value=>全部</option>
+                                        <option value=2>已发送</option>
+                                        <option value=1>未发送</option>
+                                        <option value=0>未获取</option>
+                                    </select>
                                     <button id="searchBt" class="layui-btn layui-btn-sm"><i
                                             class="layui-icon">&#xe615;</i>搜索
                                     </button>
@@ -127,6 +138,9 @@
     <input id="shipDateForm" name="shipDateForm" hidden="true">
     <input id="hawbForm" name="hawbForm" hidden="true">
     <input id="licencePlateNumberForm" name="licencePlateNumberForm" hidden="true">
+    <input id="oemForm" name="oemForm" hidden="true">
+    <input id="gatewayForm" name="gatewayForm" hidden="true">
+    <input id="pddStatusForm" name="pddStatusForm" hidden="true">
 
     <input id="token" name="token" hidden="true">
 </form>
@@ -178,7 +192,15 @@
         var shipDate = $('#shipDate').val();
         var hawb = $('#hawb').val();
         var licencePlateNumber = $('#licencePlateNumber').val();
-        if (shipDate.length == 0 && hawb.length == 0  && licencePlateNumber.length == 0) {
+        var oem = $('#oem').val();
+        var gateway = $('#gateway').val();
+        var pddStatus = $('#pddStatus').val();
+        if (shipDate.length == 0
+            && hawb.length == 0
+            && licencePlateNumber.length == 0
+            && oem.length == 0
+            && gateway.length == 0
+            && pddStatus.length == 0) {
             layer.open({
                 title: '提示',
                 content: '请先输入至少一个条件'
@@ -187,6 +209,9 @@
             $("#shipDateForm").val(shipDate);
             $("#hawbForm").val(hawb);
             $("#licencePlateNumberForm").val(licencePlateNumber);
+            $("#oemForm").val(oem);
+            $("#gatewayForm").val(gateway);
+            $("#pddStatusForm").val(pddStatus);
             $("#token").val(localStorage.getItem("token"));
             $("#form").attr("onsubmit", "return true");
             $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
@@ -258,7 +283,10 @@
                 data: JSON.stringify({
                     shipDate: $('#shipDate').val(),
                     hawb: $('#hawb').val(),
-                    licencePlateNumber: $('#licencePlateNumber').val()
+                    licencePlateNumber: $('#licencePlateNumber').val(),
+                    oem: $('#oem').val(),
+                    gateway: $('#gateway').val(),
+                    status: $('#pddStatus').val()
                 }),
                 dataType: 'json',
                 url: '/dimTransfer/sendPdd',
@@ -314,6 +342,9 @@
                         d.shipDate = $('#shipDate').val();
                         d.hawb = $('#hawb').val();
                         d.licencePlateNumber = $('#licencePlateNumber').val();
+                        d.oem = $('#oem').val();
+                        d.gateway = $('#gateway').val();
+                        d.status = $('#pddStatus').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
                         var msg = xhr.responseText;
@@ -399,8 +430,10 @@
                             // 根据特定的条件将某些值替换成其他的值
                             if (data === 2) {
                                 return '已发送';
-                            } else {
+                            } else if (data == 1) {
                                 return '未发送';
+                            } else {
+                                return '未获取';
                             }
                         }
                     },
