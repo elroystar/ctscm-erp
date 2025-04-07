@@ -6,6 +6,7 @@ import com.boot.security.server.dao.DimTransferMapper;
 import com.boot.security.server.dao.EDI945Mapper;
 import com.boot.security.server.dao.EDIDimTransferMapper;
 import com.boot.security.server.dto.load.DimTransfer;
+import com.boot.security.server.dto.load.DimTransferSH;
 import com.boot.security.server.dto.load.EDIDimTransfer;
 import com.boot.security.server.dto.load.SendPddInfoDTO;
 import com.boot.security.server.model.EDI945;
@@ -236,6 +237,50 @@ public class DimTransferController {
         return fileInfo;
     }
 
+    @LogAnnotation
+    @PostMapping("importLoadSH")
+    @ApiOperation(value = "文件上传SH")
+    public FileInfo importLoadSH(MultipartFile file) throws IOException {
+        checkFileName(file);
+        // 读取Excel
+        XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet sheet = xssfWorkbook.getSheetAt(0); //获取文件的第一个sheet
+        int rows = sheet.getPhysicalNumberOfRows();
+        for (int r = 1; r < rows; r++) {
+            XSSFRow xssfRow = sheet.getRow(r);  //获取sheet的第一行
+            try {
+                String createdTime = ExcelUtil.getCellValue(xssfRow.getCell(0));
+                String loadingNo = ExcelUtil.getCellValue(xssfRow.getCell(1));
+                String palletId = ExcelUtil.getCellValue(xssfRow.getCell(2));
+                String cartons = ExcelUtil.getCellValue(xssfRow.getCell(3));
+                String quantity = ExcelUtil.getCellValue(xssfRow.getCell(4));
+                String grossWeight = ExcelUtil.getCellValue(xssfRow.getCell(5));
+                String forwarder = ExcelUtil.getCellValue(xssfRow.getCell(6));
+                String destination = ExcelUtil.getCellValue(xssfRow.getCell(7));
+                String hawb = ExcelUtil.getCellValue(xssfRow.getCell(8));
+                String licencePlateNumber = ExcelUtil.getCellValue(xssfRow.getCell(9));
+
+                DimTransferSH dimTransferSH = new DimTransferSH();
+                dimTransferSH.setDate(createdTime);
+                dimTransferSH.setLoadingNo(loadingNo);
+                dimTransferSH.setPalletId(palletId);
+                dimTransferSH.setCartons(cartons);
+                dimTransferSH.setQuantity(new BigDecimal(quantity));
+                dimTransferSH.setGrossWeight(new BigDecimal(grossWeight));
+                dimTransferSH.setForwarder(forwarder);
+                dimTransferSH.setDestination(destination);
+                dimTransferSH.setHawb(hawb);
+                dimTransferSH.setLicencePlateNumber(licencePlateNumber);
+                dimTransferMapper.insertSelectiveSH(dimTransferSH);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        FileInfo fileInfo = getFileInfo(file);
+        return fileInfo;
+    }
+
     @PostMapping("exportLoad")
     @ApiOperation(value = "导出Load数据")
     public void exportLoad(HttpServletRequest request, HttpServletResponse response) {
@@ -355,6 +400,44 @@ public class DimTransferController {
         ExcelUtil.excelExport2(fileName, null, headers, data, response);
     }
 
+    @PostMapping("exportLoadManifestSH")
+    @ApiOperation(value = "导出LoadManifest SH数据")
+    public void exportLoadManifestSH(HttpServletRequest request, HttpServletResponse response) {
+        String dateForm = request.getParameter("dateForm");
+        String licencePlateNumberForm = request.getParameter("licencePlateNumberForm");
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("date", dateForm);
+        params.put("licencePlateNumber", licencePlateNumberForm);
+        List<DimTransferSH> ediLoads = dimTransferMapper.listSH(params, 0, 999999);
+        exportLoadManifestSH(response, ediLoads);
+    }
+
+    private void exportLoadManifestSH(HttpServletResponse response, List<DimTransferSH> ediLoads) {
+        List<Object[]> data = new ArrayList<>();
+        for (DimTransferSH ediLoad : ediLoads) {
+            data.add(ediLoad.toLoadManifestString().split(","));
+        }
+        String headerStr = "Date," +
+                "Loading No," +
+                "Pallet ID," +
+                "Cartons," +
+                "Quantity," +
+                "Gross Weight," +
+                "Forwarder," +
+                "Destination," +
+                "HAWB," +
+                "Licence Plate Number," +
+                "Measurement Time," +
+                "Measurement Weight," +
+                "Measurement Length," +
+                "Measurement Width," +
+                "Measurement Height," +
+                "Measurement CBM";
+        String[] headers = headerStr.split(",");
+        String fileName = MessageFormat.format("{0}-{1}", "LOAD MANIFEST SH", DateUtil.format(new Date(), DateUtil.NORM_DATE_TIME_PATTERN_TWO));
+        ExcelUtil.excelExport2(fileName, null, headers, data, response);
+    }
+
     @GetMapping("list")
     @ApiOperation(value = "load管理列表")
     public PageTableResponse list(PageTableRequest request) {
@@ -384,6 +467,23 @@ public class DimTransferController {
             @Override
             public List<DimTransfer> list(PageTableRequest request) {
                 List<DimTransfer> ediLoads = dimTransferMapper.list(request.getParams(), request.getOffset(), request.getLimit());
+                return ediLoads;
+            }
+        }).handle(request);
+    }
+
+    @GetMapping("listLoadSH")
+    @ApiOperation(value = "loadListSH管理列表")
+    public PageTableResponse listLoadSH(PageTableRequest request) {
+        return new PageTableHandler(new CountHandler() {
+            @Override
+            public int count(PageTableRequest request) {
+                return dimTransferMapper.countSH(request.getParams());
+            }
+        }, new ListHandler() {
+            @Override
+            public List<DimTransferSH> list(PageTableRequest request) {
+                List<DimTransferSH> ediLoads = dimTransferMapper.listSH(request.getParams(), request.getOffset(), request.getLimit());
                 return ediLoads;
             }
         }).handle(request);

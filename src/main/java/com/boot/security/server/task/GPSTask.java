@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@Component
-@EnableScheduling
+//@Component
+//@EnableScheduling
 public class GPSTask {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

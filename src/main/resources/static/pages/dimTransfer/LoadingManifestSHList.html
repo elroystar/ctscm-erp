@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/select.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+</head>
+<body>
+<div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <header style="height: 100%">
+            <div align="left">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <form class="form-inline" onsubmit="return false">
+                                <div class="form-group">
+                                    Date:：
+                                    <input id="date" type="text" class="form-control" placeholder="Date">
+                                    Licence Plate Number:：
+                                    <input id="licencePlateNumber" type="text" class="form-control" placeholder="Licence Plate Number">
+                                    <button id="searchBt" class="layui-btn layui-btn-sm"><i
+                                            class="layui-icon">&#xe615;</i>搜索
+                                    </button>
+                                    <hr class="layui-border-green">
+                                    <button id="exportExcel" class="layui-btn"><i
+                                            class="layui-icon">&#xe601;</i>导出
+                                    </button>
+                                    <button id="importLoad" class="layui-btn"><i
+                                            class="layui-icon">&#xe67c;</i>导入
+                                    </button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </header>
+
+        <div>
+            <div class="widget-body no-padding">
+                <table id="dt-table" class="table table-striped table-bordered table-hover" style="width:100%">
+                    <thead>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <th>id</th>
+                        <th>Date</th>
+                        <th>Loading No</th>
+                        <th>Pallet ID</th>
+                        <th>Cartons</th>
+                        <th>Quantity</th>
+                        <th>GW</th>
+                        <th>Forwarder</th>
+                        <th>Destination</th>
+                        <th>HAWB</th>
+                        <th>Licence Plate Number</th>
+                        <th>Measurement Time</th>
+                        <th>Measurement Weight</th>
+                        <th>Measurement Length</th>
+                        <th>Measurement Width</th>
+                        <th>Measurement Height</th>
+                        <th>Measurement CBM</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="form-horizontal" id="form" method="post" action="/dimTransfer/exportLoadManifestSH" onsubmit="return false"
+      enctype="multipart/form-data">
+    <br/>
+    <input id="dateForm" name="dateForm" hidden="true">
+    <input id="licencePlateNumberForm" name="licencePlateNumberForm" hidden="true">
+
+    <input id="token" name="token" hidden="true">
+</form>
+</body>
+</html>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.select.min.js"></script>
+<script type="text/javascript" src="../../js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../js/dict.js"></script>
+<script type="text/javascript">
+
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        upload.render({
+            elem: '#importLoad' //绑定元素
+            , accept: 'file' //允许上传的文件类型
+            , url: '/dimTransfer/importLoadSH' //上传接口
+            , before: function () {
+                //开始加载效果
+                layui.use('layer', function () {
+                    layui.layer.load();
+                    $(".layui-layer-shade").css('background', '#000000')
+                    $(".layui-layer-shade").css('opacity', '0.2')
+                    $(".layui-layer-shade").click(function (event) {
+                        event.stopPropagation();
+                    })
+                })
+            }
+            , done: function (res, index, upload) {
+                layer.msg("上传成功");
+                //上传成功结束加载效果
+                layui.use('layer', function () {
+                    layui.layer.closeAll();
+                    setTimeout(function () {
+                        layui.layer.closeAll();
+                    }, 1000);
+                });
+                example.ajax.reload();
+            }
+        });
+    });
+
+    $("#exportExcel").click(function () {
+        var date = $('#date').val();
+        var licencePlateNumber = $('#licencePlateNumber').val();
+        if (date.length == 0 && licencePlateNumber.length == 0) {
+            layer.open({
+                title: '提示',
+                content: '请先输入至少一个条件'
+            });
+        } else {
+            $("#dateForm").val(date);
+            $("#licencePlateNumberForm").val(licencePlateNumber);
+            $("#token").val(localStorage.getItem("token"));
+            $("#form").attr("onsubmit", "return true");
+            $("#form")[0].submit();//解决bootstrapValidator 表单无法提交的问题
+            $("#form").attr("onsubmit", "return false");
+        }
+    });
+
+    var example;
+
+    showDictNameSelect("region", "region", true);
+
+    function init() {
+        example =
+            $('#dt-table').DataTable({
+                "searching": false,
+                "processing": false,
+                "serverSide": true,
+                "ordering": false,
+                "language": {
+                    "url": "/js/plugin/datatables/Chinese.lang"
+                },
+                "ajax": {
+                    "url": "/dimTransfer/listLoadSH",
+                    "type": "get",
+                    "data": function (d) {
+                        d.date = $('#date').val();
+                        d.licencePlateNumber = $('#licencePlateNumber').val();
+                    },
+                    "error": function (xhr, textStatus, errorThrown) {
+                        var msg = xhr.responseText;
+                        console.log(msg);
+                        var response = JSON.parse(msg);
+                        var code = response.code;
+                        var message = response.message;
+                        if (code == 400) {
+                            layer.msg(message);
+                        } else if (code == 401) {
+                            localStorage.removeItem("token");
+                            layer.msg("token过期，请先登录", {shift: -1, time: 1000}, function () {
+                                location.href = '/login.html';
+                            });
+                        } else if (code == 403) {
+                            console.log("未授权:" + message);
+                            layer.msg('未授权');
+                        } else if (code == 500) {
+                            layer.msg('系统错误：' + message);
+                        }
+                    }
+                },
+                "dom": "<'dt-toolbar'r>t<'dt-toolbar-footer'<'col-sm-10 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-10' p v>>",
+                "columns": [
+                    {"data": "id", "defaultContent": "", "visible": false},
+                    {"data": "date", "defaultContent": ""},
+                    {"data": "loadingNo", "defaultContent": ""},
+                    {"data": "palletId", "defaultContent": ""},
+                    {"data": "cartons", "defaultContent": ""},
+                    {"data": "quantity", "defaultContent": ""},
+                    {"data": "grossWeight", "defaultContent": ""},
+                    {"data": "forwarder", "defaultContent": ""},
+                    {"data": "destination", "defaultContent": ""},
+                    {"data": "hawb", "defaultContent": ""},
+                    {"data": "licencePlateNumber", "defaultContent": ""},
+                    {"data": "measurementTime", "defaultContent": ""},
+                    {"data": "measurementWeightKg", "defaultContent": ""},
+                    {"data": "measurementLengthCm", "defaultContent": ""},
+                    {"data": "measurementWidthCm", "defaultContent": ""},
+                    {"data": "measurementHeightCm", "defaultContent": ""},
+                    {"data": "measurementCbm", "defaultContent": ""},
+                ],
+                "select": {
+                    style: 'multi'
+                },
+            });
+    }
+
+    $("#searchBt").click(function () {
+        example.ajax.reload();
+    });
+
+    init();
+</script>

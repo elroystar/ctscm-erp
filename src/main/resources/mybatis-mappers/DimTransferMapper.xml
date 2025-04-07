@@ -66,6 +66,25 @@
         <result column="trailer_no" jdbcType="VARCHAR" property="trailerNo"/>
         <result column="site" jdbcType="VARCHAR" property="site"/>
     </resultMap>
+    <resultMap id="BaseResultMapSH" type="com.boot.security.server.dto.load.DimTransferSH">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="date" jdbcType="VARCHAR" property="date"/>
+        <result column="loading_no" jdbcType="VARCHAR" property="loadingNo"/>
+        <result column="pallet_id" jdbcType="VARCHAR" property="palletId"/>
+        <result column="cartons" jdbcType="VARCHAR" property="cartons"/>
+        <result column="quantity" jdbcType="DECIMAL" property="quantity"/>
+        <result column="gw" jdbcType="DECIMAL" property="grossWeight"/>
+        <result column="forwarder" jdbcType="VARCHAR" property="forwarder"/>
+        <result column="destination" jdbcType="VARCHAR" property="destination"/>
+        <result column="hawb" jdbcType="VARCHAR" property="hawb"/>
+        <result column="licence_plate_number" jdbcType="VARCHAR" property="licencePlateNumber"/>
+        <result column="measurement_time" jdbcType="DECIMAL" property="measurementTime"/>
+        <result column="measurement_weight_kg" jdbcType="DECIMAL" property="measurementWeightKg"/>
+        <result column="measurement_length_cm" jdbcType="DECIMAL" property="measurementLengthCm"/>
+        <result column="measurement_width_cm" jdbcType="DECIMAL" property="measurementWidthCm"/>
+        <result column="measurement_height_cm" jdbcType="DECIMAL" property="measurementHeightCm"/>
+        <result column="measurement_cbm" jdbcType="DECIMAL" property="measurementCbm"/>
+    </resultMap>
     <sql id="Base_Column_List">
         id
         , status, created_time, licence_plate_number, line_no, loading_no, number_of_boxes, quantity, repeat_weight,
@@ -79,6 +98,11 @@
     icao_flight_code, aircraft_type, airline_name, flight_distance, flight_time, flight_no, 
     gps_transmitter_no, driver_ph_no, trailer_no, site
     </sql>
+    <sql id="Base_Column_List_Sh">
+        id
+        , `date`, loading_no, pallet_id, cartons, quantity, gw, hawb, forwarder, destination, licence_plate_number,
+    measurement_time, measurement_weight_kg, measurement_length_cm, measurement_width_cm, measurement_height_cm, measurement_cbm
+    </sql>
     <sql id="where">
         <where>
             <if test="params.shipDate != null and params.shipDate != ''">
@@ -87,8 +111,8 @@
             <if test="params.hawb != null and params.hawb != ''">
                 and hawb = #{params.hawb,jdbcType=VARCHAR}
             </if>
-            <if test="params.createdTime != null and params.createdTime != ''">
-                and created_time = #{params.createdTime,jdbcType=VARCHAR}
+            <if test="params.date != null and params.date != ''">
+                and `date` = #{params.date,jdbcType=VARCHAR}
             </if>
             <if test="params.licencePlateNumber != null and params.licencePlateNumber != ''">
                 and licence_plate_number = #{params.licencePlateNumber,jdbcType=VARCHAR}
@@ -114,12 +138,24 @@
         select count(1) from loading_manifest
         <include refid="where"/>
     </select>
+    <select id="countSH" resultType="int">
+        select count(1) from loading_manifest_sh
+        <include refid="where"/>
+    </select>
     <select id="list" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from loading_manifest
         <include refid="where"/>
         order by created_time desc
+        limit #{offset}, #{limit}
+    </select>
+    <select id="listSH" resultMap="BaseResultMapSH">
+        select
+        <include refid="Base_Column_List_Sh"/>
+        from loading_manifest_sh
+        <include refid="where"/>
+        order by `date` desc
         limit #{offset}, #{limit}
     </select>
     <select id="selectByHawb" resultMap="BaseResultMap">
@@ -547,6 +583,79 @@
             </if>
             <if test="site != null">
                 #{site,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertSelectiveSH" parameterType="com.boot.security.server.dto.load.DimTransferSH">
+        insert into loading_manifest_sh
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="date != null">
+                date,
+            </if>
+            <if test="loadingNo != null">
+                loading_no,
+            </if>
+            <if test="palletId != null">
+                pallet_id,
+            </if>
+            <if test="cartons != null">
+                cartons,
+            </if>
+            <if test="quantity != null">
+                quantity,
+            </if>
+            <if test="grossWeight != null">
+                gw,
+            </if>
+            <if test="forwarder != null">
+                forwarder,
+            </if>
+            <if test="destination != null">
+                destination,
+            </if>
+            <if test="hawb != null">
+                hawb,
+            </if>
+            <if test="licencePlateNumber != null">
+                licence_plate_number,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="loadingNo != null">
+                #{loadingNo,jdbcType=VARCHAR},
+            </if>
+            <if test="palletId != null">
+                #{palletId,jdbcType=VARCHAR},
+            </if>
+            <if test="cartons != null">
+                #{cartons,jdbcType=VARCHAR},
+            </if>
+            <if test="quantity != null">
+                #{quantity,jdbcType=DECIMAL},
+            </if>
+            <if test="grossWeight != null">
+                #{grossWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="forwarder != null">
+                #{forwarder,jdbcType=VARCHAR},
+            </if>
+            <if test="destination != null">
+                #{destination,jdbcType=VARCHAR},
+            </if>
+            <if test="hawb != null">
+                #{hawb,jdbcType=VARCHAR},
+            </if>
+            <if test="licencePlateNumber != null">
+                #{licencePlateNumber,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
