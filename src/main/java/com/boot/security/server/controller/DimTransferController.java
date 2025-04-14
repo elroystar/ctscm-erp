@@ -484,6 +484,7 @@ public class DimTransferController {
             @Override
             public List<DimTransferSH> list(PageTableRequest request) {
                 List<DimTransferSH> ediLoads = dimTransferMapper.listSH(request.getParams(), request.getOffset(), request.getLimit());
+
                 return ediLoads;
             }
         }).handle(request);

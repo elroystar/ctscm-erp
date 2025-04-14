@@ -78,7 +78,7 @@
         <result column="destination" jdbcType="VARCHAR" property="destination"/>
         <result column="hawb" jdbcType="VARCHAR" property="hawb"/>
         <result column="licence_plate_number" jdbcType="VARCHAR" property="licencePlateNumber"/>
-        <result column="measurement_time" jdbcType="DECIMAL" property="measurementTime"/>
+        <result column="measurement_time" jdbcType="INTEGER" property="measurementTime"/>
         <result column="measurement_weight_kg" jdbcType="DECIMAL" property="measurementWeightKg"/>
         <result column="measurement_length_cm" jdbcType="DECIMAL" property="measurementLengthCm"/>
         <result column="measurement_width_cm" jdbcType="DECIMAL" property="measurementWidthCm"/>
@@ -101,7 +101,8 @@
     <sql id="Base_Column_List_Sh">
         id
         , `date`, loading_no, pallet_id, cartons, quantity, gw, hawb, forwarder, destination, licence_plate_number,
-    measurement_time, measurement_weight_kg, measurement_length_cm, measurement_width_cm, measurement_height_cm, measurement_cbm
+        FROM_UNIXTIME(measurement_time, '%Y-%m-%d %H:%i:%s') AS measurement_time,
+        measurement_weight_kg, measurement_length_cm, measurement_width_cm, measurement_height_cm, measurement_cbm
     </sql>
     <sql id="where">
         <where>

@@ -25,7 +25,7 @@ public class DimTransferSH {
 
     private String licencePlateNumber;
 
-    private BigDecimal measurementTime;
+    private String measurementTime;
 
     private BigDecimal measurementWeightKg;
 
@@ -125,11 +125,11 @@ public class DimTransferSH {
         this.licencePlateNumber = licencePlateNumber;
     }
 
-    public BigDecimal getMeasurementTime() {
+    public String getMeasurementTime() {
         return measurementTime;
     }
 
-    public void setMeasurementTime(BigDecimal measurementTime) {
+    public void setMeasurementTime(String measurementTime) {
         this.measurementTime = measurementTime;
     }
 
