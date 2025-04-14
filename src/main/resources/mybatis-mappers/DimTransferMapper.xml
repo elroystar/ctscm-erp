@@ -99,6 +99,9 @@
             <if test="params.gateway != null and params.gateway != ''">
                 and gateway = #{params.gateway,jdbcType=VARCHAR}
             </if>
+            <if test="params.uploadDate != null and params.uploadDate != ''">
+                and created_time like concat(#{params.uploadDate,jdbcType=VARCHAR}, '%')
+            </if>
             <if test="params.status != null">
                 and status = #{params.status,jdbcType=INTEGER}
             </if>

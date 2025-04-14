@@ -12,6 +12,8 @@ public class SendPddInfoDTO {
 
     private String gateway;
 
+    private String uploadDate;
+
     private Integer status;
 
     public String getShipDate() {
@@ -52,6 +54,14 @@ public class SendPddInfoDTO {
 
     public void setGateway(String gateway) {
         this.gateway = gateway;
+    }
+
+    public String getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(String uploadDate) {
+        this.uploadDate = uploadDate;
     }
 
     public Integer getStatus() {

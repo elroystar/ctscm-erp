@@ -654,7 +654,7 @@ public class DimTransfer {
                 "#" + (hawb != null ? hawb : "") +
                 "#" + (mawb != null ? mawb : "") +
                 "#" + (palletId != null ? palletId : "") +
-                "#" + (palletSscc18 != null ? palletSscc18 : "") +
+                "#" + (palletSscc18 != null ? palletSscc18 : "N/A") +
                 "#" + (palletIdTrucker != null ? palletIdTrucker : "") +
                 "#" + (grossWeight != null ? grossWeight : "") +
                 "#" + (grossWeightPdd != null ? grossWeightPdd : "") +

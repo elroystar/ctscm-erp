@@ -28,6 +28,8 @@
                                     <input id="oem" type="text" class="form-control" placeholder="OEM">
                                     Gateway:
                                     <input id="gateway" type="text" class="form-control" placeholder="Gateway">
+                                    Upload Date:
+                                    <input id="uploadDate" type="text" class="form-control" placeholder="Upload Date">
                                     Pdd Status：
                                     <select id="pddStatus" class="form-control input-sm">
                                         <option value=>全部</option>
@@ -68,6 +70,7 @@
                     <tr>
                         <th>id</th>
                         <th>License Plate Number</th>
+                        <th>Upload Date</th>
                         <th>OEM</th>
                         <th>Ship Date</th>
                         <th>Shipping Point</th>
@@ -140,6 +143,7 @@
     <input id="licencePlateNumberForm" name="licencePlateNumberForm" hidden="true">
     <input id="oemForm" name="oemForm" hidden="true">
     <input id="gatewayForm" name="gatewayForm" hidden="true">
+    <input id="uploadDateForm" name="uploadDateForm" hidden="true">
     <input id="pddStatusForm" name="pddStatusForm" hidden="true">
 
     <input id="token" name="token" hidden="true">
@@ -194,12 +198,14 @@
         var licencePlateNumber = $('#licencePlateNumber').val();
         var oem = $('#oem').val();
         var gateway = $('#gateway').val();
+        var uploadDate = $('#uploadDate').val();
         var pddStatus = $('#pddStatus').val();
         if (shipDate.length == 0
             && hawb.length == 0
             && licencePlateNumber.length == 0
             && oem.length == 0
             && gateway.length == 0
+            && uploadDate.length == 0
             && pddStatus.length == 0) {
             layer.open({
                 title: '提示',
@@ -211,6 +217,7 @@
             $("#licencePlateNumberForm").val(licencePlateNumber);
             $("#oemForm").val(oem);
             $("#gatewayForm").val(gateway);
+            $("#uploadDateForm").val(uploadDate);
             $("#pddStatusForm").val(pddStatus);
             $("#token").val(localStorage.getItem("token"));
             $("#form").attr("onsubmit", "return true");
@@ -286,6 +293,7 @@
                     licencePlateNumber: $('#licencePlateNumber').val(),
                     oem: $('#oem').val(),
                     gateway: $('#gateway').val(),
+                    uploadDate: $('#uploadDate').val(),
                     status: $('#pddStatus').val()
                 }),
                 dataType: 'json',
@@ -344,6 +352,7 @@
                         d.licencePlateNumber = $('#licencePlateNumber').val();
                         d.oem = $('#oem').val();
                         d.gateway = $('#gateway').val();
+                        d.uploadDate = $('#uploadDate').val();
                         d.status = $('#pddStatus').val();
                     },
                     "error": function (xhr, textStatus, errorThrown) {
@@ -371,6 +380,7 @@
                 "columns": [
                     {"data": "id", "defaultContent": "", "visible": false},
                     {"data": "licencePlateNumber", "defaultContent": ""},
+                    {"data": "createdTime", "defaultContent": ""},
                     {"data": "oem", "defaultContent": ""},
                     {"data": "shipDate", "defaultContent": ""},
                     {"data": "shippingPoint", "defaultContent": ""},
@@ -379,7 +389,7 @@
                     {"data": "hawb", "defaultContent": ""},
                     {"data": "mawb", "defaultContent": ""},
                     {"data": "palletId", "defaultContent": ""},
-                    {"data": "palletSscc18", "defaultContent": ""},
+                    {"data": "palletSscc18", "defaultContent": "N/A"},
                     {"data": "palletIdTrucker", "defaultContent": ""},
                     {"data": "grossWeight", "defaultContent": ""},
                     {"data": "grossWeightPdd", "defaultContent": ""},
