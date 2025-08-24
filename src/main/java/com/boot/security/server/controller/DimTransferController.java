@@ -281,6 +281,38 @@ public class DimTransferController {
         return fileInfo;
     }
 
+    @LogAnnotation
+    @PostMapping("importLoadMeasure")
+    @ApiOperation(value = "导入尺寸SH")
+    public FileInfo importLoadMeasure(MultipartFile file) throws IOException {
+        checkFileName(file);
+        // 读取Excel
+        XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet sheet = xssfWorkbook.getSheetAt(0); //获取文件的第一个sheet
+        int rows = sheet.getPhysicalNumberOfRows();
+        for (int r = 1; r < rows; r++) {
+            XSSFRow xssfRow = sheet.getRow(r);  //获取sheet的第一行
+            try {
+                String palletId = ExcelUtil.getCellValue(xssfRow.getCell(0));
+                String oemLength = ExcelUtil.getCellValue(xssfRow.getCell(1));
+                String oemWidth = ExcelUtil.getCellValue(xssfRow.getCell(2));
+                String oemHeight = ExcelUtil.getCellValue(xssfRow.getCell(3));
+
+                DimTransferSH dimTransferSH = new DimTransferSH();
+                dimTransferSH.setPalletId(palletId);
+                dimTransferSH.setOemHeight(new BigDecimal(oemLength));
+                dimTransferSH.setOemWidth(new BigDecimal(oemWidth));
+                dimTransferSH.setOemLength(new BigDecimal(oemHeight));
+                dimTransferMapper.updateByPalletId(dimTransferSH);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        FileInfo fileInfo = getFileInfo(file);
+        return fileInfo;
+    }
+
     @PostMapping("exportLoad")
     @ApiOperation(value = "导出Load数据")
     public void exportLoad(HttpServletRequest request, HttpServletResponse response) {
@@ -427,6 +459,9 @@ public class DimTransferController {
                 "Destination," +
                 "HAWB," +
                 "Licence Plate Number," +
+                "OEM Length," +
+                "OEM Width," +
+                "OEM Height," +
                 "Measurement Time," +
                 "Measurement Weight," +
                 "Measurement Length," +

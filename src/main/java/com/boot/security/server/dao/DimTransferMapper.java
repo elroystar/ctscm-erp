@@ -41,4 +41,6 @@ public interface DimTransferMapper {
 
     List<DimTransfer> getSendPddData(@Param("params") Map<String, Object> params, @Param("offset") Integer offset,
                                 @Param("limit") Integer limit);
+
+    void updateByPalletId(DimTransferSH dimTransferSH);
 }

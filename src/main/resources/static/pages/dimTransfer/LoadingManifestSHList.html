@@ -32,6 +32,9 @@
                                     <button id="importLoad" class="layui-btn"><i
                                             class="layui-icon">&#xe67c;</i>导入
                                     </button>
+                                    <button id="importLoadMeasure" class="layui-btn"><i
+                                            class="layui-icon">&#xe67c;</i>导入尺寸
+                                    </button>
                                 </div>
                             </form>
                         </td>
@@ -58,6 +61,9 @@
                         <th>Destination</th>
                         <th>HAWB</th>
                         <th>Licence Plate Number</th>
+                        <th>OEM Length</th>
+                        <th>OEM Width</th>
+                        <th>OEM Height</th>
                         <th>Measurement Time</th>
                         <th>Measurement Weight</th>
                         <th>Measurement Length</th>
@@ -100,6 +106,36 @@
             elem: '#importLoad' //绑定元素
             , accept: 'file' //允许上传的文件类型
             , url: '/dimTransfer/importLoadSH' //上传接口
+            , before: function () {
+                //开始加载效果
+                layui.use('layer', function () {
+                    layui.layer.load();
+                    $(".layui-layer-shade").css('background', '#000000')
+                    $(".layui-layer-shade").css('opacity', '0.2')
+                    $(".layui-layer-shade").click(function (event) {
+                        event.stopPropagation();
+                    })
+                })
+            }
+            , done: function (res, index, upload) {
+                layer.msg("上传成功");
+                //上传成功结束加载效果
+                layui.use('layer', function () {
+                    layui.layer.closeAll();
+                    setTimeout(function () {
+                        layui.layer.closeAll();
+                    }, 1000);
+                });
+                example.ajax.reload();
+            }
+        });
+    });
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        upload.render({
+            elem: '#importLoadMeasure' //绑定元素
+            , accept: 'file' //允许上传的文件类型
+            , url: '/dimTransfer/importLoadMeasure' //上传接口
             , before: function () {
                 //开始加载效果
                 layui.use('layer', function () {
@@ -198,6 +234,9 @@
                     {"data": "destination", "defaultContent": ""},
                     {"data": "hawb", "defaultContent": ""},
                     {"data": "licencePlateNumber", "defaultContent": ""},
+                    {"data": "oemLength", "defaultContent": ""},
+                    {"data": "oemWidth", "defaultContent": ""},
+                    {"data": "oemHeight", "defaultContent": ""},
                     {"data": "measurementTime", "defaultContent": ""},
                     {"data": "measurementWeightKg", "defaultContent": ""},
                     {"data": "measurementLengthCm", "defaultContent": ""},

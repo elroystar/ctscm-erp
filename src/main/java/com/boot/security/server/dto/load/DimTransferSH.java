@@ -25,6 +25,10 @@ public class DimTransferSH {
 
     private String licencePlateNumber;
 
+    private BigDecimal oemLength;
+    private BigDecimal oemWidth;
+    private BigDecimal oemHeight;
+
     private String measurementTime;
 
     private BigDecimal measurementWeightKg;
@@ -173,6 +177,30 @@ public class DimTransferSH {
         this.measurementCbm = measurementCbm;
     }
 
+    public BigDecimal getOemLength() {
+        return oemLength;
+    }
+
+    public void setOemLength(BigDecimal oemLength) {
+        this.oemLength = oemLength;
+    }
+
+    public BigDecimal getOemWidth() {
+        return oemWidth;
+    }
+
+    public void setOemWidth(BigDecimal oemWidth) {
+        this.oemWidth = oemWidth;
+    }
+
+    public BigDecimal getOemHeight() {
+        return oemHeight;
+    }
+
+    public void setOemHeight(BigDecimal oemHeight) {
+        this.oemHeight = oemHeight;
+    }
+
     public String toLoadManifestString() {
         return (date != null ? date : "") +
                 "," + (loadingNo != null ? loadingNo : "") +
@@ -184,6 +212,9 @@ public class DimTransferSH {
                 "," + (destination != null ? destination : "") +
                 "," + (hawb != null ? hawb : "") +
                 "," + (licencePlateNumber != null ? licencePlateNumber : "") +
+                "," + (oemHeight != null ? oemHeight : "") +
+                "," + (oemWidth != null ? oemWidth : "") +
+                "," + (oemLength != null ? oemLength : "") +
                 "," + (measurementTime != null ? measurementTime : "") +
                 "," + (measurementWeightKg != null ? measurementWeightKg : "") +
                 "," + (measurementLengthCm != null ? measurementLengthCm : "") +
