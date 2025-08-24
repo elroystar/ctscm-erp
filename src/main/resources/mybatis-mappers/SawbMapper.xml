@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.SawbMapper">
+    <resultMap id="BaseResultMap" type="com.boot.security.server.dto.load.SawbDTO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="ship_date" jdbcType="VARCHAR" property="shipDate"/>
+        <result column="sawb" jdbcType="VARCHAR" property="sawb"/>
+        <result column="hawb" jdbcType="VARCHAR" property="hawb"/>
+        <result column="pallet_id" jdbcType="VARCHAR" property="palletId"/>
+        <result column="ctns" jdbcType="VARCHAR" property="ctns"/>
+        <result column="units" jdbcType="VARCHAR" property="units"/>
+        <result column="gw" jdbcType="VARCHAR" property="gw"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , status, ship_date, hawb, sawb, pallet_id, ctns, units, gw
+    </sql>
+    <sql id="where">
+        <where>
+            <if test="params.shipDate != null and params.shipDate != ''">
+                and ship_date = #{params.shipDate,jdbcType=VARCHAR}
+            </if>
+            <if test="params.hawb != null and params.hawb != ''">
+                and hawb = #{params.hawb,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sawb_data
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="count" resultType="int">
+        select count(1) from sawb_data
+        <include refid="where"/>
+    </select>
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sawb_data
+        <include refid="where"/>
+        order by id desc
+        limit #{offset}, #{limit}
+    </select>
+    <insert id="insertSelective" parameterType="com.boot.security.server.dto.load.DimTransfer">
+        insert into sawb_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="shipDate != null">
+                ship_date,
+            </if>
+            <if test="sawb != null">
+                sawb,
+            </if>
+            <if test="hawb != null">
+                hawb,
+            </if>
+            <if test="palletId != null">
+                pallet_id,
+            </if>
+            <if test="ctns != null">
+                ctns,
+            </if>
+            <if test="units != null">
+                units,
+            </if>
+            <if test="gw != null">
+                gw,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="shipDate != null">
+                #{shipDate,jdbcType=VARCHAR},
+            </if>
+            <if test="sawb != null">
+                #{sawb,jdbcType=VARCHAR},
+            </if>
+            <if test="hawb != null">
+                #{hawb,jdbcType=VARCHAR},
+            </if>
+            <if test="palletId != null">
+                #{palletId,jdbcType=VARCHAR},
+            </if>
+            <if test="ctns != null">
+                #{ctns,jdbcType=VARCHAR},
+            </if>
+            <if test="units != null">
+                #{units,jdbcType=VARCHAR},
+            </if>
+            <if test="gw != null">
+                #{gw,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>
