@@ -388,18 +388,14 @@ public class ShipperController {
     private EditTruckDTO getEditTruckDTO(XSSFRow xssfRow) throws Exception {
         String shipDate = ExcelUtil.getCellValue(xssfRow.getCell(0));
         String shipmentNumber = ExcelUtil.getCellValue(xssfRow.getCell(1));
-        String fwd = ExcelUtil.getCellValue(xssfRow.getCell(2));
-        String fwdCode = ExcelUtil.getCellValue(xssfRow.getCell(3));
-        String driverName = ExcelUtil.getCellValue(xssfRow.getCell(4));
-        String cellular = ExcelUtil.getCellValue(xssfRow.getCell(5));
-        String truckPlantNumber = ExcelUtil.getCellValue(xssfRow.getCell(6));
-        String ctTracking = ExcelUtil.getCellValue(xssfRow.getCell(7));
-        String gpsDevice = ExcelUtil.getCellValue(xssfRow.getCell(8));
+        String driverName = ExcelUtil.getCellValue(xssfRow.getCell(2));
+        String cellular = ExcelUtil.getCellValue(xssfRow.getCell(3));
+        String truckPlantNumber = ExcelUtil.getCellValue(xssfRow.getCell(4));
+        String ctTracking = ExcelUtil.getCellValue(xssfRow.getCell(5));
+        String gpsDevice = ExcelUtil.getCellValue(xssfRow.getCell(6));
         EditTruckDTO editTruckDTO = new EditTruckDTO();
         editTruckDTO.setShipDateSub(shipDate);
         editTruckDTO.setShipmentNumberSub(shipmentNumber);
-        editTruckDTO.setFwd(blankToNull(fwd));
-        editTruckDTO.setFwdCode(blankToNull(fwdCode));
         editTruckDTO.setDriverName(driverName);
         editTruckDTO.setCellular(cellular);
         editTruckDTO.setTruckPlantNumber(truckPlantNumber);
