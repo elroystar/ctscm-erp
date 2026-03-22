@@ -657,10 +657,10 @@
             <if test="gpsDevice != null">
                 gps_device = #{gpsDevice,jdbcType=VARCHAR},
             </if>
-            <if test="fwd != null">
+            <if test="fwd != null and fwd != ''">
                 fwd = #{fwd,jdbcType=VARCHAR},
             </if>
-            <if test="fwdCode != null">
+            <if test="fwdCode != null and fwdCode != ''">
                 fwd_code = #{fwdCode,jdbcType=VARCHAR},
             </if>
         </set>

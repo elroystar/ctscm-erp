@@ -398,14 +398,18 @@ public class ShipperController {
         EditTruckDTO editTruckDTO = new EditTruckDTO();
         editTruckDTO.setShipDateSub(shipDate);
         editTruckDTO.setShipmentNumberSub(shipmentNumber);
-        editTruckDTO.setFwd(fwd);
-        editTruckDTO.setFwdCode(fwdCode);
+        editTruckDTO.setFwd(blankToNull(fwd));
+        editTruckDTO.setFwdCode(blankToNull(fwdCode));
         editTruckDTO.setDriverName(driverName);
         editTruckDTO.setCellular(cellular);
         editTruckDTO.setTruckPlantNumber(truckPlantNumber);
         editTruckDTO.setCtTracking(ctTracking);
         editTruckDTO.setGpsDevice(gpsDevice);
         return editTruckDTO;
+    }
+
+    private String blankToNull(String value) {
+        return StringUtils.isBlank(value) ? null : value;
     }
 
     @PostMapping("exportEDI945")

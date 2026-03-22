@@ -338,7 +338,12 @@ public class DimTransferController {
     private void exportLoadManifest(HttpServletResponse response, List<DimTransfer> ediLoads) {
         List<Object[]> data = new ArrayList<>();
         for (DimTransfer ediLoad : ediLoads) {
-            data.add(ediLoad.toLoadManifestString().split(","));
+            String[] rowData = ediLoad.toLoadManifestString().split(",");
+            // 转换Forwarder字段（索引为6）
+            if (rowData.length > 6) {
+                rowData[6] = convertForwarder(rowData[6]);
+            }
+            data.add(rowData);
         }
         String headerStr = "Created Time," +
                 "Loading No," +
@@ -429,5 +434,173 @@ public class DimTransferController {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    /**
+     * 转换Forwarder字段值
+     * @param forwarder 原始forwarder值
+     * @return 转换后的forwarder值
+     */
+    private String convertForwarder(String forwarder) {
+        if (forwarder == null || forwarder.trim().isEmpty()) {
+            return forwarder;
+        }
+        
+        // Forwarder转换映射表
+        Map<String, String> forwarderMap = Maps.newHashMap();
+        // APEX相关
+        forwarderMap.put("XAPXL", "APEX");
+        forwarderMap.put("APEX", "APEX");
+        forwarderMap.put("APXL", "APEX");
+        forwarderMap.put("CGS-SH", "APEX");
+        
+        // CEVA相关
+        forwarderMap.put("XEAGL", "CEVA");
+        forwarderMap.put("EAGL", "CEVA");
+        forwarderMap.put("EGL", "CEVA");
+        forwarderMap.put("1060049080", "CEVA");
+        
+        // China Post相关
+        forwarderMap.put("XCPEL", "China Post");
+        forwarderMap.put("XCPLFF", "China Post");
+        forwarderMap.put("XCPLHK", "China Post");
+        
+        // CNTIC相关
+        forwarderMap.put("XCNTIC", "CNTIC");
+        
+        // DGF相关
+        forwarderMap.put("XDZNA", "DGF");
+        forwarderMap.put("DZNA", "DGF");
+        forwarderMap.put("1060017927", "DGF");
+        forwarderMap.put("1060036203", "DGF");
+        forwarderMap.put("XDGF", "DGF");
+        forwarderMap.put("DGF", "DGF");
+        forwarderMap.put("DGFI", "DGF");
+        forwarderMap.put("BDHL", "DGF");
+        forwarderMap.put("ECL", "DGF");
+        forwarderMap.put("ECLI", "DGF");
+        forwarderMap.put("DHL", "DGF");
+        forwarderMap.put("DGF-CN", "DGF");
+        
+        // DHL相关
+        forwarderMap.put("XDHLE", "DHL");
+        forwarderMap.put("XDHLKR", "DHL");
+        forwarderMap.put("XDHLG", "DHL");
+        forwarderMap.put("DHLG", "DHL");
+        forwarderMap.put("1060000099", "DHL");
+        forwarderMap.put("DHLBBX", "DHL");
+        forwarderMap.put("1060025331", "DHL");
+        forwarderMap.put("1060029373", "DHL");
+        forwarderMap.put("1060032962", "DHL");
+        forwarderMap.put("PDHL", "DHL");
+        forwarderMap.put("PPBX", "DHL");
+        
+        // EI相关
+        forwarderMap.put("1060027904", "EI");
+        forwarderMap.put("EI", "EI");
+        forwarderMap.put("1060027895", "EI");
+        forwarderMap.put("XEPL", "EI");
+        
+        // Expeditors相关
+        forwarderMap.put("EXP", "Expeditors");
+        
+        // FedEx相关
+        forwarderMap.put("XFEDE", "FedEx");
+        forwarderMap.put("FEDC", "FedEx");
+        forwarderMap.put("FEDE", "FedEx");
+        forwarderMap.put("FEDM", "FedEx");
+        forwarderMap.put("FED", "FedEx");
+        
+        // Flexport相关
+        forwarderMap.put("XFLXT", "Flexport");
+        
+        // FTN相关
+        forwarderMap.put("XFTNQ", "FTN");
+        forwarderMap.put("XFTNV", "FTN");
+        
+        // GEO相关
+        forwarderMap.put("1060027586", "GEO");
+        forwarderMap.put("1060034741", "GEO");
+        forwarderMap.put("GEO", "GEO");
+        
+        // Geodis相关
+        forwarderMap.put("GDW", "Geodis");
+        
+        // KN相关
+        forwarderMap.put("1060020795", "KN");
+        forwarderMap.put("1060029822", "KN");
+        forwarderMap.put("1060051752", "KN");
+        forwarderMap.put("KAN", "KN");
+        forwarderMap.put("KNI", "KN");
+        forwarderMap.put("XKHNN", "KN");
+        forwarderMap.put("KN", "KN");
+        forwarderMap.put("NKN", "KN");
+        forwarderMap.put("K&N-CN", "KN");
+        
+        // KWE相关
+        forwarderMap.put("XKWE", "KWE");
+        
+        // Morrison相关
+        forwarderMap.put("XMORR", "Morrison");
+        forwarderMap.put("MORR", "Morrison");
+        forwarderMap.put("XMOR", "Morrison");
+        forwarderMap.put("MOR", "Morrison");
+        
+        // Nippon相关
+        forwarderMap.put("XNEX", "Nippon");
+        forwarderMap.put("NEX", "Nippon");
+        
+        // Schenker相关
+        forwarderMap.put("XBNAF", "Schenker");
+        forwarderMap.put("BNAF", "Schenker");
+        forwarderMap.put("1060000064", "Schenker");
+        forwarderMap.put("XBAX", "Schenker");
+        forwarderMap.put("BAX", "Schenker");
+        forwarderMap.put("BAXI", "Schenker");
+        forwarderMap.put("1060028361", "Schenker");
+        forwarderMap.put("1060026371", "Schenker");
+        forwarderMap.put("SCK-CN", "Schenker");
+        
+        // SF相关
+        forwarderMap.put("XSF", "SF");
+        forwarderMap.put("SF", "SF");
+        
+        // SLC相关
+        forwarderMap.put("XSLC", "SLC");
+        
+        // TCI相关
+        forwarderMap.put("0080154092", "TCI");
+        
+        // TNT相关
+        forwarderMap.put("1060019776", "TNT");
+        forwarderMap.put("XTNT", "TNT");
+        forwarderMap.put("XTNTA", "TNT");
+        forwarderMap.put("XTNTKR", "TNT");
+        forwarderMap.put("XTNTTW", "TNT");
+        
+        // TOLL相关
+        forwarderMap.put("XTOLL", "TOLL");
+        
+        // UPS相关
+        forwarderMap.put("UPS", "UPS");
+        forwarderMap.put("UPSC", "UPS");
+        forwarderMap.put("1060022352", "UPS");
+        forwarderMap.put("1060032936", "UPS");
+        forwarderMap.put("XUPSC", "UPS");
+        forwarderMap.put("XUPSM", "UPS");
+        forwarderMap.put("XUPSN", "UPS");
+        forwarderMap.put("XUPSSG", "UPS");
+        forwarderMap.put("XUPSF", "UPS SC");
+        
+        // YMT相关
+        forwarderMap.put("XYMT", "YMT");
+        
+        // Yamato相关
+        forwarderMap.put("YMT", "Yamato");
+        forwarderMap.put("QCIMCAC", "AC");
+        forwarderMap.put("QCIMC", "FG");
+
+        // 如果在映射表中找到对应的值，返回转换后的值，否则返回原值
+        return forwarderMap.getOrDefault(forwarder.trim(), forwarder);
     }
 }
