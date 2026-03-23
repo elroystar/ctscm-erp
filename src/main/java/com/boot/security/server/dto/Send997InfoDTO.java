@@ -10,6 +10,7 @@ public class Send997InfoDTO {
     private String truckPlantNumber;
     private String sender;
     private String shipDate;
+    private String hazardousCertificationNo;
 
     public String getShipmentNumber() {
         return shipmentNumber;
@@ -73,5 +74,13 @@ public class Send997InfoDTO {
 
     public void setShipDate(String shipDate) {
         this.shipDate = shipDate;
+    }
+
+    public String getHazardousCertificationNo() {
+        return hazardousCertificationNo;
+    }
+
+    public void setHazardousCertificationNo(String hazardousCertificationNo) {
+        this.hazardousCertificationNo = hazardousCertificationNo;
     }
 }

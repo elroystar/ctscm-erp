@@ -36,6 +36,9 @@
                                     <input id="sender" type="text" class="form-control" placeholder="sender">
                                     Ship Date：
                                     <input id="shipDate" type="text" class="form-control" placeholder="Ship Date">
+                                    Hazardous Certification No：
+                                    <input id="hazardousCertificationNo" type="text" class="form-control"
+                                           placeholder="Hazardous Certification No">
                                     Dispose 997：
                                     <select id="dispose997" class="form-control input-sm">
                                         <option value=>全部</option>
@@ -499,6 +502,7 @@
         var truckPlantNumber = $('#truckPlantNumber').val();
         var sender = $('#sender').val();
         var shipDate = $('#shipDate').val();
+        var hazardousCertificationNo = $('#hazardousCertificationNo').val();
         if (shipmentNumber.length == 0
             && waybill.length == 0
             && oem.length == 0
@@ -506,7 +510,8 @@
             && region.length == 0
             && truckPlantNumber.length == 0
             && sender.length == 0
-            && shipDate.length == 0) {
+            && shipDate.length == 0
+            && hazardousCertificationNo.length == 0) {
             layer.open({
                 title: '提示',
                 content: '请先输入至少一个条件'
@@ -522,7 +527,8 @@
                     region: $('#region').val(),
                     truckPlantNumber: $('#truckPlantNumber').val(),
                     sender: $('#sender').val(),
-                    shipDate: $('#shipDate').val()
+                    shipDate: $('#shipDate').val(),
+                    hazardousCertificationNo: $('#hazardousCertificationNo').val()
                 }),
                 dataType: 'json',
                 url: '/shipper/send997Info',

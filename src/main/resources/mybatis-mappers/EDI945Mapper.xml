@@ -97,6 +97,9 @@
             <if test="params.dispose997 != null and params.dispose997 != ''">
                 and dispose_997 = #{params.dispose997,jdbcType=INTEGER}
             </if>
+            <if test="params.hazardousCertificationNo != null and params.hazardousCertificationNo != ''">
+                and hazardous_certification_no = #{params.hazardousCertificationNo,jdbcType=VARCHAR}
+            </if>
         </where>
     </sql>
     <select id="selectByGPSState" parameterType="java.lang.Integer" resultMap="BaseResultMap">
