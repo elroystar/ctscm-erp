@@ -21,6 +21,8 @@ public class FieldIhub997 {
 
     private String fuctionalrp;
 
+    private String hazardousCertificationNo;
+
     public Integer getId() {
         return id;
     }
@@ -99,5 +101,13 @@ public class FieldIhub997 {
 
     public void setFuctionalrp(String fuctionalrp) {
         this.fuctionalrp = fuctionalrp == null ? null : fuctionalrp.trim();
+    }
+
+    public String getHazardousCertificationNo() {
+        return hazardousCertificationNo;
+    }
+
+    public void setHazardousCertificationNo(String hazardousCertificationNo) {
+        this.hazardousCertificationNo = hazardousCertificationNo == null ? null : hazardousCertificationNo.trim();
     }
 }

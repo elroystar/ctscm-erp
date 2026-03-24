@@ -12,11 +12,12 @@
         <result column="controlnumber" jdbcType="VARCHAR" property="controlnumber"/>
         <result column="transationrp" jdbcType="VARCHAR" property="transationrp"/>
         <result column="fuctionalrp" jdbcType="VARCHAR" property="fuctionalrp"/>
+        <result column="hazardous_certification_no" jdbcType="VARCHAR" property="hazardousCertificationNo"/>
     </resultMap>
     <sql id="Base_Column_List">
         id
         , status, orimessageid, fareceiverid, fasenderid, appreceivercode, orisenderid,
-    controlnumber, transationrp, fuctionalrp
+    controlnumber, transationrp, fuctionalrp, hazardous_certification_no
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -33,11 +34,11 @@
         insert into field_ihub_997 (id, status, orimessageid,
                                       fareceiverid, fasenderid, appreceivercode,
                                       orisenderid, controlnumber, transationrp,
-                                      fuctionalrp)
+                                      fuctionalrp, hazardous_certification_no)
         values (#{id,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{orimessageid,jdbcType=VARCHAR},
                 #{fareceiverid,jdbcType=VARCHAR}, #{fasenderid,jdbcType=VARCHAR}, #{appreceivercode,jdbcType=VARCHAR},
                 #{orisenderid,jdbcType=VARCHAR}, #{controlnumber,jdbcType=VARCHAR}, #{transationrp,jdbcType=VARCHAR},
-                #{fuctionalrp,jdbcType=VARCHAR})
+                #{fuctionalrp,jdbcType=VARCHAR}, #{hazardousCertificationNo,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.boot.security.server.model.FieldIhub997">
         insert into field_ihub_997
@@ -72,6 +73,9 @@
             <if test="fuctionalrp != null">
                 fuctionalrp,
             </if>
+            <if test="hazardousCertificationNo != null">
+                hazardous_certification_no,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -103,6 +107,9 @@
             </if>
             <if test="fuctionalrp != null">
                 #{fuctionalrp,jdbcType=VARCHAR},
+            </if>
+            <if test="hazardousCertificationNo != null">
+                #{hazardousCertificationNo,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -136,6 +143,9 @@
             <if test="fuctionalrp != null">
                 fuctionalrp = #{fuctionalrp,jdbcType=VARCHAR},
             </if>
+            <if test="hazardousCertificationNo != null">
+                hazardous_certification_no = #{hazardousCertificationNo,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -149,7 +159,8 @@
             orisenderid     = #{orisenderid,jdbcType=VARCHAR},
             controlnumber   = #{controlnumber,jdbcType=VARCHAR},
             transationrp    = #{transationrp,jdbcType=VARCHAR},
-            fuctionalrp     = #{fuctionalrp,jdbcType=VARCHAR}
+            fuctionalrp     = #{fuctionalrp,jdbcType=VARCHAR},
+            hazardous_certification_no = #{hazardousCertificationNo,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

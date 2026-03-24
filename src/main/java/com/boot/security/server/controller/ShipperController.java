@@ -756,6 +756,7 @@ public class ShipperController {
                 fieldIhub997.setAppreceivercode(edi945.getAppreceivercode());
                 fieldIhub997.setOrisenderid(edi945.getOrisenderid());
                 fieldIhub997.setControlnumber(edi945.getControlnumber());
+                fieldIhub997.setHazardousCertificationNo(send997Info.getHazardousCertificationNo());
                 fieldIhub997Mapper.insertSelective(fieldIhub997);
                 // 推送完毕后标记为已推送
                 edi945.setDispose997("1");
