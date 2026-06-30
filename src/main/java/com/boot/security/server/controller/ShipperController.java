@@ -707,6 +707,22 @@ public class ShipperController {
     @ApiOperation(value = "发送997数据")
     public Integer send997Info(@RequestBody Send997InfoDTO send997Info) {
         Map<String, Object> params = convert(send997Info);
+        // 对 region 和 sender 做与 extractedRegion 相同的数组转换处理
+        String region = (String) params.get("region");
+        putRegion(params, region);
+        String sender = (String) params.get("sender");
+        if (StringUtils.equals(sender, "FG")) {
+            String[] split = senderFG.split(",");
+            params.put("sender", split);
+        } else if (StringUtils.equals(sender, "AC")) {
+            String[] split = senderAC.split(",");
+            params.put("sender", split);
+        } else {
+            if (StringUtils.isNotBlank(sender)) {
+                String[] split = sender.split(",");
+                params.put("sender", split);
+            }
+        }
         List<EDI945> edi945List = edi945Mapper.getSend997Data(params, 0, 999999);
         for (EDI945 edi945 : edi945List) {
             try {
@@ -756,7 +772,7 @@ public class ShipperController {
                 fieldIhub997.setAppreceivercode(edi945.getAppreceivercode());
                 fieldIhub997.setOrisenderid(edi945.getOrisenderid());
                 fieldIhub997.setControlnumber(edi945.getControlnumber());
-                fieldIhub997.setHazardousCertificationNo(send997Info.getHazardousCertificationNo());
+                fieldIhub997.setTransactionsetControlno(edi945.getTransactionsetControlno());
                 fieldIhub997Mapper.insertSelective(fieldIhub997);
                 // 推送完毕后标记为已推送
                 edi945.setDispose997("1");

@@ -10,7 +10,7 @@ public class Send997InfoDTO {
     private String truckPlantNumber;
     private String sender;
     private String shipDate;
-    private String hazardousCertificationNo;
+    private String transactionsetControlno;
 
     public String getShipmentNumber() {
         return shipmentNumber;
@@ -76,11 +76,11 @@ public class Send997InfoDTO {
         this.shipDate = shipDate;
     }
 
-    public String getHazardousCertificationNo() {
-        return hazardousCertificationNo;
+    public String getTransactionsetControlno() {
+        return transactionsetControlno;
     }
 
-    public void setHazardousCertificationNo(String hazardousCertificationNo) {
-        this.hazardousCertificationNo = hazardousCertificationNo;
+    public void setTransactionsetControlno(String transactionsetControlno) {
+        this.transactionsetControlno = transactionsetControlno;
     }
 }

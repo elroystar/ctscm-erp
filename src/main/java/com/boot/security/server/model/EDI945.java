@@ -82,6 +82,8 @@ public class EDI945 {
 
     private String dispose997;
 
+    private String transactionsetControlno;
+
     private String desLon;
 
     private String desLat;
@@ -508,6 +510,14 @@ public class EDI945 {
 
     public void setFuctionalrp(String fuctionalrp) {
         this.fuctionalrp = fuctionalrp;
+    }
+
+    public String getTransactionsetControlno() {
+        return transactionsetControlno;
+    }
+
+    public void setTransactionsetControlno(String transactionsetControlno) {
+        this.transactionsetControlno = transactionsetControlno;
     }
 
     public String getTcCode() {

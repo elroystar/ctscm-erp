@@ -44,6 +44,7 @@
         <result column="transationrp" jdbcType="VARCHAR" property="transationrp"/>
         <result column="fuctionalrp" jdbcType="VARCHAR" property="fuctionalrp"/>
         <result column="dispose_997" jdbcType="VARCHAR" property="dispose997"/>
+        <result column="transactionset_controlno" jdbcType="VARCHAR" property="transactionsetControlno"/>
         <result column="des_lon" jdbcType="VARCHAR" property="desLon"/>
         <result column="des_lat" jdbcType="VARCHAR" property="desLat"/>
         <result column="device_type" jdbcType="VARCHAR" property="deviceType"/>
@@ -60,7 +61,7 @@
     waybill, shipway, fwd, fwd_code, oem, gateway, ctns, units, gw, ship_mode, poe, poe_country, 
     truck_plant_number, driver_name, cellular, ct_tracking, gps_device, gps_updating, city, province, `position`,
     longitude, latitude, messageid, dispose_997, inreceiverid, insenderid, appreceivercode, orisenderid, controlnumber, transationrp,
-    fuctionalrp,tccode,stcity
+    fuctionalrp,transactionset_controlno,tccode,stcity
     </sql>
     <sql id="where">
         <where>
@@ -97,8 +98,8 @@
             <if test="params.dispose997 != null and params.dispose997 != ''">
                 and dispose_997 = #{params.dispose997,jdbcType=INTEGER}
             </if>
-            <if test="params.hazardousCertificationNo != null and params.hazardousCertificationNo != ''">
-                and hazardous_certification_no = #{params.hazardousCertificationNo,jdbcType=VARCHAR}
+            <if test="params.transactionsetControlno != null and params.transactionsetControlno != ''">
+                and transactionset_controlno = #{params.transactionsetControlno,jdbcType=VARCHAR}
             </if>
         </where>
     </sql>
