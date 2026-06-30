@@ -5,3 +5,5 @@
 /logs/
 /.idea/
 /*.iml
+/docs/
+/src/main/resources/sql/

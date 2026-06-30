@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDI210TaxMapper">
+
+    <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDI210Tax">
+        <id     column="invoice_id"               property="invoiceId"/>
+        <result column="customer_reference"       property="customerReference"/>
+        <result column="po"                       property="po"/>
+        <result column="dn"                       property="dn"/>
+        <result column="rma"                      property="rma"/>
+        <result column="hawb"                     property="hawb"/>
+        <result column="so"                       property="so"/>
+        <result column="bill_of_lading_number"    property="billOfLadingNumber"/>
+        <result column="tracking_number"          property="trackingNumber"/>
+        <result column="freight_bill_number"      property="freightBillNumber"/>
+        <result column="billing_account"          property="billingAccount"/>
+        <result column="bill_to_account"          property="billToAccount"/>
+        <result column="division_identifier"      property="divisionIdentifier"/>
+        <result column="invoice_standard_code"    property="invoiceStandardCode"/>
+        <result column="carrier_name"             property="carrierName"/>
+        <result column="business_unit"            property="businessUnit"/>
+        <result column="customer_vat_registration" property="customerVatRegistration"/>
+        <result column="carrier_vat_registration"  property="carrierVatRegistration"/>
+        <result column="carrier_tax_identity"     property="carrierTaxIdentity"/>
+        <result column="sender_tax_identity"      property="senderTaxIdentity"/>
+        <result column="recipient_tax_identity"   property="recipientTaxIdentity"/>
+        <result column="tax_bureau_name"          property="taxBureauName"/>
+        <result column="tax_bureau_code"          property="taxBureauCode"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.boot.security.server.model.EDI210Tax">
+        INSERT INTO edi_210_tax
+        (invoice_id, customer_reference, po, dn, rma, hawb, so,
+         bill_of_lading_number, tracking_number, freight_bill_number,
+         billing_account, bill_to_account, division_identifier,
+         invoice_standard_code, carrier_name, business_unit,
+         customer_vat_registration, carrier_vat_registration,
+         carrier_tax_identity, sender_tax_identity, recipient_tax_identity,
+         tax_bureau_name, tax_bureau_code)
+        VALUES
+        (#{invoiceId}, #{customerReference}, #{po}, #{dn}, #{rma}, #{hawb}, #{so},
+         #{billOfLadingNumber}, #{trackingNumber}, #{freightBillNumber},
+         #{billingAccount}, #{billToAccount}, #{divisionIdentifier},
+         #{invoiceStandardCode}, #{carrierName}, #{businessUnit},
+         #{customerVatRegistration}, #{carrierVatRegistration},
+         #{carrierTaxIdentity}, #{senderTaxIdentity}, #{recipientTaxIdentity},
+         #{taxBureauName}, #{taxBureauCode})
+    </insert>
+
+    <delete id="deleteByInvoiceId">
+        DELETE FROM edi_210_tax WHERE invoice_id = #{invoiceId}
+    </delete>
+
+    <select id="selectByInvoiceId" resultMap="BaseResultMap">
+        SELECT * FROM edi_210_tax WHERE invoice_id = #{invoiceId}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDI210Tax">
+        UPDATE edi_210_tax
+        <set>
+            <if test="customerReference       != null">customer_reference = #{customerReference},</if>
+            <if test="po                      != null">po = #{po},</if>
+            <if test="dn                      != null">dn = #{dn},</if>
+            <if test="rma                     != null">rma = #{rma},</if>
+            <if test="hawb                    != null">hawb = #{hawb},</if>
+            <if test="so                      != null">so = #{so},</if>
+            <if test="billOfLadingNumber      != null">bill_of_lading_number = #{billOfLadingNumber},</if>
+            <if test="trackingNumber          != null">tracking_number = #{trackingNumber},</if>
+            <if test="freightBillNumber       != null">freight_bill_number = #{freightBillNumber},</if>
+            <if test="billingAccount          != null">billing_account = #{billingAccount},</if>
+            <if test="billToAccount           != null">bill_to_account = #{billToAccount},</if>
+            <if test="divisionIdentifier      != null">division_identifier = #{divisionIdentifier},</if>
+            <if test="invoiceStandardCode     != null">invoice_standard_code = #{invoiceStandardCode},</if>
+            <if test="carrierName             != null">carrier_name = #{carrierName},</if>
+            <if test="businessUnit            != null">business_unit = #{businessUnit},</if>
+            <if test="customerVatRegistration != null">customer_vat_registration = #{customerVatRegistration},</if>
+            <if test="carrierVatRegistration  != null">carrier_vat_registration = #{carrierVatRegistration},</if>
+            <if test="carrierTaxIdentity      != null">carrier_tax_identity = #{carrierTaxIdentity},</if>
+            <if test="senderTaxIdentity       != null">sender_tax_identity = #{senderTaxIdentity},</if>
+            <if test="recipientTaxIdentity    != null">recipient_tax_identity = #{recipientTaxIdentity},</if>
+            <if test="taxBureauName           != null">tax_bureau_name = #{taxBureauName},</if>
+            <if test="taxBureauCode           != null">tax_bureau_code = #{taxBureauCode},</if>
+        </set>
+        WHERE invoice_id = #{invoiceId}
+    </update>
+
+</mapper>

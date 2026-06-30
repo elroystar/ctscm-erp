@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>EDI 210 发票详情</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+    <style>
+        body { padding: 10px; }
+        .panel { margin-bottom: 10px; }
+        .panel-heading { font-weight: bold; }
+        table.detail-tbl td { padding: 4px 8px; vertical-align: top; }
+        table.detail-tbl td.label { color: #888; width: 160px; text-align: right; }
+        .charge-tbl { width: 100%; font-size: 12px; }
+        .charge-tbl th, .charge-tbl td { border: 1px solid #ddd; padding: 4px 6px; }
+        .charge-tbl thead th { background: #f5f5f5; }
+        .scroll-x { overflow-x: auto; }
+    </style>
+</head>
+<body>
+<div class="layui-tab layui-tab-brief" lay-filter="detailTab">
+    <ul class="layui-tab-title">
+        <li class="layui-this">基本信息</li>
+        <li>参与方</li>
+        <li>计费明细</li>
+        <li>税务/参考</li>
+    </ul>
+    <div class="layui-tab-content">
+
+        <!-- Tab1 基本信息 -->
+        <div class="layui-tab-item layui-show">
+            <div class="panel panel-default">
+                <div class="panel-heading">Billing Basic Information</div>
+                <div class="panel-body">
+                    <table class="detail-tbl" id="basicTbl"></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab2 参与方 -->
+        <div class="layui-tab-item">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Bill-To</div>
+                        <div class="panel-body"><table class="detail-tbl" id="billToTbl"></table></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Bill-From</div>
+                        <div class="panel-body"><table class="detail-tbl" id="billFromTbl"></table></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Shipper</div>
+                        <div class="panel-body"><table class="detail-tbl" id="shipperTbl"></table></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Consignee</div>
+                        <div class="panel-body"><table class="detail-tbl" id="consigneeTbl"></table></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab3 计费明细 -->
+        <div class="layui-tab-item">
+            <div class="panel panel-default">
+                <div class="panel-heading">Charges (<span id="chargeCount">0</span> 条)</div>
+                <div class="panel-body scroll-x">
+                    <table class="charge-tbl" id="chargeTbl">
+                        <thead>
+                        <tr>
+                            <th>#</th><th>Description</th><th>Rate</th><th>Rate Qual</th>
+                            <th>Currency</th><th>Charge</th><th>Weight</th><th>Volume</th>
+                            <th>Quantity</th><th>L×W×H</th>
+                            <th>Equipment</th><th>SP Charge</th><th>Service</th>
+                            <th>Origin→Destination Zone</th>
+                            <th>Declared Value</th><th>Commodity</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab4 税务/参考 -->
+        <div class="layui-tab-item">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Reference (业务编号)</div>
+                        <div class="panel-body"><table class="detail-tbl" id="refTbl"></table></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Tax (税务信息)</div>
+                        <div class="panel-body"><table class="detail-tbl" id="taxTbl"></table></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript">
+
+    layui.use('element', function () {});
+
+    function getQuery(name) {
+        var url = location.search.substring(1);
+        var arr = url.split('&');
+        for (var i = 0; i < arr.length; i++) {
+            var kv = arr[i].split('=');
+            if (kv[0] === name) return decodeURIComponent(kv[1] || '');
+        }
+        return '';
+    }
+
+    function row(label, value) {
+        return '<tr><td class="label">' + label + '</td><td>' + (value == null ? '' : value) + '</td></tr>';
+    }
+
+    function fillBasic(inv) {
+        if (!inv) return;
+        var html = '';
+        html += row('Region',         inv.region);
+        html += row('SCAC',           inv.scac);
+        html += row('INV#',           inv.invNo);
+        html += row('INV Date',       inv.invDate);
+        html += row('Payment Terms',  inv.paymentTerms);
+        html += row('Currency',       inv.cur);
+        html += row('INV Amount',     inv.invAmount);
+        html += row('TT Charge',      inv.ttCharge);
+        html += row('Pickup Date/Time', (inv.pickupDate || '') + ' ' + (inv.pickupTime || ''));
+        html += row('POD Date/Time',  (inv.podDate || '') + ' ' + (inv.podTime || ''));
+        html += row('POD Name',       inv.podName);
+        html += row('Gross Weight',   (inv.grossWeight || '') + ' ' + (inv.gwUnit || '')
+                                       + (inv.gwQualifier ? ' [' + inv.gwQualifier + ']' : ''));
+        html += row('Bill Weight',    (inv.billWeight || '') + ' ' + (inv.bwUnit || '')
+                                       + (inv.bwQualifier ? ' [' + inv.bwQualifier + ']' : ''));
+        html += row('BOL',            inv.bol);
+        html += row('Status',         inv.status);
+        html += row('Import Batch',   inv.importBatch);
+        html += row('Create Time',    inv.createTime);
+        $('#basicTbl').html(html);
+    }
+
+    function fillParty(tblId, p) {
+        if (!p) {
+            $('#' + tblId).html('<tr><td colspan="2" style="color:#999">无数据</td></tr>');
+            return;
+        }
+        var html = '';
+        html += row('Name1',   p.name1);
+        html += row('Name2',   p.name2);
+        html += row('Address1', p.address1);
+        html += row('Address2', p.address2);
+        html += row('City',    p.city);
+        html += row('State/Province', p.stateProvince);
+        html += row('Postal Code',   p.postalCode);
+        html += row('Country', p.country);
+        html += row('Account', p.account);
+        html += row('Location', p.location);
+        $('#' + tblId).html(html);
+    }
+
+    function fillCharges(charges) {
+        $('#chargeCount').text(charges ? charges.length : 0);
+        var $tb = $('#chargeTbl tbody').empty();
+        if (!charges || !charges.length) return;
+        for (var i = 0; i < charges.length; i++) {
+            var c = charges[i];
+            var lwh = (c.length || '') + '×' + (c.width || '') + '×' + (c.height || '')
+                      + (c.measurementUnit ? ' ' + c.measurementUnit : '');
+            var qty = (c.billedQuantity || c.ratedQuantity || '')
+                      + (c.billedQualifier ? ' ' + c.billedQualifier : '')
+                      + (c.ratedPackageType ? ' ' + c.ratedPackageType : '');
+            var zone = (c.originZone || '') + ' → ' + (c.destinationZone || '');
+            var commodity = (c.commodityClass || '') + (c.commodityCode ? ' / ' + c.commodityCode : '');
+            $tb.append('<tr>'
+                + '<td>' + (i + 1) + '</td>'
+                + '<td>' + (c.description || '') + '</td>'
+                + '<td>' + (c.rate || '') + '</td>'
+                + '<td>' + (c.rateQual || '') + '</td>'
+                + '<td>' + (c.ratedCurrency || '') + (c.expressedCurrency ? ' / ' + c.expressedCurrency : '') + '</td>'
+                + '<td>' + (c.charge || '') + '</td>'
+                + '<td>' + (c.weight || '') + (c.weightQual ? ' ' + c.weightQual : '') + '</td>'
+                + '<td>' + (c.volume || '') + (c.volumeQual ? ' ' + c.volumeQual : '') + '</td>'
+                + '<td>' + qty + '</td>'
+                + '<td>' + lwh + '</td>'
+                + '<td>' + (c.equipmentCode || '') + (c.equipmentType ? ' / ' + c.equipmentType : '') + '</td>'
+                + '<td>' + (c.spChargeCode || '') + (c.spChargeDesc ? ' - ' + c.spChargeDesc : '') + '</td>'
+                + '<td>' + (c.serviceCode || '') + (c.transportService ? ' / ' + c.transportService : '') + '</td>'
+                + '<td>' + zone + '</td>'
+                + '<td>' + (c.declaredValue || '') + '</td>'
+                + '<td>' + commodity + '</td>'
+                + '</tr>');
+        }
+    }
+
+    function fillTax(tax) {
+        if (!tax) {
+            $('#refTbl').html('<tr><td colspan="2" style="color:#999">无数据</td></tr>');
+            $('#taxTbl').html('<tr><td colspan="2" style="color:#999">无数据</td></tr>');
+            return;
+        }
+        var refHtml = '';
+        refHtml += row('Customer Reference', tax.customerReference);
+        refHtml += row('PO',                 tax.po);
+        refHtml += row('DN',                 tax.dn);
+        refHtml += row('RMA',                tax.rma);
+        refHtml += row('HAWB',               tax.hawb);
+        refHtml += row('SO',                 tax.so);
+        refHtml += row('Bill of Lading No.', tax.billOfLadingNumber);
+        refHtml += row('Tracking Number',    tax.trackingNumber);
+        refHtml += row('Freight Bill Number', tax.freightBillNumber);
+        refHtml += row('Billing Account',    tax.billingAccount);
+        refHtml += row('Bill to Account',    tax.billToAccount);
+        refHtml += row('Division Identifier', tax.divisionIdentifier);
+        refHtml += row('Invoice Standard Code', tax.invoiceStandardCode);
+        refHtml += row('Carrier Name',       tax.carrierName);
+        refHtml += row('Business Unit',      tax.businessUnit);
+        $('#refTbl').html(refHtml);
+
+        var taxHtml = '';
+        taxHtml += row('Customer VAT Reg.', tax.customerVatRegistration);
+        taxHtml += row('Carrier VAT Reg.',  tax.carrierVatRegistration);
+        taxHtml += row('Carrier Tax ID',    tax.carrierTaxIdentity);
+        taxHtml += row('Sender Tax ID',     tax.senderTaxIdentity);
+        taxHtml += row('Recipient Tax ID',  tax.recipientTaxIdentity);
+        taxHtml += row('Tax Bureau Name',   tax.taxBureauName);
+        taxHtml += row('Tax Bureau Code',   tax.taxBureauCode);
+        $('#taxTbl').html(taxHtml);
+    }
+
+    var id = getQuery('id');
+    $.ajax({
+        url: '/edi210/detail/' + id,
+        type: 'GET',
+        headers: { 'Authorization': localStorage.getItem("token") },
+        success: function (data) {
+            fillBasic(data.invoice);
+            fillParty('billToTbl',    data.billTo);
+            fillParty('billFromTbl',  data.billFrom);
+            fillParty('shipperTbl',   data.shipper);
+            fillParty('consigneeTbl', data.consignee);
+            fillCharges(data.charges);
+            fillTax(data.tax);
+        },
+        error: function () { layer.msg('加载详情失败'); }
+    });
+
+</script>
+</body>
+</html>

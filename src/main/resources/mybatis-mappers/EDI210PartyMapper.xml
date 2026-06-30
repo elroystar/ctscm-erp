@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDI210PartyMapper">
+
+    <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDI210Party">
+        <id     column="id"             property="id"/>
+        <result column="invoice_id"     property="invoiceId"/>
+        <result column="party_role"     property="partyRole"/>
+        <result column="name1"          property="name1"/>
+        <result column="name2"          property="name2"/>
+        <result column="address1"       property="address1"/>
+        <result column="address2"       property="address2"/>
+        <result column="city"           property="city"/>
+        <result column="country"        property="country"/>
+        <result column="postal_code"    property="postalCode"/>
+        <result column="state_province" property="stateProvince"/>
+        <result column="account"        property="account"/>
+        <result column="location"       property="location"/>
+    </resultMap>
+
+    <sql id="cols">
+        id, invoice_id, party_role, name1, name2, address1, address2,
+        city, country, postal_code, state_province, account, location
+    </sql>
+
+    <insert id="insert" parameterType="com.boot.security.server.model.EDI210Party"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO edi_210_party
+        (invoice_id, party_role, name1, name2, address1, address2,
+         city, country, postal_code, state_province, account, location)
+        VALUES
+        (#{invoiceId}, #{partyRole}, #{name1}, #{name2}, #{address1}, #{address2},
+         #{city}, #{country}, #{postalCode}, #{stateProvince}, #{account}, #{location})
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO edi_210_party
+        (invoice_id, party_role, name1, name2, address1, address2,
+         city, country, postal_code, state_province, account, location)
+        VALUES
+        <foreach collection="list" item="p" separator=",">
+            (#{p.invoiceId}, #{p.partyRole}, #{p.name1}, #{p.name2},
+             #{p.address1}, #{p.address2}, #{p.city}, #{p.country},
+             #{p.postalCode}, #{p.stateProvince}, #{p.account}, #{p.location})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByInvoiceId">
+        DELETE FROM edi_210_party WHERE invoice_id = #{invoiceId}
+    </delete>
+
+    <select id="selectByInvoiceId" resultMap="BaseResultMap">
+        SELECT <include refid="cols"/> FROM edi_210_party WHERE invoice_id = #{invoiceId}
+    </select>
+
+    <select id="selectByInvoiceIdAndRole" resultMap="BaseResultMap">
+        SELECT <include refid="cols"/>
+        FROM edi_210_party
+        WHERE invoice_id = #{invoiceId} AND party_role = #{role}
+        LIMIT 1
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDI210Party">
+        UPDATE edi_210_party
+        <set>
+            <if test="name1         != null">name1 = #{name1},</if>
+            <if test="name2         != null">name2 = #{name2},</if>
+            <if test="address1      != null">address1 = #{address1},</if>
+            <if test="address2      != null">address2 = #{address2},</if>
+            <if test="city          != null">city = #{city},</if>
+            <if test="country       != null">country = #{country},</if>
+            <if test="postalCode    != null">postal_code = #{postalCode},</if>
+            <if test="stateProvince != null">state_province = #{stateProvince},</if>
+            <if test="account       != null">account = #{account},</if>
+            <if test="location      != null">location = #{location},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

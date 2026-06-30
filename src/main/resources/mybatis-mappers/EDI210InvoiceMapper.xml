@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDI210InvoiceMapper">
+
+    <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDI210Invoice">
+        <id     column="id"             property="id" jdbcType="BIGINT"/>
+        <result column="region"         property="region"/>
+        <result column="scac"           property="scac"/>
+        <result column="inv_no"         property="invNo"/>
+        <result column="inv_date"       property="invDate"/>
+        <result column="payment_terms"  property="paymentTerms"/>
+        <result column="cur"            property="cur"/>
+        <result column="inv_amount"     property="invAmount"/>
+        <result column="tt_charge"      property="ttCharge"/>
+        <result column="pickup_date"    property="pickupDate"/>
+        <result column="pickup_time"    property="pickupTime"/>
+        <result column="pod_date"       property="podDate"/>
+        <result column="pod_time"       property="podTime"/>
+        <result column="pod_name"       property="podName"/>
+        <result column="gross_weight"   property="grossWeight"/>
+        <result column="gw_qualifier"   property="gwQualifier"/>
+        <result column="gw_unit"        property="gwUnit"/>
+        <result column="bill_weight"    property="billWeight"/>
+        <result column="bw_qualifier"   property="bwQualifier"/>
+        <result column="bw_unit"        property="bwUnit"/>
+        <result column="bol"            property="bol"/>
+        <result column="status"         property="status"/>
+        <result column="import_batch"   property="importBatch"/>
+        <result column="create_user"    property="createUser"/>
+        <result column="create_time"    property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user"    property="updateUser"/>
+        <result column="update_time"    property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="ListResultMap" type="com.boot.security.server.dto.EDI210ListDTO">
+        <id     column="id"            property="id"/>
+        <result column="region"        property="region"/>
+        <result column="scac"          property="scac"/>
+        <result column="inv_no"        property="invNo"/>
+        <result column="inv_date"      property="invDate"/>
+        <result column="bol"           property="bol"/>
+        <result column="cur"           property="cur"/>
+        <result column="inv_amount"    property="invAmount"/>
+        <result column="status"        property="status"/>
+        <result column="create_time"   property="createTime"/>
+        <result column="bill_to_name"  property="billToName"/>
+        <result column="shipper_name"  property="shipperName"/>
+        <result column="consignee_name" property="consigneeName"/>
+        <result column="charge_count"  property="chargeCount"/>
+    </resultMap>
+
+    <resultMap id="ExcelRowResultMap" type="com.boot.security.server.dto.EDI210ExcelRowDTO">
+        <result column="region"          property="region"/>
+        <!-- Bill-To -->
+        <result column="bt_name1"        property="btName1"/>
+        <result column="bt_name2"        property="btName2"/>
+        <result column="bt_address1"     property="btAddress1"/>
+        <result column="bt_address2"     property="btAddress2"/>
+        <result column="bt_city"         property="btCity"/>
+        <result column="bt_country"      property="btCountry"/>
+        <result column="bt_postal_code"  property="btPostalCode"/>
+        <result column="bt_state_province" property="btStateProvince"/>
+        <result column="bt_account"      property="btAccount"/>
+        <result column="bt_location"     property="btLocation"/>
+        <!-- Bill-From (only 5 fields used) -->
+        <result column="bf_name1"        property="bfName"/>
+        <result column="bf_address1"     property="bfAddress"/>
+        <result column="bf_city"         property="bfCity"/>
+        <result column="bf_postal_code"  property="bfPostalCode"/>
+        <result column="bf_country"      property="bfCountry"/>
+        <!-- Shipper -->
+        <result column="sh_name1"        property="shName1"/>
+        <result column="sh_name2"        property="shName2"/>
+        <result column="sh_address1"     property="shAddress1"/>
+        <result column="sh_address2"     property="shAddress2"/>
+        <result column="sh_city"         property="shCity"/>
+        <result column="sh_country"      property="shCountry"/>
+        <result column="sh_postal_code"  property="shPostalCode"/>
+        <result column="sh_state_province" property="shStateProvince"/>
+        <result column="sh_account"      property="shAccount"/>
+        <result column="sh_location"     property="shLocation"/>
+        <!-- Consignee -->
+        <result column="cn_name1"        property="cnName1"/>
+        <result column="cn_name2"        property="cnName2"/>
+        <result column="cn_address1"     property="cnAddress1"/>
+        <result column="cn_address2"     property="cnAddress2"/>
+        <result column="cn_city"         property="cnCity"/>
+        <result column="cn_country"      property="cnCountry"/>
+        <result column="cn_postal_code"  property="cnPostalCode"/>
+        <result column="cn_state_province" property="cnStateProvince"/>
+        <result column="cn_account"      property="cnAccount"/>
+        <result column="cn_location"     property="cnLocation"/>
+        <!-- Billing Basic -->
+        <result column="scac"            property="scac"/>
+        <result column="inv_no"          property="invNo"/>
+        <result column="inv_date"        property="invDate"/>
+        <result column="payment_terms"   property="paymentTerms"/>
+        <result column="cur"             property="cur"/>
+        <result column="inv_amount"      property="invAmount"/>
+        <result column="tt_charge"       property="ttCharge"/>
+        <result column="pickup_date"     property="pickupDate"/>
+        <result column="pickup_time"     property="pickupTime"/>
+        <result column="pod_date"        property="podDate"/>
+        <result column="pod_time"        property="podTime"/>
+        <result column="pod_name"        property="podName"/>
+        <result column="gross_weight"    property="grossWeight"/>
+        <result column="gw_qualifier"    property="gwQualifier"/>
+        <result column="gw_unit"         property="gwUnit"/>
+        <result column="bill_weight"     property="billWeight"/>
+        <result column="bw_qualifier"    property="bwQualifier"/>
+        <result column="bw_unit"         property="bwUnit"/>
+        <result column="bol"             property="bol"/>
+        <!-- Charge -->
+        <result column="description"     property="description"/>
+        <result column="rate"            property="rate"/>
+        <result column="rate_qual"       property="rateQual"/>
+        <result column="rated_currency"  property="ratedCurrency"/>
+        <result column="exchange_rate"   property="exchangeRate"/>
+        <result column="expressed_currency" property="expressedCurrency"/>
+        <result column="charge"          property="charge"/>
+        <result column="weight"          property="weight"/>
+        <result column="weight_qual"     property="weightQual"/>
+        <result column="weight_type"     property="weightType"/>
+        <result column="sp_charge_code"  property="spChargeCode"/>
+        <result column="sp_charge_desc"  property="spChargeDesc"/>
+        <result column="equipment_code"  property="equipmentCode"/>
+        <result column="equipment_type"  property="equipmentType"/>
+        <result column="total_weight"    property="totalWeight"/>
+        <result column="total_weight_qual" property="totalWeightQual"/>
+        <result column="service_code"    property="serviceCode"/>
+        <result column="volume"          property="volume"/>
+        <result column="volume_qual"     property="volumeQual"/>
+        <result column="rated_quantity"  property="ratedQuantity"/>
+        <result column="rated_package_type" property="ratedPackageType"/>
+        <result column="billed_quantity" property="billedQuantity"/>
+        <result column="billed_qualifier" property="billedQualifier"/>
+        <result column="length"          property="length"/>
+        <result column="width"           property="width"/>
+        <result column="height"          property="height"/>
+        <result column="measurement_unit" property="measurementUnit"/>
+        <result column="declared_value"  property="declaredValue"/>
+        <result column="commodity_class" property="commodityClass"/>
+        <result column="commodity_code"  property="commodityCode"/>
+        <result column="correction_indicator" property="correctionIndicator"/>
+        <result column="carriers_description" property="carriersDescription"/>
+        <result column="carriers_quantity" property="carriersQuantity"/>
+        <result column="transport_service" property="transportService"/>
+        <result column="origin_zone"     property="originZone"/>
+        <result column="destination_zone" property="destinationZone"/>
+        <!-- Tax -->
+        <result column="customer_reference" property="customerReference"/>
+        <result column="po"              property="po"/>
+        <result column="dn"              property="dn"/>
+        <result column="rma"             property="rma"/>
+        <result column="hawb"            property="hawb"/>
+        <result column="so"              property="so"/>
+        <result column="bill_of_lading_number" property="billOfLadingNumber"/>
+        <result column="tracking_number" property="trackingNumber"/>
+        <result column="freight_bill_number" property="freightBillNumber"/>
+        <result column="billing_account" property="billingAccount"/>
+        <result column="bill_to_account" property="billToAccount"/>
+        <result column="division_identifier" property="divisionIdentifier"/>
+        <result column="invoice_standard_code" property="invoiceStandardCode"/>
+        <result column="carrier_name"    property="carrierName"/>
+        <result column="business_unit"   property="businessUnit"/>
+        <result column="customer_vat_registration" property="customerVatRegistration"/>
+        <result column="carrier_vat_registration"  property="carrierVatRegistration"/>
+        <result column="carrier_tax_identity" property="carrierTaxIdentity"/>
+        <result column="sender_tax_identity"  property="senderTaxIdentity"/>
+        <result column="recipient_tax_identity" property="recipientTaxIdentity"/>
+        <result column="tax_bureau_name" property="taxBureauName"/>
+        <result column="tax_bureau_code" property="taxBureauCode"/>
+    </resultMap>
+
+    <sql id="invoiceColumns">
+        id, region, scac, inv_no, inv_date, payment_terms, cur, inv_amount, tt_charge,
+        pickup_date, pickup_time, pod_date, pod_time, pod_name,
+        gross_weight, gw_qualifier, gw_unit, bill_weight, bw_qualifier, bw_unit, bol,
+        status, import_batch, create_user, create_time, update_user, update_time
+    </sql>
+
+    <sql id="whereList">
+        <where>
+            <if test="params.region != null and params.region != ''">
+                AND i.region = #{params.region}
+            </if>
+            <if test="params.scac != null and params.scac != ''">
+                AND i.scac = #{params.scac}
+            </if>
+            <if test="params.invNo != null and params.invNo != ''">
+                AND i.inv_no LIKE CONCAT('%', #{params.invNo}, '%')
+            </if>
+            <if test="params.bol != null and params.bol != ''">
+                AND i.bol LIKE CONCAT('%', #{params.bol}, '%')
+            </if>
+            <if test="params.dateFrom != null and params.dateFrom != ''">
+                AND i.inv_date &gt;= #{params.dateFrom}
+            </if>
+            <if test="params.dateTo != null and params.dateTo != ''">
+                AND i.inv_date &lt;= #{params.dateTo}
+            </if>
+            <if test="params.status != null">
+                AND i.status = #{params.status}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.boot.security.server.model.EDI210Invoice"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO edi_210_invoice
+        (region, scac, inv_no, inv_date, payment_terms, cur, inv_amount, tt_charge,
+         pickup_date, pickup_time, pod_date, pod_time, pod_name,
+         gross_weight, gw_qualifier, gw_unit, bill_weight, bw_qualifier, bw_unit, bol,
+         status, import_batch, create_user, create_time)
+        VALUES
+        (#{region}, #{scac}, #{invNo}, #{invDate}, #{paymentTerms}, #{cur}, #{invAmount}, #{ttCharge},
+         #{pickupDate}, #{pickupTime}, #{podDate}, #{podTime}, #{podName},
+         #{grossWeight}, #{gwQualifier}, #{gwUnit}, #{billWeight}, #{bwQualifier}, #{bwUnit}, #{bol},
+         #{status}, #{importBatch}, #{createUser}, NOW())
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.boot.security.server.model.EDI210Invoice"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO edi_210_invoice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="region        != null">region,</if>
+            <if test="scac          != null">scac,</if>
+            <if test="invNo         != null">inv_no,</if>
+            <if test="invDate       != null">inv_date,</if>
+            <if test="paymentTerms  != null">payment_terms,</if>
+            <if test="cur           != null">cur,</if>
+            <if test="invAmount     != null">inv_amount,</if>
+            <if test="ttCharge      != null">tt_charge,</if>
+            <if test="pickupDate    != null">pickup_date,</if>
+            <if test="pickupTime    != null">pickup_time,</if>
+            <if test="podDate       != null">pod_date,</if>
+            <if test="podTime       != null">pod_time,</if>
+            <if test="podName       != null">pod_name,</if>
+            <if test="grossWeight   != null">gross_weight,</if>
+            <if test="gwQualifier   != null">gw_qualifier,</if>
+            <if test="gwUnit        != null">gw_unit,</if>
+            <if test="billWeight    != null">bill_weight,</if>
+            <if test="bwQualifier   != null">bw_qualifier,</if>
+            <if test="bwUnit        != null">bw_unit,</if>
+            <if test="bol           != null">bol,</if>
+            <if test="status        != null">status,</if>
+            <if test="importBatch   != null">import_batch,</if>
+            <if test="createUser    != null">create_user,</if>
+            create_time,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="region        != null">#{region},</if>
+            <if test="scac          != null">#{scac},</if>
+            <if test="invNo         != null">#{invNo},</if>
+            <if test="invDate       != null">#{invDate},</if>
+            <if test="paymentTerms  != null">#{paymentTerms},</if>
+            <if test="cur           != null">#{cur},</if>
+            <if test="invAmount     != null">#{invAmount},</if>
+            <if test="ttCharge      != null">#{ttCharge},</if>
+            <if test="pickupDate    != null">#{pickupDate},</if>
+            <if test="pickupTime    != null">#{pickupTime},</if>
+            <if test="podDate       != null">#{podDate},</if>
+            <if test="podTime       != null">#{podTime},</if>
+            <if test="podName       != null">#{podName},</if>
+            <if test="grossWeight   != null">#{grossWeight},</if>
+            <if test="gwQualifier   != null">#{gwQualifier},</if>
+            <if test="gwUnit        != null">#{gwUnit},</if>
+            <if test="billWeight    != null">#{billWeight},</if>
+            <if test="bwQualifier   != null">#{bwQualifier},</if>
+            <if test="bwUnit        != null">#{bwUnit},</if>
+            <if test="bol           != null">#{bol},</if>
+            <if test="status        != null">#{status},</if>
+            <if test="importBatch   != null">#{importBatch},</if>
+            <if test="createUser    != null">#{createUser},</if>
+            NOW(),
+        </trim>
+    </insert>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM edi_210_invoice WHERE id = #{id}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT <include refid="invoiceColumns"/> FROM edi_210_invoice WHERE id = #{id}
+    </select>
+
+    <select id="selectIdByUk" resultType="java.lang.Long">
+        SELECT id FROM edi_210_invoice
+        WHERE region = #{region} AND scac = #{scac} AND inv_no = #{invNo}
+        LIMIT 1
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.boot.security.server.model.EDI210Invoice">
+        UPDATE edi_210_invoice
+        <set>
+            <if test="region        != null">region = #{region},</if>
+            <if test="scac          != null">scac = #{scac},</if>
+            <if test="invNo         != null">inv_no = #{invNo},</if>
+            <if test="invDate       != null">inv_date = #{invDate},</if>
+            <if test="paymentTerms  != null">payment_terms = #{paymentTerms},</if>
+            <if test="cur           != null">cur = #{cur},</if>
+            <if test="invAmount     != null">inv_amount = #{invAmount},</if>
+            <if test="ttCharge      != null">tt_charge = #{ttCharge},</if>
+            <if test="pickupDate    != null">pickup_date = #{pickupDate},</if>
+            <if test="pickupTime    != null">pickup_time = #{pickupTime},</if>
+            <if test="podDate       != null">pod_date = #{podDate},</if>
+            <if test="podTime       != null">pod_time = #{podTime},</if>
+            <if test="podName       != null">pod_name = #{podName},</if>
+            <if test="grossWeight   != null">gross_weight = #{grossWeight},</if>
+            <if test="gwQualifier   != null">gw_qualifier = #{gwQualifier},</if>
+            <if test="gwUnit        != null">gw_unit = #{gwUnit},</if>
+            <if test="billWeight    != null">bill_weight = #{billWeight},</if>
+            <if test="bwQualifier   != null">bw_qualifier = #{bwQualifier},</if>
+            <if test="bwUnit        != null">bw_unit = #{bwUnit},</if>
+            <if test="bol           != null">bol = #{bol},</if>
+            <if test="status        != null">status = #{status},</if>
+            <if test="updateUser    != null">update_user = #{updateUser},</if>
+            update_time = NOW(),
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM edi_210_invoice i
+        <include refid="whereList"/>
+    </select>
+
+    <select id="list" resultMap="ListResultMap">
+        SELECT
+            i.id, i.region, i.scac, i.inv_no, i.inv_date, i.bol, i.cur, i.inv_amount,
+            i.status,
+            DATE_FORMAT(i.create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+            bt.name1 AS bill_to_name,
+            sh.name1 AS shipper_name,
+            cn.name1 AS consignee_name,
+            (SELECT COUNT(*) FROM edi_210_charge c WHERE c.invoice_id = i.id) AS charge_count
+        FROM edi_210_invoice i
+        LEFT JOIN edi_210_party bt ON bt.invoice_id = i.id AND bt.party_role = 'BILL_TO'
+        LEFT JOIN edi_210_party sh ON sh.invoice_id = i.id AND sh.party_role = 'SHIPPER'
+        LEFT JOIN edi_210_party cn ON cn.invoice_id = i.id AND cn.party_role = 'CONSIGNEE'
+        <include refid="whereList"/>
+        ORDER BY i.id DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="exportFlat" resultMap="ExcelRowResultMap">
+        SELECT
+            i.region,
+            -- Bill-To
+            bt.name1 AS bt_name1, bt.name2 AS bt_name2,
+            bt.address1 AS bt_address1, bt.address2 AS bt_address2,
+            bt.city AS bt_city, bt.country AS bt_country,
+            bt.postal_code AS bt_postal_code, bt.state_province AS bt_state_province,
+            bt.account AS bt_account, bt.location AS bt_location,
+            -- Bill-From
+            bf.name1 AS bf_name1, bf.address1 AS bf_address1,
+            bf.city AS bf_city, bf.postal_code AS bf_postal_code, bf.country AS bf_country,
+            -- Shipper
+            sh.name1 AS sh_name1, sh.name2 AS sh_name2,
+            sh.address1 AS sh_address1, sh.address2 AS sh_address2,
+            sh.city AS sh_city, sh.country AS sh_country,
+            sh.postal_code AS sh_postal_code, sh.state_province AS sh_state_province,
+            sh.account AS sh_account, sh.location AS sh_location,
+            -- Consignee
+            cn.name1 AS cn_name1, cn.name2 AS cn_name2,
+            cn.address1 AS cn_address1, cn.address2 AS cn_address2,
+            cn.city AS cn_city, cn.country AS cn_country,
+            cn.postal_code AS cn_postal_code, cn.state_province AS cn_state_province,
+            cn.account AS cn_account, cn.location AS cn_location,
+            -- Invoice basic
+            i.scac, i.inv_no, i.inv_date, i.payment_terms, i.cur,
+            i.inv_amount, i.tt_charge,
+            i.pickup_date, i.pickup_time, i.pod_date, i.pod_time, i.pod_name,
+            i.gross_weight, i.gw_qualifier, i.gw_unit,
+            i.bill_weight, i.bw_qualifier, i.bw_unit, i.bol,
+            -- Charge
+            c.description, c.rate, c.rate_qual, c.rated_currency,
+            c.exchange_rate, c.expressed_currency, c.charge, c.weight,
+            c.weight_qual, c.weight_type, c.sp_charge_code, c.sp_charge_desc,
+            c.equipment_code, c.equipment_type, c.total_weight, c.total_weight_qual, c.service_code,
+            c.volume, c.volume_qual, c.rated_quantity, c.rated_package_type,
+            c.billed_quantity, c.billed_qualifier,
+            c.length, c.width, c.height, c.measurement_unit,
+            c.declared_value, c.commodity_class, c.commodity_code,
+            c.correction_indicator, c.carriers_description, c.carriers_quantity,
+            c.transport_service, c.origin_zone, c.destination_zone,
+            -- Tax
+            t.customer_reference, t.po, t.dn, t.rma, t.hawb, t.so,
+            t.bill_of_lading_number, t.tracking_number, t.freight_bill_number,
+            t.billing_account, t.bill_to_account, t.division_identifier,
+            t.invoice_standard_code, t.carrier_name, t.business_unit,
+            t.customer_vat_registration, t.carrier_vat_registration,
+            t.carrier_tax_identity, t.sender_tax_identity, t.recipient_tax_identity,
+            t.tax_bureau_name, t.tax_bureau_code
+        FROM edi_210_invoice i
+        LEFT JOIN edi_210_party bt ON bt.invoice_id = i.id AND bt.party_role = 'BILL_TO'
+        LEFT JOIN edi_210_party bf ON bf.invoice_id = i.id AND bf.party_role = 'BILL_FROM'
+        LEFT JOIN edi_210_party sh ON sh.invoice_id = i.id AND sh.party_role = 'SHIPPER'
+        LEFT JOIN edi_210_party cn ON cn.invoice_id = i.id AND cn.party_role = 'CONSIGNEE'
+        LEFT JOIN edi_210_charge c ON c.invoice_id = i.id
+        LEFT JOIN edi_210_tax    t ON t.invoice_id = i.id
+        <include refid="whereList"/>
+        ORDER BY i.id, c.line_no
+    </select>
+
+</mapper>

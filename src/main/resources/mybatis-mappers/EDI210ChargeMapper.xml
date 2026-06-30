@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.EDI210ChargeMapper">
+
+    <resultMap id="BaseResultMap" type="com.boot.security.server.model.EDI210Charge">
+        <id     column="id"               property="id"/>
+        <result column="invoice_id"       property="invoiceId"/>
+        <result column="line_no"          property="lineNo"/>
+        <result column="description"      property="description"/>
+        <result column="rate"             property="rate"/>
+        <result column="rate_qual"        property="rateQual"/>
+        <result column="rated_currency"   property="ratedCurrency"/>
+        <result column="exchange_rate"    property="exchangeRate"/>
+        <result column="expressed_currency" property="expressedCurrency"/>
+        <result column="charge"           property="charge"/>
+        <result column="weight"           property="weight"/>
+        <result column="weight_qual"      property="weightQual"/>
+        <result column="weight_type"      property="weightType"/>
+        <result column="sp_charge_code"   property="spChargeCode"/>
+        <result column="sp_charge_desc"   property="spChargeDesc"/>
+        <result column="equipment_code"   property="equipmentCode"/>
+        <result column="equipment_type"   property="equipmentType"/>
+        <result column="total_weight"     property="totalWeight"/>
+        <result column="total_weight_qual" property="totalWeightQual"/>
+        <result column="service_code"     property="serviceCode"/>
+        <result column="volume"           property="volume"/>
+        <result column="volume_qual"      property="volumeQual"/>
+        <result column="rated_quantity"   property="ratedQuantity"/>
+        <result column="rated_package_type" property="ratedPackageType"/>
+        <result column="billed_quantity"  property="billedQuantity"/>
+        <result column="billed_qualifier" property="billedQualifier"/>
+        <result column="length"           property="length"/>
+        <result column="width"            property="width"/>
+        <result column="height"           property="height"/>
+        <result column="measurement_unit" property="measurementUnit"/>
+        <result column="declared_value"   property="declaredValue"/>
+        <result column="commodity_class"  property="commodityClass"/>
+        <result column="commodity_code"   property="commodityCode"/>
+        <result column="correction_indicator" property="correctionIndicator"/>
+        <result column="carriers_description" property="carriersDescription"/>
+        <result column="carriers_quantity" property="carriersQuantity"/>
+        <result column="transport_service" property="transportService"/>
+        <result column="origin_zone"      property="originZone"/>
+        <result column="destination_zone" property="destinationZone"/>
+    </resultMap>
+
+    <sql id="cols">
+        id, invoice_id, line_no, description, rate, rate_qual, rated_currency,
+        exchange_rate, expressed_currency, charge, weight,
+        weight_qual, weight_type, sp_charge_code, sp_charge_desc,
+        equipment_code, equipment_type, total_weight, total_weight_qual, service_code,
+        volume, volume_qual, rated_quantity, rated_package_type,
+        billed_quantity, billed_qualifier,
+        length, width, height, measurement_unit,
+        declared_value, commodity_class, commodity_code, correction_indicator,
+        carriers_description, carriers_quantity, transport_service,
+        origin_zone, destination_zone
+    </sql>
+
+    <insert id="insert" parameterType="com.boot.security.server.model.EDI210Charge"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO edi_210_charge
+        (invoice_id, line_no, description, rate, rate_qual, rated_currency,
+         exchange_rate, expressed_currency, charge, weight,
+         weight_qual, weight_type, sp_charge_code, sp_charge_desc,
+         equipment_code, equipment_type, total_weight, total_weight_qual, service_code,
+         volume, volume_qual, rated_quantity, rated_package_type,
+         billed_quantity, billed_qualifier,
+         length, width, height, measurement_unit,
+         declared_value, commodity_class, commodity_code, correction_indicator,
+         carriers_description, carriers_quantity, transport_service,
+         origin_zone, destination_zone)
+        VALUES
+        (#{invoiceId}, #{lineNo}, #{description}, #{rate}, #{rateQual}, #{ratedCurrency},
+         #{exchangeRate}, #{expressedCurrency}, #{charge}, #{weight},
+         #{weightQual}, #{weightType}, #{spChargeCode}, #{spChargeDesc},
+         #{equipmentCode}, #{equipmentType}, #{totalWeight}, #{totalWeightQual}, #{serviceCode},
+         #{volume}, #{volumeQual}, #{ratedQuantity}, #{ratedPackageType},
+         #{billedQuantity}, #{billedQualifier},
+         #{length}, #{width}, #{height}, #{measurementUnit},
+         #{declaredValue}, #{commodityClass}, #{commodityCode}, #{correctionIndicator},
+         #{carriersDescription}, #{carriersQuantity}, #{transportService},
+         #{originZone}, #{destinationZone})
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO edi_210_charge
+        (invoice_id, line_no, description, rate, rate_qual, rated_currency,
+         exchange_rate, expressed_currency, charge, weight,
+         weight_qual, weight_type, sp_charge_code, sp_charge_desc,
+         equipment_code, equipment_type, total_weight, total_weight_qual, service_code,
+         volume, volume_qual, rated_quantity, rated_package_type,
+         billed_quantity, billed_qualifier,
+         length, width, height, measurement_unit,
+         declared_value, commodity_class, commodity_code, correction_indicator,
+         carriers_description, carriers_quantity, transport_service,
+         origin_zone, destination_zone)
+        VALUES
+        <foreach collection="list" item="c" separator=",">
+            (#{c.invoiceId}, #{c.lineNo}, #{c.description}, #{c.rate}, #{c.rateQual}, #{c.ratedCurrency},
+             #{c.exchangeRate}, #{c.expressedCurrency}, #{c.charge}, #{c.weight},
+             #{c.weightQual}, #{c.weightType}, #{c.spChargeCode}, #{c.spChargeDesc},
+             #{c.equipmentCode}, #{c.equipmentType}, #{c.totalWeight}, #{c.totalWeightQual}, #{c.serviceCode},
+             #{c.volume}, #{c.volumeQual}, #{c.ratedQuantity}, #{c.ratedPackageType},
+             #{c.billedQuantity}, #{c.billedQualifier},
+             #{c.length}, #{c.width}, #{c.height}, #{c.measurementUnit},
+             #{c.declaredValue}, #{c.commodityClass}, #{c.commodityCode}, #{c.correctionIndicator},
+             #{c.carriersDescription}, #{c.carriersQuantity}, #{c.transportService},
+             #{c.originZone}, #{c.destinationZone})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByInvoiceId">
+        DELETE FROM edi_210_charge WHERE invoice_id = #{invoiceId}
+    </delete>
+
+    <select id="selectByInvoiceId" resultMap="BaseResultMap">
+        SELECT <include refid="cols"/>
+        FROM edi_210_charge
+        WHERE invoice_id = #{invoiceId}
+        ORDER BY line_no, id
+    </select>
+
+</mapper>
